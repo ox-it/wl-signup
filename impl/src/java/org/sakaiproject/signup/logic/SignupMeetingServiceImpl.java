@@ -765,4 +765,11 @@ public class SignupMeetingServiceImpl implements SignupMeetingService, Retry {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isEventExisted(Long eventId) {
+		return signupMeetingDao.isEventExisted(eventId);
+	}
+
 }

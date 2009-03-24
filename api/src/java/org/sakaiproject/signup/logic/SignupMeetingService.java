@@ -299,5 +299,14 @@ public interface SignupMeetingService {
 	 *             thrown if something goes bad
 	 */
 	void removeCalendarEvents(List<SignupMeeting> meetings) throws Exception;
+	
+	/**
+	 * Test to see if the event exists.
+	 * 
+	 * @param eventId
+	 *            a Long Id for event
+	 * @return true if the event is existed.
+	 */
+	boolean isEventExisted(Long eventId);
 
 }

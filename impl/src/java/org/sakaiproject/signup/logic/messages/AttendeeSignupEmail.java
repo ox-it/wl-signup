@@ -41,8 +41,6 @@ public class AttendeeSignupEmail extends SignupEmailBase {
 
 	private final User currentUser;
 
-	private final SignupMeeting meeting;
-
 	private final SignupTimeslot timeslot;
 
 	private final User creator;
