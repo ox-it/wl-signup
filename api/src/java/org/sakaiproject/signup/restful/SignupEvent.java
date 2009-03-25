@@ -52,10 +52,17 @@ public class SignupEvent implements Entity, MeetingTypes {
 
 	public static final String USER_REMOVE_FROM_WAITLIST = "removeWaitList";
 
+	/* corresponding field name in Json */
+	public static final String USER_ACTION_TYPE_FIELD_NAME = "userActionType";
+	/* corresponding field name in Json */
+	public static final String ALLOCATE_TO_TS_ID_FIELD_NAME = "allocToTSid";
+	/* corresponding field name in Json */
+	public static final String SITE_ID_FIELD_NAME = "siteId";
+
 	private static final long serialVersionUID = 2L;
 
-	public static final String[] USER_ATION_Types = { USER_SIGNUP, USER_CANCEL_SIGNUP, USER_ADD_TO_WAITLIST,
-			USER_REMOVE_FROM_WAITLIST };
+	public static final String[] USER_ATION_Types = { USER_SIGNUP,
+			USER_CANCEL_SIGNUP, USER_ADD_TO_WAITLIST, USER_REMOVE_FROM_WAITLIST };
 
 	private Long id;
 
@@ -450,7 +457,8 @@ public class SignupEvent implements Entity, MeetingTypes {
 	 * @param signupTimeSlots
 	 *            a list of SignupTimeslot objects
 	 */
-	public void setSignupTimeSlotItems(List<SignupTimeslotItem> signupTimeSlotItems) {
+	public void setSignupTimeSlotItems(
+			List<SignupTimeslotItem> signupTimeSlotItems) {
 		this.signupTimeSlotItems = signupTimeSlotItems;
 	}
 
@@ -525,7 +533,8 @@ public class SignupEvent implements Entity, MeetingTypes {
 	}
 
 	public String getReference() {
-		return ServerConfigurationService.getAccessUrl() + "/signupEvent/" + Entity.SEPARATOR + this.getId();
+		return ServerConfigurationService.getAccessUrl() + "/signupEvent/"
+				+ Entity.SEPARATOR + this.getId();
 	}
 
 	public String getReference(String arg0) {
@@ -533,7 +542,8 @@ public class SignupEvent implements Entity, MeetingTypes {
 	}
 
 	public String getUrl() {
-		return ServerConfigurationService.getAccessUrl() + "/signupEvent/" + this.getId();
+		return ServerConfigurationService.getAccessUrl() + "/signupEvent/"
+				+ this.getId();
 	}
 
 	public String getUrl(String arg0) {
@@ -557,7 +567,8 @@ public class SignupEvent implements Entity, MeetingTypes {
 		event.setAttribute("organizer", this.getOrganizerName());
 		event.setAttribute("location", this.getLocation());
 		event.setAttribute("event-type", this.getMeetingType());
-		event.setAttribute("event-recurrenceId", this.getRecurrenceId().toString());
+		event.setAttribute("event-recurrenceId", this.getRecurrenceId()
+				.toString());
 
 		if (description != null)
 			event.setAttribute("description", description);
@@ -565,7 +576,8 @@ public class SignupEvent implements Entity, MeetingTypes {
 		event.setAttribute("start-time", this.getStartTime().toString());
 		event.setAttribute("end-time", this.getEndTime().toString());
 		event.setAttribute("signup-begin", this.getSignupBegins().toString());
-		event.setAttribute("signup-deadline", this.getSignupDeadline().toString());
+		event.setAttribute("signup-deadline", this.getSignupDeadline()
+				.toString());
 		// event.setAttribute("repeat-event",
 		// Boolean.valueOf(isRecurredMeeting()).toString());
 		// properties
@@ -578,8 +590,10 @@ public class SignupEvent implements Entity, MeetingTypes {
 	}
 
 	public String toString() {
-		return new ToStringBuilder(this).append(this.id).append(this.organizerName).append(this.title).append(
-				this.location).append(this.startTime).append(this.endTime).append(this.description).toString();
+		return new ToStringBuilder(this).append(this.id).append(
+				this.organizerName).append(this.title).append(this.location)
+				.append(this.startTime).append(this.endTime).append(
+						this.description).toString();
 	}
 
 	/**

@@ -17,7 +17,7 @@
 	  </p>
 	
 	  <h4>Display Sign-up Events Via Direct Ajax Access To Your Application Server</h4>
-	  <p>Note: you need to login in first to establish a session for next steps.</p>
+	  <p>Note: you need to login in first to establish a session for ajax access.</p>
 	  <table>
 		<tr><td>View Range: </td><td noWrap><input id='nextDays' type='text' value='60' name='nextDays'/> [Empty value means view all]</td></tr>
 		<tr><td>Enter Your Site Id: </td><td noWrap><input id='userSite' type='text' value='' name='userSite'/> [Example: c8f0e8a4-31fd-4525-ac5e-6788d612347c ]</td></tr>
@@ -106,7 +106,11 @@
 					<td>
 						<table>
 							{for p in ts.attendees}
-								<tr><td>${p.displayName}</td></tr>
+								{if ts.displayAttendees}
+									<tr><td>${p.displayName}</td></tr>
+								{else}
+									<tr><td>private</td></tr>
+								{/if}
 							{/for}
 						</table>
 					</td>

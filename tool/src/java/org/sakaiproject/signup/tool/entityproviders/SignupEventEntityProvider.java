@@ -103,7 +103,7 @@ public class SignupEventEntityProvider extends AbstractEntityProvider implements
 
 		String siteId = developerHelperService.getCurrentLocationId();
 		if (siteId == null || siteId.trim().length() < 1) {
-			siteId = (String) requestStorage.getStoredValueAsType(String.class, "siteId");
+			siteId = (String) requestStorage.getStoredValueAsType(String.class, SignupEvent.SITE_ID_FIELD_NAME);
 			if (siteId == null || siteId.trim().length() < 1) {
 				throw new IllegalArgumentException("Missing current site id: (" + id + "), it is required.");
 			}
@@ -135,7 +135,7 @@ public class SignupEventEntityProvider extends AbstractEntityProvider implements
 		}
 		String userReference = developerHelperService.getCurrentUserReference();
 		if (userReference == null) {
-			throw new SecurityException("anonymous user cannot update poll: " + ref);
+			throw new SecurityException("anonymous user cannot update event: " + ref);
 		}
 
 		SignupEvent event = (SignupEvent) entity;
@@ -144,7 +144,7 @@ public class SignupEventEntityProvider extends AbstractEntityProvider implements
 		if (siteId == null || siteId.trim().length() < 1) {
 			siteId = event != null ? event.getSiteId() : null;
 			if (siteId == null || siteId.trim().length() < 1) {
-				siteId = (String) requestStorage.getStoredValueAsType(String.class, "siteId");
+				siteId = (String) requestStorage.getStoredValueAsType(String.class, SignupEvent.SITE_ID_FIELD_NAME);
 				if (siteId == null || siteId.trim().length() < 1) {
 					throw new IllegalArgumentException("Missing current site id: (" + id + "), it is required.");
 				}
@@ -153,7 +153,7 @@ public class SignupEventEntityProvider extends AbstractEntityProvider implements
 
 		String userGoToTSid = event != null ? event.getAllocToTSid() : null;
 		if (userGoToTSid == null || userGoToTSid.trim().length() < 1) {
-			userGoToTSid = (String) requestStorage.getStoredValueAsType(String.class, "allocToTSid");
+			userGoToTSid = (String) requestStorage.getStoredValueAsType(String.class, SignupEvent.ALLOCATE_TO_TS_ID_FIELD_NAME);
 			if (userGoToTSid == null || userGoToTSid.trim().length() < 1) {
 				throw new IllegalArgumentException("Missing allocToTSid, it is required.");
 			}
@@ -161,7 +161,7 @@ public class SignupEventEntityProvider extends AbstractEntityProvider implements
 
 		String userAction = event != null ? event.getUserActionType() : null;
 		if (userAction == null || userAction.trim().length() < 1) {
-			userAction = (String) requestStorage.getStoredValueAsType(String.class, "userActionType");
+			userAction = (String) requestStorage.getStoredValueAsType(String.class, SignupEvent.USER_ACTION_TYPE_FIELD_NAME);
 			if (userAction == null || userAction.trim().length() < 1) {
 				throw new IllegalArgumentException("Missing userActionType, it is required.");
 			}
@@ -201,7 +201,7 @@ public class SignupEventEntityProvider extends AbstractEntityProvider implements
 
 		String siteId = developerHelperService.getCurrentLocationId();
 		if (siteId == null || siteId.trim().length() < 1) {
-			siteId = (String) requestStorage.getStoredValueAsType(String.class, "siteId");
+			siteId = (String) requestStorage.getStoredValueAsType(String.class, SignupEvent.SITE_ID_FIELD_NAME);
 		}
 		boolean allowedView = false;
 		if (!developerHelperService.isEntityRequestInternal(ref + "")) {
