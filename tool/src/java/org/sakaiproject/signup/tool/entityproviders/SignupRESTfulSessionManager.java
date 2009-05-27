@@ -96,7 +96,7 @@ public class SignupRESTfulSessionManager {
 
 	public SignupEvent getExistedSignupEventInCache(String siteId, Long eventId) {
 		if (this.getSiteEventsCache(siteId) != null) {
-			getSiteEventsCache(siteId).getSignupEvent(eventId);
+			//getSiteEventsCache(siteId).getSignupEvent(eventId);
 			return getSiteEventsCache(siteId).getSignupEvent(eventId);
 		}
 		return null;
