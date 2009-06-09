@@ -14,18 +14,13 @@
 	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/generic-dao/0.9.8/generic-dao-0.9.8.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/springframework/spring/2.0.6/spring-2.0.6.jar" sourcepath="/spring_2.03_src"/>
 	<classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate/3.2.5.ga/hibernate-3.2.5.ga.jar"/>
-	<classpathentry kind="src" path="/authz-api"/>
-	<classpathentry kind="src" path="/site-api"/>
-	<classpathentry kind="src" path="/tool-api"/>
-	<classpathentry kind="src" path="/user-api"/>
-	<classpathentry kind="src" path="/util-api"/>
-	<classpathentry kind="src" path="/util-util"/>
-	<classpathentry kind="src" path="/email-api"/>
-	<classpathentry kind="src" path="/entity-api"/>
-	<classpathentry kind="src" path="/entity-util"/>
-	<classpathentry kind="src" path="/event-api"/>
-	<classpathentry kind="src" path="/component-api"/>
-	<classpathentry kind="src" path="/calendar-api"/>
-	<classpathentry kind="src" path="/jsf"/>
+	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-kernel-api/1.0.7/sakai-kernel-api-1.0.7.jar"/>
+  	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-kernel-util/1.0.7/sakai-kernel-util-1.0.7.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/kernel/sakai-component-manager/1.0.7/sakai-component-manager-1.0.7.jar"/>
+	<classpathentry kind="src" path="/sakai-calendar-api"/>
+	<classpathentry kind="src" path="/sakai-jsf-app"/>
+	<classpathentry kind="src" path="/sakai-jsf-tool"/>
+	<classpathentry kind="src" path="/entitybroker-api"/>
+  	<classpathentry kind="src" path="/entitybroker-utils"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
