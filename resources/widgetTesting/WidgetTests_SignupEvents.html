@@ -81,6 +81,13 @@
 				<tr><td>Organizer:</td><td>${organizerName}</td></tr>
 				<tr><td>Location:</td><td>${location}</td></tr>
 				<tr><td>Description:</td><td>${description}</td></tr>
+				{if signupMainEventAttachItems.length >0}
+					<tr><td>Attachment:</td><td><table>
+				    {for attach in signupMainEventAttachItems}
+					<tr><td><a href="${serverUrl}${attach.location}" target="_new">${attach.filename}</a> (${attach.fileSize}kb)</td></tr>
+				    {/for}
+					</td></table></tr>
+				{/if}
 				<tr><td>Meeting Date:</td><td>${date}</td></tr>
 				{if meetingExpired }
 					<tr><td>Meeting Status:</td><td style="color:b11">The meeting is closed</td></tr>
@@ -127,7 +134,7 @@
 					</td>
 					<td>	
 					    {if (ts.available && !meetingExpired && !ts.signedUp && availableStatus !="<font color='red'>Signed up<\/font>")}
-						   {if startToSignUp && !passedDeadline}	
+						   {if startToSignUp && !passedDeadline && !ts.canceled && !ts.locked}	
 					    	     <input type="button"  onclick="submitEvent.click('${id}','${ts.id}','${allowedUserActionTypes[0]}','${siteId}')"  value="${allowedUserActionTypes[0]}" name="userActionType">
 					    	   {else}
 							 <input type="button" disabled="true" onclick="submitEvent.click('${id}','${ts.id}','${allowedUserActionTypes[0]}','${siteId}')"  value="${allowedUserActionTypes[0]}" name="userActionType">
@@ -135,7 +142,11 @@
 					     {elseif ts.signedUp && !meetingExpired}
 					   	     <input type="button" onclick="submitEvent.click('${id}','${ts.id}','${allowedUserActionTypes[1]}','${siteId}')" value="${allowedUserActionTypes[1]}" name="userActionType"/>
 					     {elseif !meetingExpired && !ts.available && !ts.onWaitList}
-							   <input type="button" onclick="submitEvent.click('${id}','${ts.id}','${allowedUserActionTypes[2]}','${siteId}')" value="${allowedUserActionTypes[2]}" name="userActionType"/>
+						    {if allowWaitList }
+							   <input type="button"  onclick="submitEvent.click('${id}','${ts.id}','${allowedUserActionTypes[2]}','${siteId}')" value="${allowedUserActionTypes[2]}" name="userActionType"/>
+					     	    {else}
+							   <input type="button"  disabled="true" value="${allowedUserActionTypes[2]}" name="userActionType"/>
+						    {/if}	
 					     {elseif !meetingExpired && !ts.available && ts.onWaitList}
 							   <input type="button" onclick="submitEvent.click('${id}','${ts.id}','${allowedUserActionTypes[3]}','${siteId}')" value="${allowedUserActionTypes[3]}" name="userActionType"/>
 					     {else}

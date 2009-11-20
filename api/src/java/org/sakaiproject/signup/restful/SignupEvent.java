@@ -31,6 +31,7 @@ import org.sakaiproject.entity.api.Entity;
 import org.sakaiproject.entity.api.ResourceProperties;
 import org.sakaiproject.signup.logic.Permission;
 import org.sakaiproject.signup.model.MeetingTypes;
+import org.sakaiproject.signup.model.SignupAttachment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -85,10 +86,22 @@ public class SignupEvent implements Entity, MeetingTypes {
 	private Date signupDeadline;
 
 	private String meetingType;
+	
+	private String repeatType;
+	
+	private boolean allowWaitList;
+	
+	private boolean allowComment;
+	
+	private boolean eidInputMode;
+	
+	private boolean autoReminder;
 
 	private List<SignupTimeslotItem> signupTimeSlotItems;
 
 	private List<SignupSiteItem> signupSiteItems;
+	
+	private List<SignupAttachment> signupMainEventAttachItems;
 
 	private Permission permission;
 
@@ -341,6 +354,30 @@ public class SignupEvent implements Entity, MeetingTypes {
 	public void setSignupDeadline(Date signupDeadLine) {
 		this.signupDeadline = truncateSeconds(signupDeadLine);
 	}
+	
+	public boolean isAllowWaitList() {
+		return allowWaitList;
+	}
+
+	public void setAllowWaitList(boolean allowWaitList) {
+		this.allowWaitList = allowWaitList;
+	}
+
+	public boolean isAllowComment() {
+		return allowComment;
+	}
+
+	public void setAllowComment(boolean allowComment) {
+		this.allowComment = allowComment;
+	}
+	
+	public String getRepeatType() {
+		return repeatType;
+	}
+
+	public void setRepeatType(String repeatType) {
+		this.repeatType = repeatType;
+	}
 
 	/**
 	 * get the maximum nubmer of the attendees, which is allowed in one time
@@ -461,6 +498,29 @@ public class SignupEvent implements Entity, MeetingTypes {
 			List<SignupTimeslotItem> signupTimeSlotItems) {
 		this.signupTimeSlotItems = signupTimeSlotItems;
 	}
+	
+	
+	/**
+	 * This method provides the attachments for main Sign-up event page 
+	 * and is public to whole site.
+	 * @return	a list of SignupAttachment objects.
+	 */
+	public List<SignupAttachment> getSignupMainEventAttachItems() {
+		return signupMainEventAttachItems;
+	}
+
+	/**
+	 * this is a setter. it only holds the attachments,
+	 *  which belongs to the entire event, not to individual 
+	 *  time slot or participant
+	 * 
+	 * @param SignupAttachment
+	 *            a list of SignupAttachment objects
+	 */
+	public void setSignupMainEventAttachItems(
+			List<SignupAttachment> signupMainEventAttachItems) {
+		this.signupMainEventAttachItems = signupMainEventAttachItems;
+	}
 
 	/**
 	 * get the Permission object, which contains the user's operation
@@ -506,6 +566,22 @@ public class SignupEvent implements Entity, MeetingTypes {
 	public void setSiteId(String siteId) {
 		this.siteId = siteId;
 	}
+	
+	public boolean isEidInputMode() {
+		return eidInputMode;
+	}
+
+	public void setEidInputMode(boolean eidInputMode) {
+		this.eidInputMode = eidInputMode;
+	}
+
+	public boolean isAutoReminder() {
+		return autoReminder;
+	}
+
+	public void setAutoReminder(boolean autoReminder) {
+		this.autoReminder = autoReminder;
+	}
 
 	/**
 	 * Set the second value to zero. it only need to accurate to minutes level.
@@ -539,6 +615,10 @@ public class SignupEvent implements Entity, MeetingTypes {
 
 	public String getReference(String arg0) {
 		return getReference();
+	}
+	
+	public String getServerUrl(){
+		return ServerConfigurationService.getServerUrl();
 	}
 
 	public String getUrl() {
