@@ -12,7 +12,15 @@
 	<name>Sakai Signup Project</name>
 	<groupId>org.sakaiproject</groupId>
 	<artifactId>signup-base</artifactId>
+	<version>2.6-SNAPSHOT</version>
 	<inceptionYear>2007</inceptionYear>
+	
+	<scm>
+		<connection>scm:https://source.sakaiproject.org/contrib/signup</connection>
+		<developerConnection>scm:svn:https://source.sakaiproject.org/contrib/signup</developerConnection>
+		<url>https://source.sakaiproject.org/contrib/signup</url>
+	</scm>
+	
 	<packaging>pom</packaging>
 	<modules>
 		<module>api</module>

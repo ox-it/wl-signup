@@ -128,6 +128,11 @@ public class SignupEventEntityProvider extends AbstractEntityProvider implements
 		return new SignupEvent();
 	}
 
+	/**
+	 * Example for updating event via json object:
+	 * http://localhost:8080/direct/signupEvent/128/edit
+	 * where '128 is eventId and with corresponding POST parameters.
+	 */
 	public void updateEntity(EntityReference ref, Object entity, Map<String, Object> params) {
 		String id = ref.getId();
 		if (id == null) {
@@ -182,6 +187,11 @@ public class SignupEventEntityProvider extends AbstractEntityProvider implements
 		// TODO update the event only for attend purpose here
 	}
 
+	/**
+	 * Example for accessing one event's Json object URL: 
+	 * http://localhost:8080/direct/signupEvent/128.json?siteId=91ab88b6-f687-46e2-8645-f8cc1d26959c&rnd=32421
+	 * where '128' is eventId, and 'rnd' is any random numbers
+	 * */
 	public Object getEntity(EntityReference ref) {
 		String id = ref.getId();
 		if (id == null) {
@@ -221,6 +231,11 @@ public class SignupEventEntityProvider extends AbstractEntityProvider implements
 		throw new IllegalArgumentException("Metho: 'Delete' is not supported currently.");
 	}
 
+	/**
+	 * Example for accessing multiple events's Json objects URL: 
+	 * http://localhost:8080/direct/signupEvent/site/91ab88b6-f687-46e2-8645-f8cc1d26959c.json?viewNextDays=30&rnd=32421
+	 * where '91ab88b6-f687-46e2-8645-f8cc1d26959c' is siteId and 'rnd' is any random numbers
+	 * */
 	public List<?> getEntities(EntityReference ref, Search search) {
 		// get the location (if set)
 		Restriction locRes = search.getRestrictionByProperty(CollectionResolvable.SEARCH_LOCATION_REFERENCE); // requestStorage.getStoredValueAsType(String.class,
