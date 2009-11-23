@@ -1011,15 +1011,10 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 			suffix = " (" + serialNum + ")";
 		
 		StringBuilder escapedString = new StringBuilder();
-		
-		name = name.trim();
+
 		for (int i = 0; i < name.length(); i++) {
 			char escapedStringCur_char = name.charAt(i);
-			
-			/*Strip out the first single quote, which is not allowed by Excel*/
-			if(i==0 && escapedStringCur_char =='\'')
-				continue;
-				
+
 			if (escapedStringCur_char == ':' || escapedStringCur_char == '\\'
 					|| escapedStringCur_char == '/' || escapedStringCur_char == '?'
 					|| escapedStringCur_char == '*' || escapedStringCur_char == '['
@@ -1035,7 +1030,7 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 		 * and add together to 31 characters (Excel sheet name limit)
 		 */
 		String validSheetName = escapedString.toString().length() <= 31-suffix.length() ? escapedString.toString() : escapedString
-				.substring(0,31-suffix.length());
+				.substring(31-suffix.length());
 		
 		validSheetName = validSheetName + suffix;
 		
