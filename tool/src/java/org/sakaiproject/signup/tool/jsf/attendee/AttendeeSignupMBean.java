@@ -23,6 +23,8 @@
 package org.sakaiproject.signup.tool.jsf.attendee;
 
 import javax.faces.component.UIData;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.sakaiproject.signup.logic.SignupUserActionException;
 import org.sakaiproject.signup.model.SignupAttendee;
@@ -267,6 +269,23 @@ public class AttendeeSignupMBean extends SignupUIBaseBean {
 	 */
 	public void setCollapsedMeetingInfo(boolean collapsedMeetingInfo) {
 		this.collapsedMeetingInfo = collapsedMeetingInfo;
+	}
+	
+	/**
+	 * This is a getter method which provide current Iframe id for refresh
+	 * IFrame purpose.
+	 * 
+	 * @return a String
+	 */
+	public String getIframeId() {
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+				.getRequest();
+		String iFrameId = (String) request.getAttribute("sakai.tool.placement.id");
+		return iFrameId;
+	}
+	
+	public String getCurUserDisplayName(){
+		return getSakaiFacade().getUserDisplayName(currentUserId());
 	}
 
 }

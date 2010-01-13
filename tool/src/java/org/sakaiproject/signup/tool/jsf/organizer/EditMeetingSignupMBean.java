@@ -172,6 +172,9 @@ public class EditMeetingSignupMBean extends SignupUIBaseBean {
 		/*user readability case for 'start now'*/
 		this.originalSignupBegins=this.signupBegins;
 		this.originalSignupBeginsType=this.signupBeginsType;
+		if(this.signupBegins < 0)
+			this.signupBegins = 0;//negative number is not allowed
+		
 		if(MINUTES.equals(this.signupBeginsType) && sMeeting.getSignupBegins().before(new Date())
 				&& this.signupBegins > 500){
 			/*we assume it has to be 'start now' before and we convert it to round to days*/			
