@@ -563,10 +563,12 @@ public class SakaiFacadeImpl implements SakaiFacade {
 							member.getUserId(), SIGNUP_VIEW_ALL, site.getId()))) {
 				User user = getUser(member.getUserId());
 				if (user == null) {
-					log.info("user is not found from 'userDirectoryService' for userId:" + member.getUserId());
+					log.debug("user is not found from 'userDirectoryService' for userId:" + member.getUserId());
+					/* will not add into the dropDown list
 					signupUser = new SignupUser(member.getUserEid(), member.getUserId(), "", member.getUserEid(),
 							member.getRole(), site.getId(), site.isPublished());
 					processAddOrUpdateSignupUsers(signupUsers, signupUser);
+					*/
 					continue;
 				}
 
@@ -608,10 +610,12 @@ public class SakaiFacadeImpl implements SakaiFacade {
 							.getUserId(), SIGNUP_VIEW_ALL, site.getId()))) {
 				User user = getUser(member.getUserId());
 				if (user == null) {
-					log.info("user is not found from 'userDirectoryService' for userId:" + member.getUserId());
+					log.debug("user is not found from 'userDirectoryService' for userId:" + member.getUserId());
+					/* will not add into the dropDown list
 					signupUser = new SignupUser(member.getUserEid(), member.getUserId(), "", member.getUserEid(),
 							member.getRole(), site.getId(), site.isPublished());
 					processAddOrUpdateSignupUsers(signupUsers, signupUser);
+					*/
 					continue;
 				}
 

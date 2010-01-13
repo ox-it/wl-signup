@@ -225,9 +225,9 @@ abstract public class SignupEmailBase implements SignupEmailNotification, Meetin
 		 * it will allow user to define different 'ui.service' value */
 		if (myServiceName == null) {
 			try {
-				myServiceName = rb.getString("ui.service");
-				int index = myServiceName.indexOf("missing key");/*return value by rb if no key defined-- hard coded!!!*/
-				if (index >=0)
+				if(rb.keySet().contains("ui.service"))
+					myServiceName = rb.getString("ui.service");
+				else
 					myServiceName = getSakaiFacade().getServerConfigurationService().getString("ui.service",
 							"Sakai Service");
 			} catch (Exception e) {
