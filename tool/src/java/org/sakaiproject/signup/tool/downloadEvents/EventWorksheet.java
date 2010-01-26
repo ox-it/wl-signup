@@ -252,13 +252,13 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 
 							/* attendee name */
 							cell = row.getCell(cellNum++);
-							cell.setCellValue(attendee.getDisplayName());
+							cell.setCellValue(attendee ==null? "--" :attendee.getDisplayName());
 
 							cell = row.getCell(cellNum++);
-							cell.setCellValue(attendee.getEid());
+							cell.setCellValue(attendee ==null? "--" : attendee.getEid());
 
 							cell = row.getCell(cellNum++);
-							cell.setCellValue(attendee.getEmail());
+							cell.setCellValue(attendee ==null? "--" : attendee.getEmail());
 
 							cell = row.getCell(cellNum++);
 							cell.setCellValue(getSiteTitle(att.getSignupSiteId()));
@@ -1009,10 +1009,15 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 			suffix = " (" + serialNum + ")";
 		
 		StringBuilder escapedString = new StringBuilder();
-
+		
+		name = name.trim();
 		for (int i = 0; i < name.length(); i++) {
 			char escapedStringCur_char = name.charAt(i);
-
+			
+			/*Strip out the first single quote, which is not allowed by Excel*/
+			if(i==0 && escapedStringCur_char =='\'')
+				continue;
+				
 			if (escapedStringCur_char == ':' || escapedStringCur_char == '\\'
 					|| escapedStringCur_char == '/' || escapedStringCur_char == '?'
 					|| escapedStringCur_char == '*' || escapedStringCur_char == '['
