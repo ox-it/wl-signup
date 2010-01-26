@@ -1011,10 +1011,15 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 			suffix = " (" + serialNum + ")";
 		
 		StringBuilder escapedString = new StringBuilder();
-
+		
+		name = name.trim();
 		for (int i = 0; i < name.length(); i++) {
 			char escapedStringCur_char = name.charAt(i);
-
+			
+			/*Strip out the first single quote, which is not allowed by Excel*/
+			if(i==0 && escapedStringCur_char =='\'')
+				continue;
+				
 			if (escapedStringCur_char == ':' || escapedStringCur_char == '\\'
 					|| escapedStringCur_char == '/' || escapedStringCur_char == '?'
 					|| escapedStringCur_char == '*' || escapedStringCur_char == '['
