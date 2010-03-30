@@ -1033,7 +1033,7 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 		 * and add together to 31 characters (Excel sheet name limit)
 		 */
 		String validSheetName = escapedString.toString().length() <= 31-suffix.length() ? escapedString.toString() : escapedString
-				.substring(31-suffix.length());
+				.substring(0,31-suffix.length());
 		
 		validSheetName = validSheetName + suffix;
 		
