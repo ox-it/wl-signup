@@ -113,8 +113,8 @@
 							<h:outputText value="#{msgs.event_signup_start}"  rendered="#{!EditMeetingSignupMBean.announcementType}" escape="false"/>
 							<h:panelGrid columns="2" columnClasses="editText,timeSelectTab" rendered="#{!EditMeetingSignupMBean.announcementType}">
 									<h:panelGroup>
-										<h:inputText id="signupBegins" value="#{EditMeetingSignupMBean.signupBegins}" size="3" required="true">
-											<f:validateLongRange minimum="0" maximum="99999"/>
+										<h:inputText id="signupBegins" value="#{EditMeetingSignupMBean.signupBegins}" size="4" required="true">
+											<f:validateLongRange minimum="0" maximum="9999"/>
 										</h:inputText>
 										<h:selectOneMenu id="signupBeginsType" value="#{EditMeetingSignupMBean.signupBeginsType}" onchange="isSignUpBeginStartNow(value);">
 											<f:selectItem itemValue="minutes" itemLabel="#{msgs.label_minutes}"/>
@@ -132,8 +132,8 @@
 							<h:outputText value="#{msgs.event_signup_deadline}" rendered="#{!EditMeetingSignupMBean.announcementType}" escape="false"/>
 							<h:panelGrid columns="2" columnClasses="editText,timeSelectTab" rendered="#{!EditMeetingSignupMBean.announcementType}">
 									<h:panelGroup>
-										<h:inputText id="signupDeadline" value="#{EditMeetingSignupMBean.deadlineTime}" size="3" required="true">
-											<f:validateLongRange minimum="0" maximum="1000"/>
+										<h:inputText id="signupDeadline" value="#{EditMeetingSignupMBean.deadlineTime}" size="4" required="true">
+											<f:validateLongRange minimum="0" maximum="9999"/>
 										</h:inputText>
 										<h:selectOneMenu value="#{EditMeetingSignupMBean.deadlineTimeType}" >
 											<f:selectItem itemValue="minutes" itemLabel="#{msgs.label_minutes}"/>
