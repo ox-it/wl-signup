@@ -45,7 +45,9 @@ import org.sakaiproject.signup.model.SignupSite;
 import org.sakaiproject.signup.util.PlainTextFormat;
 import org.sakaiproject.site.api.Group;
 import org.sakaiproject.site.api.Site;
+import org.sakaiproject.time.api.Time;
 import org.sakaiproject.time.api.TimeRange;
+import org.sakaiproject.time.api.TimeService;
 import org.springframework.dao.OptimisticLockingFailureException;
 
 /**
@@ -508,38 +510,7 @@ public class SignupMeetingServiceImpl implements SignupMeetingService, Retry {
 	 * {@inheritDoc}
 	 */
 	public void postToCalendar(SignupMeeting meeting) throws Exception {
-		try {
-			List<SignupSite> signupSites = meeting.getSignupSites();
-			for (SignupSite site : signupSites) {
-				Calendar calendar = sakaiFacade.getCalendar(site.getSiteId());
-				if (calendar == null)// site does not have calendar tool
-					continue;
-				CalendarEvent event = calendarEvent(calendar, meeting, site);
-				if (event == null)
-					throw new Exception("TODO: A database error occured");
-
-				if (site.isSiteScope()) {
-					site.setCalendarEventId(event.getId());
-					site.setCalendarId(calendar.getId());
-					continue;
-				}
-
-				List<SignupGroup> signupGroups = site.getSignupGroups();
-				for (SignupGroup group : signupGroups) {
-					group.setCalendarEventId(event.getId());
-					group.setCalendarId(calendar.getId());
-				}
-
-			}
-			updateMeetingWithVersionHandling(meeting);
-
-		} catch (IdUnusedException e) {
-			log.info("IdUnusedException: " + e.getMessage());
-			throw e;
-		} catch (PermissionException pe) {
-			log.info("PermissionException for posting calendar: " + pe.getMessage());
-			throw pe;
-		}
+		modifyCalendar(meeting);
 	}
 
 	/**
@@ -547,6 +518,7 @@ public class SignupMeetingServiceImpl implements SignupMeetingService, Retry {
 	 */
 	public void modifyCalendar(SignupMeeting meeting) throws Exception {
 		List<SignupSite> signupSites = meeting.getSignupSites();
+		boolean saveMeeting = false;
 		for (SignupSite site : signupSites) {
 			try {
 				Calendar calendar = sakaiFacade.getCalendar(site.getSiteId());
@@ -563,36 +535,64 @@ public class SignupMeetingServiceImpl implements SignupMeetingService, Retry {
 						break;
 					}
 				}
+				CalendarEventEdit eventEdit = null;
 
-				if (eventId == null || eventId.trim().length() < 1)
-					continue;
-
-				CalendarEventEdit eventEdit = calendar.getEditEvent(eventId,
-						org.sakaiproject.calendar.api.CalendarService.EVENT_MODIFY_CALENDAR);
+				boolean isNew = true;
+				if (eventId != null && eventId.trim().length() > 1) {
+					try {
+						eventEdit = calendar.getEditEvent(eventId,
+								org.sakaiproject.calendar.api.CalendarService.EVENT_MODIFY_CALENDAR);
+						isNew = false;
+						if (!calendar.allowEditEvent(eventId))
+							continue;
+					}catch (IdUnusedException e) {
+						log.debug("IdUnusedException: " + e.getMessage());
+						// If the event was removed from the calendar.
+						eventEdit = calendarEvent(calendar, meeting, site);
+					}
+				} else {
+					eventEdit = calendarEvent(calendar, meeting, site);
+				}
 				if (eventEdit == null)
 					continue;
 
-				if (!calendar.allowEditEvent(eventId))
-					continue;
-
 				/* new time frame */
-				TimeRange timeRange = getSakaiFacade().getTimeService().newTimeRange(meeting.getStartTime().getTime(),
-						meeting.getEndTime().getTime() - meeting.getStartTime().getTime());
+				TimeService timeService = getSakaiFacade().getTimeService();
+				Time start = timeService.newTime(meeting.getStartTime().getTime());
+				Time end = timeService.newTime(meeting.getEndTime().getTime());
+				TimeRange timeRange = timeService.newTimeRange(start, end, true, false);
+				eventEdit.setRange(timeRange);
 
 				String desc = meeting.getDescription();
 				eventEdit.setDescription(PlainTextFormat.convertFormattedHtmlTextToPlaintext(desc));
 				eventEdit.setLocation(meeting.getLocation());
 				eventEdit.setDisplayName(meeting.getTitle());
 				eventEdit.setRange(timeRange);
+				
 				calendar.commitEvent(eventEdit);
-			} catch (IdUnusedException e) {
-				log.info("IdUnusedException: " + e.getMessage());
-				throw e;
+				
+				if (isNew) {
+					saveMeeting = true; // Need to save these back
+					if (site.isSiteScope()) {
+						site.setCalendarEventId(eventEdit.getId());
+						site.setCalendarId(calendar.getId());
+					} else {
+						List<SignupGroup> signupGroups = site.getSignupGroups();
+						for (SignupGroup group : signupGroups) {
+							group.setCalendarEventId(eventEdit.getId());
+							group.setCalendarId(calendar.getId());
+						}
+					}
+				}
 			} catch (PermissionException pe) {
 				log.info("PermissionException for calendar-modification: " + pe.getMessage());
 				throw pe;
 			}
 		}
+		if (saveMeeting) {
+			updateMeetingWithVersionHandling(meeting);
+		}
+		
 
 	}
 
@@ -649,24 +649,17 @@ public class SignupMeetingServiceImpl implements SignupMeetingService, Retry {
 	}
 
 	/*
-	 * This method will post the event/meeting to the Calendar at Scheduler tool
-	 * in that site
+	 * This method will create a skeleton  event/meeting in the Scheduler tool
+	 * in that site. It still needs to be committed.
 	 */
-	@SuppressWarnings("unchecked")
-	private CalendarEvent calendarEvent(Calendar calendar, SignupMeeting meeting, SignupSite site)
+	private CalendarEventEdit calendarEvent(Calendar calendar, SignupMeeting meeting, SignupSite site)
 			throws IdUnusedException, PermissionException {
-		TimeRange timeRange = getSakaiFacade().getTimeService().newTimeRange(meeting.getStartTime().getTime(),
-				meeting.getEndTime().getTime() - meeting.getStartTime().getTime());
-		String title = meeting.getTitle();
-		Collection<Group> groups = Collections.EMPTY_LIST;
-		EventAccess eventAccess = CalendarEvent.EventAccess.SITE;
+		CalendarEventEdit addEvent = calendar.addEvent();
+		addEvent.setType("Meeting");
 		if (!site.isSiteScope()) {
-			groups = groupIds(site);
-			eventAccess = CalendarEvent.EventAccess.GROUPED;
+			List<Group> groups = groupIds(site);
+			addEvent.setGroupAccess(groups, true);
 		}
-		String mDescription = PlainTextFormat.convertFormattedHtmlTextToPlaintext(meeting.getDescription());
-		CalendarEvent addEvent = calendar.addEvent(timeRange, title, mDescription, "Meeting", meeting.getLocation(),
-				eventAccess, groups, Collections.EMPTY_LIST);
 
 		return addEvent;
 	}
