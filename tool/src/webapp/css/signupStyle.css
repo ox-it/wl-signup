@@ -531,3 +531,10 @@ table.emailTable td.valueColumn {
 	color: #888;
 	margin-left: 10px;
 }
+table.signupTable td.mobileCol{	
+	text-align:center;
+}
+
+.mobile-info-link img {
+	height: 50px;
+}
