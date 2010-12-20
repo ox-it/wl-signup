@@ -72,7 +72,7 @@ public class SignupMeetingWrapper implements SignupBeanConstants {
 	private List<SignupAttachment> attendeeAttachments = new ArrayList<SignupAttachment>();
 	
 	private List<SignupAttachment> eventMainAttachments = new ArrayList<SignupAttachment>();
-
+	
 	/**
 	 * Constructor
 	 * 
@@ -421,5 +421,9 @@ public class SignupMeetingWrapper implements SignupBeanConstants {
 				//TODO other cases: such as attachment for a specific time slot only.
 			}
 		}
+	}
+	
+	public String getMeetingId() {
+		return getMeeting().getId().toString();
 	}
 }

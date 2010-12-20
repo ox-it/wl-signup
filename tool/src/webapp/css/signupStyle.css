@@ -495,3 +495,11 @@ table.emailTable td.valueColumn {
 	margin-top:-8px; 
 	margin-left:-5px;
 }
+
+table.signupTable td.mobileCol{	
+	text-align:center;
+}
+
+.mobile-info-link img {
+	height: 50px;
+}
