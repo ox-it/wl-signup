@@ -27,5 +27,8 @@
 	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/entitybroker/entitybroker-utils/1.5-SNAPSHOT/entitybroker-utils-1.5-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/springframework/spring/2.5.6.SEC02/spring-2.5.6.SEC02.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/entitybroker/entitybroker-api/1.5-SNAPSHOT/entitybroker-api-1.5-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/jsf/jsf-widgets/2.9-SNAPSHOT/jsf-widgets-2.9-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/jsf/jsf-widgets-sun/2.9-SNAPSHOT/jsf-widgets-sun-2.9-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/jsf/myfaces-widgets/2.9-SNAPSHOT/myfaces-widgets-2.9-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
