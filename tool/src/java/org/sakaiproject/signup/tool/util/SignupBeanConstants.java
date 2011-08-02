@@ -83,7 +83,7 @@ public interface SignupBeanConstants {
 	public static final int perBiweek = 14;
 
 	/** define the JSF action outcomes constants */
-	public static final int MAX_NUM_PARTICIPANTS_FOR_DROPDOWN_BEFORE_AUTO_SWITCH_TO_EID_INPUT_MODE = 600;// 1000;
+	public static final int MAX_NUM_PARTICIPANTS_FOR_DROPDOWN_BEFORE_AUTO_SWITCH_TO_EID_INPUT_MODE = 2000;//600;// 1000;
 
 	public static final String MAIN_EVENTS_LIST_PAGE_URL = "listMeetings";
 
