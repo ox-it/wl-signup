@@ -32,5 +32,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/jsf/myfaces-widgets/2.9-SNAPSHOT/myfaces-widgets-2.9-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="M2_REPO/net/sf/opencsv/opencsv/2.3/opencsv-2.3.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/sakaiproject/calendar/sakai-calendar-api/2.9-SNAPSHOT/sakai-calendar-api-2.9-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
