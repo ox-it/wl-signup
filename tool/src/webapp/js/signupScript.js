@@ -774,7 +774,7 @@ function shortenUrl(fullUrl) {
     		$("#dialog-mox-url").html(data);
     		
     		//also set img tag for QR code
-    		var imgUrl = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" + data;
+    		var imgUrl = "https://chart.googleapis.com/chart?chs=547x547&cht=qr&chl=" + data;
     		$('#dialog-qr-code').attr("src", imgUrl);
     		
     		//and show the dialog
@@ -791,7 +791,9 @@ function showDialog() {
 	$("#dialog").dialog({
 		close: function(event, ui){
 			resizeFrame('shrink');
-		},	
+		},
+		height: 680,
+		width: 580,
 		resizable: false,
 		draggable: true,
 		closeOnEscape: true
