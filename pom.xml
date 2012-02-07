@@ -12,7 +12,7 @@
 	
 	<groupId>org.sakaiproject.signup</groupId>
 	<artifactId>signup</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0ox1-SNAPSHOT</version>
 	
 	<packaging>pom</packaging>
 	
@@ -41,21 +41,23 @@
 	</contributors>
 	
 	<scm>
-		<connection>scm:https://source.sakaiproject.org/contrib/signup/trunk</connection>
-		<developerConnection>scm:svn:https://source.sakaiproject.org/contrib/signup/trunk</developerConnection>
-		<url>https://source.sakaiproject.org/contrib/signup/trunk</url>
+		<connection>scm:git:ssh://git-repo.oucs.ox.ac.uk/~git/repos/local-version/signup.git</connection>
+		<developerConnection>scm:git:ssh://git-repo.oucs.ox.ac.uk/~git/repos/local-version/signup.git</developerConnection>
 	</scm>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
-	 <distributionManagement>
-        <site>
-            <id>sakai-site</id>
-            <name>Sakai release Site</name>
-            <url>scpexe://source.sakaiproject.org/var/www/html/release/signup/${project.version}</url>
-        </site>
+    <distributionManagement>
+        <repository>
+            <id>maven-repo.oucs</id>
+            <url>http://maven-repo.oucs.ox.ac.uk/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-repo.oucs</id>
+            <url>http://maven-repo.oucs.ox.ac.uk/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
     
     <pluginRepositories>
