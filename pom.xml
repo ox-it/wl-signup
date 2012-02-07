@@ -12,7 +12,7 @@
 	
 	<groupId>org.sakaiproject.signup</groupId>
 	<artifactId>signup</artifactId>
-	<version>1.0ox1</version>
+	<version>1.0ox2-SNAPSHOT</version>
 	
 	<packaging>pom</packaging>
 	
