@@ -371,12 +371,16 @@ public interface SignupMeetingService {
 	/**
 	 * This deletes a list of SignupMeeting objects. It should remove all or
 	 * none of them in one transaction
+	 *
+	 * Then sends email cancellation notification if the meeting has not already occurred.
 	 * 
 	 * @param meetings
 	 *            a list of SignupMeeting objects, which will be deleted from
 	 *            Database storage
+	 * @throws Exception 
+	 * 			thrown if something goes bad
 	 */
-	void removeMeetings(List<SignupMeeting> meetings);
+	void removeMeetings(List<SignupMeeting> meetings) throws Exception;
 
 	/**
 	 * This method will remove a list of the posted Calendar for a set of modified
@@ -408,5 +412,16 @@ public interface SignupMeetingService {
 	 * @return true if the event is existed.
 	 */
 	boolean isEventExisted(Long eventId);
+	
+	/**
+	 * Send email to attendee when they sign up/cancel their attendance
+	 * 
+	 * @param eventTrackingInfo
+	 *            an EventTrackingInfo object, which contains all the
+	 *            information about user action such as signup and cancel
+	 * @throws Exception
+	 *             thrown if something goes bad
+	 */
+	void sendEmailToAttendee(SignupEventTrackingInfo eventTrackingInfo) throws Exception;
 
 }
