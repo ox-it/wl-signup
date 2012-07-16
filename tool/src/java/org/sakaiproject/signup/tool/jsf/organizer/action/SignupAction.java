@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.sakaiproject.signup.logic.SakaiFacade;
 import org.sakaiproject.signup.logic.SignupEmailFacade;
 import org.sakaiproject.signup.logic.SignupMeetingService;
 import org.sakaiproject.signup.logic.SignupMessageTypes;
@@ -242,19 +243,20 @@ public abstract class SignupAction implements SignupBeanConstants{
 	
 	// Generate a group title based on the input given
 	public String generateGroupTitle(String meetingTitle, SignupTimeslot timeslot) {
-		
-		final char SEPARATOR = '-';
-		
-		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
-		
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append(meetingTitle);
+	    //Based on the database limitation
+        final int TITLE_MAX_LENGTH = 99;
+        final char SEPARATOR = '-';
+        final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        int titleSize = TITLE_MAX_LENGTH - SakaiFacade.GROUP_PREFIX.length();
+        StringBuilder sb = new StringBuilder(titleSize);
+
 		sb.append(SEPARATOR);
 		sb.append(df.format(timeslot.getStartTime()));
 		sb.append(SEPARATOR);
 		sb.append(df.format(timeslot.getEndTime()));
-		
+        titleSize -= sb.length();
+        if(titleSize > 0)
+            sb.insert(0, meetingTitle.substring(0, Math.min(titleSize, meetingTitle.length())));
 		return sb.toString();
 	}
 	
