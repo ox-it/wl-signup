@@ -149,6 +149,10 @@
 			<value>#{org_sakaiproject_signup_logic_SakaiFacade}</value>
 		</managed-property>
 		<managed-property>
+			<property-name>calendarHelper</property-name>
+			<value>#{org_sakaiproject_signup_logic_SignupCalendarHelper}</value>
+		</managed-property>
+		<managed-property>
 			<property-name>copyMeetingMBean</property-name>
 			<value>#{CopyMeetingSignupMBean}</value>
 		</managed-property>
@@ -230,6 +234,10 @@
 		<managed-property>
 			<property-name>sakaiFacade</property-name>
 			<value>#{org_sakaiproject_signup_logic_SakaiFacade}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>calendarHelper</property-name>
+			<value>#{org_sakaiproject_signup_logic_SignupCalendarHelper}</value>
 		</managed-property>
 		<managed-property>
 			<property-name>attachmentHandler</property-name>

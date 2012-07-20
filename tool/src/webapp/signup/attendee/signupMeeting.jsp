@@ -102,6 +102,13 @@
 										<f:convertDateTime dateStyle="long"/>
 								</h:outputText>	
 							</h:panelGroup>	
+							
+							<!-- iCalendar link, only rendered for attendees if it is a 'no signup required/announcement' meeting -->
+							<h:outputText value="#{msgs.event_icalendar_link}" styleClass="titleText" escape="false" rendered="#{AttendeeSignupMBean.icsEnabled && AttendeeSignupMBean.meetingWrapper.meeting.meetingType =='announcement'}"/>
+							<h:commandLink id="mICS" action="#{AttendeeSignupMBean.downloadICSForMeeting}" rendered="#{AttendeeSignupMBean.icsEnabled && AttendeeSignupMBean.meetingWrapper.meeting.meetingType =='announcement'}">
+								<h:graphicImage value="/images/calendar_add.png" alt="#{msgs.label_ics}" title="#{msgs.label_download_ics_meeting}" style="margin-right: 5px;" />
+								<h:outputText value="#{msgs.event_icalendar_label}"/>
+							</h:commandLink>
 		
 							<h:outputText id="noAnnouncement107" value="#{msgs.event_signup_start}" style="white-space: nowrap;" styleClass="titleText" rendered="#{!AttendeeSignupMBean.announcementType}" escape="false"/>
 							<h:panelGroup id="noAnnouncemnt108" rendered="#{!AttendeeSignupMBean.announcementType}">
@@ -302,10 +309,14 @@
 						<f:facet name="header">
 							<h:outputText value="#{msgs.tab_event_your_status}" escape="false"/>
 						</f:facet>
-						<h:outputText value="#{msgs.event_sign_up}"
-							title="#{msgs.event_tool_tip_you_signed_up}"
-							rendered="#{timeSlotWrapper.currentUserSignedUp}"
-							styleClass="attendee_status" />
+						<h:panelGroup rendered="#{timeSlotWrapper.currentUserSignedUp}">
+							<h:outputText value="#{msgs.event_sign_up}"
+								title="#{msgs.event_tool_tip_you_signed_up}"
+								styleClass="attendee_status" />
+							<h:commandLink id="tsICS" action="#{AttendeeSignupMBean.downloadICSForTimeslot}" rendered="#{AttendeeSignupMBean.icsEnabled}">
+								<h:graphicImage value="/images/calendar_add.png" alt="#{msgs.label_ics}" title="#{msgs.label_download_ics_timeslot}" style="margin-left: 5px;" />
+							</h:commandLink>
+						</h:panelGroup>
 						<h:outputText value="#{msgs.event_on_waiting_list}"
 							title="#{msgs.event_tool_tip_you_ranking_num} #{timeSlotWrapper.rankingOnWaiting}"
 							rendered="#{timeSlotWrapper.currentUserOnWaitingList}"
