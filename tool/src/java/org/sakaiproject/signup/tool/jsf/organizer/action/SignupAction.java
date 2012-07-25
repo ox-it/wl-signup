@@ -22,6 +22,7 @@
  **********************************************************************************/
 package org.sakaiproject.signup.tool.jsf.organizer.action;
 
+import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -243,20 +244,24 @@ public abstract class SignupAction implements SignupBeanConstants{
 	
 	// Generate a group title based on the input given
 	public String generateGroupTitle(String meetingTitle, SignupTimeslot timeslot) {
-	    //Based on the database limitation
-        final int TITLE_MAX_LENGTH = 99;
-        final char SEPARATOR = '-';
-        final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        int titleSize = TITLE_MAX_LENGTH - SakaiFacade.GROUP_PREFIX.length();
-        StringBuilder sb = new StringBuilder(titleSize);
+		
+		//Based on the database limitation
+		final int TITLE_MAX_LENGTH = 99;
+		final char SEPARATOR = '-';
 
+		final DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		int titleSize = TITLE_MAX_LENGTH - SakaiFacade.GROUP_PREFIX.length();
+		StringBuilder sb = new StringBuilder(titleSize);
+		
 		sb.append(SEPARATOR);
 		sb.append(df.format(timeslot.getStartTime()));
 		sb.append(SEPARATOR);
 		sb.append(df.format(timeslot.getEndTime()));
-        titleSize -= sb.length();
-        if(titleSize > 0)
-            sb.insert(0, meetingTitle.substring(0, Math.min(titleSize, meetingTitle.length())));
+		titleSize -= sb.length();
+		
+		if (titleSize > 0)
+			sb.insert(0, meetingTitle.substring(0, Math.min(titleSize, meetingTitle.length())));
+
 		return sb.toString();
 	}
 	
