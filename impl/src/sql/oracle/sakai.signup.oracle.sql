@@ -15,8 +15,10 @@ create table signup_meetings (
 	title varchar2(255 char) not null,
 	description clob,
 	location varchar2(255 char) not null,
+	category varchar2(255 char) not null,
 	meeting_type varchar2(50 char) not null,
 	creator_user_id varchar2(255 char) not null,
+	coordinators_user_Ids   varchar2(1000 char)  default NULL,
 	start_time timestamp not null,
 	end_time timestamp not null,
 	signup_begins timestamp,
@@ -24,6 +26,7 @@ create table signup_meetings (
 	canceled number(1,0),
 	locked number(1,0),
 	receive_email_owner number(1,0),
+	default_send_email_by_owner   number(1,0)  default '0' NULL,
 	recurrence_id number(19,0),
 	repeat_type varchar2(20 char) default NULL,
 	allow_waitList  number(1,0)  default '1',
@@ -31,6 +34,8 @@ create table signup_meetings (
 	eid_input_mode  number(1,0)  default '0' NULL,
 	auto_reminder   number(1,0)  default '0' NULL,	
 	allow_attendance  number(1,0)  default '0' NULL,
+	create_groups   number(1,0)  default '0' NULL,
+	maxnumof_slot number(10,0) default 1,
 	primary key (id));
 	
 create table signup_site_groups (
