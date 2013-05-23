@@ -1160,10 +1160,9 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 								}
 
 								User attendee = sakaiFacade.getUser(att.getAttendeeUserId());
-								String attendeeEID= attendee.getEid();
-								if (m.containsKey(attendeeEID)){
-									//Integer value=m.get(attendeeEID).get(index);
-									List<Integer> attendanceList = m.get(attendeeEID);
+								String attendeeDisplayId= attendee.getDisplayId();
+								if (m.containsKey(attendeeDisplayId)){
+									List<Integer> attendanceList = m.get(attendeeDisplayId);
 									if (attendanceList.get(index)!=null){
 										attendanceList.set(index, attendanceList.get(index)+attended);
 									}
@@ -1174,7 +1173,7 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 								else{
 									List<Integer> newList= Arrays.asList(new Integer[wrappers.size()]);
 									newList.set(index,attended);
-									m.put(attendeeEID, newList);
+									m.put(attendeeDisplayId, newList);
 								}
 							}
 						}
@@ -1188,10 +1187,9 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 
 								if (wt.isAttended()){
 									User attendee = sakaiFacade.getUser(wt.getAttendeeUserId());
-									String attendeeEID= attendee.getEid();
-									if (m.containsKey(attendeeEID)){
-										//Integer value=m.get(attendeeEID).get(index);
-										List<Integer> attendanceList = m.get(attendeeEID);
+									String attendeeDisplayId= attendee.getDisplayId();
+									if (m.containsKey(attendeeDisplayId)){
+										List<Integer> attendanceList = m.get(attendeeDisplayId);
 										if (attendanceList.get(index)!=null){
 											attendanceList.set(index, attendanceList.get(index)+attended);
 										}
@@ -1202,7 +1200,7 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 									else{
 										List<Integer> newList= Arrays.asList(new Integer[wrappers.size()]);
 										newList.set(index,attended);
-										m.put(attendeeEID, newList);
+										m.put(attendeeDisplayId, newList);
 									}
 								}
 							}
@@ -1226,7 +1224,7 @@ public class EventWorksheet implements MeetingTypes, SignupBeanConstants {
 			}
 			cellNum = 0;
 			row.getCell(cellNum++).setCellValue((String)pairs.getKey());
-			List<Integer> attendanceList= (List)pairs.getValue();			
+			List<Integer> attendanceList= (List)pairs.getValue();
 			for (int i=0; i < attendanceList.size(); i++) {
 				if (attendanceList.get(i)!=null){
 					row.getCell(cellNum++).setCellValue(attendanceList.get(i));

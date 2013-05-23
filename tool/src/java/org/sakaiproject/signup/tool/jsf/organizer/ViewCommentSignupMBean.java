@@ -103,17 +103,17 @@ public class ViewCommentSignupMBean extends SignupUIBaseBean {
 	}
 	
 	/**
-	 * show the attendee's Eid (user Id)
-	 * @return eid String
+	 * show the attendee's Display ID (user Id)
+	 * @return String ID for the user.
 	 */
-	public String getAttendeeEid(){
-		String eid =attendeeWraper.getSignupAttendee().getAttendeeUserId();
+	public String getAttendeeDisplayId(){
+		String id =attendeeWraper.getSignupAttendee().getAttendeeUserId();
 		User user = sakaiFacade.getUser(attendeeWraper.getSignupAttendee().getAttendeeUserId());
 		if(user !=null){
-			eid = user.getEid();
+			id = user.getDisplayId();
 		}
 
-		return eid;
+		return id;
 	}
 
 }
