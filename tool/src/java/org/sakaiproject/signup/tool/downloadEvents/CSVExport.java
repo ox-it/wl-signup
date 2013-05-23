@@ -79,7 +79,7 @@ public class CSVExport {
 
 							attendance.add(attendee ==null? "--" :attendee.getDisplayName());
 
-							attendance.add(attendee ==null? "--" : attendee.getEid());
+							attendance.add(attendee ==null? "--" : attendee.getDisplayId());
 
 							attendance.add(attendee ==null? "--" : attendee.getEmail());
 
