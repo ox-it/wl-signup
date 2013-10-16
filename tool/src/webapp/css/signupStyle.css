@@ -457,7 +457,7 @@ table.instruction td.desc{
 	
 }
 
-.expandAllRecurMeetings {
+.padLeft {
 	margin-left: 30px;
 	text-align: left;
 }
@@ -539,4 +539,10 @@ table.signupTable td.mobileCol{
 
 .mobile-info-link img {
 	height: 50px;
+}
+
+/* control CKEditor window size*/
+.cke_contents {
+		height: 160px !important;
+		width:700px !important;
 }

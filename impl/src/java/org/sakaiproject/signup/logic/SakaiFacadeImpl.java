@@ -60,6 +60,7 @@ import org.sakaiproject.tool.api.ToolManager;
 import org.sakaiproject.user.api.User;
 import org.sakaiproject.user.api.UserDirectoryService;
 import org.sakaiproject.user.api.UserNotDefinedException;
+import org.sakaiproject.util.ResourceLoader;
 
 /**
  * <p>
@@ -76,6 +77,8 @@ public class SakaiFacadeImpl implements SakaiFacade {
 	private static Log log = LogFactory.getLog(SakaiFacadeImpl.class);
 
 	private FunctionManager functionManager;
+	
+	private static ResourceLoader rb=  new ResourceLoader();
 
 	/**
 	 * set a Sakai FunctionManager object
@@ -283,6 +286,30 @@ public class SakaiFacadeImpl implements SakaiFacade {
 	public String getUserDisplayName(String userId) {
 		try {
 			return userDirectoryService.getUser(userId).getDisplayName();
+		} catch (UserNotDefinedException e) {
+			log.warn("Cannot get user displayname for id: " + userId);
+			return "--------";
+		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getUserDisplayLastFirstName(String userId) {
+		try {
+			String dispLastName= userDirectoryService.getUser(userId).getLastName();
+			if(dispLastName !=null){
+				dispLastName = StringUtils.lowerCase(dispLastName, rb.getLocale());
+				dispLastName = StringUtils.capitalize(dispLastName);
+			}
+			String dispFirstName = userDirectoryService.getUser(userId).getFirstName();
+			if(dispFirstName !=null){
+				dispFirstName = StringUtils.lowerCase(dispFirstName, rb.getLocale());
+				dispFirstName = StringUtils.capitalize(dispFirstName);
+			}
+			String displayname = dispLastName +", " + dispFirstName;
+
+			return displayname;
 		} catch (UserNotDefinedException e) {
 			log.warn("Cannot get user displayname for id: " + userId);
 			return "--------";
@@ -509,7 +536,28 @@ public class SakaiFacadeImpl implements SakaiFacade {
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<SignupUser> getAllPossbileCoordinators(SignupMeeting meeting) {
+	public List<SignupUser> getAllPossibleAttendees(SignupMeeting meeting){
+		List<SignupSite> signupSites = meeting.getSignupSites();
+		Set<SignupUser> signupUsers = new TreeSet<SignupUser>();
+		for (SignupSite signupSite : signupSites) {
+			if (signupSite.isSiteScope()) {
+				getAttendeesForSiteWithSiteScope(signupUsers, signupSite);
+			} else {
+				List<SignupGroup> signupGroups = signupSite.getSignupGroups();
+				for (SignupGroup signupGroup : signupGroups) {
+					getAttendeesForGroup(signupUsers, signupSite, signupGroup);
+				}
+			}
+
+		}
+		return new ArrayList<SignupUser>(signupUsers);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SignupUser> getAllPossibleCoordinators(SignupMeeting meeting) {
 		List<SignupUser> coordinators = new ArrayList<SignupUser>();
 		List<SignupUser> signUpUsers = getAllUsers(meeting);
 		for (SignupUser u : signUpUsers) {
@@ -713,6 +761,45 @@ public class SakaiFacadeImpl implements SakaiFacade {
 			}
 		}
 	}
+	
+	/* get all users in a specific group */
+	@SuppressWarnings("unchecked")
+	private void getAttendeesForGroup(Set<SignupUser> signupUsers, SignupSite signupSite, SignupGroup signupGroup) {
+		Site site = null;
+		try {
+			site = siteService.getSite(signupSite.getSiteId());
+		} catch (IdUnusedException e) {
+			log.error("Cannot get the info about siteId: " + e.getMessage());
+			return;
+		}
+		Group group = site.getGroup(signupGroup.getGroupId());
+		if (group == null)
+			return;
+		Set<Member> members = group.getMembers();
+		SignupUser signupUser = null;
+		for (Member member : members) {
+			if (member.isActive()
+					&& (hasPredefinedViewPermisson(member)
+							|| isAllowedGroup(member.getUserId(), SIGNUP_ATTEND, site.getId(), group.getId()) || isAllowedSite(
+							member.getUserId(), SIGNUP_ATTEND_ALL, site.getId()))) {
+				User user = getUserQuietly(member.getUserId());
+				if (user == null) {
+					log.debug("user is not found from 'userDirectoryService' for userId:" + member.getUserId());
+					/* will not add into the dropDown list
+					signupUser = new SignupUser(member.getUserEid(), member.getUserId(), "", member.getUserEid(),
+							member.getRole(), site.getId(), site.isPublished());
+					processAddOrUpdateSignupUsers(signupUsers, signupUser);
+					*/
+					continue;
+				}
+
+				signupUser = new SignupUser(member.getUserEid(), member.getUserId(), user.getFirstName(), user
+						.getLastName(), member.getRole(), site.getId(), site.isPublished());
+				processAddOrUpdateSignupUsers(signupUsers, signupUser);
+				// comment: member.getUserDisplayId() not used
+			}
+		}
+	}
 
 	private boolean hasPredefinedViewPermisson(Member member) {
 		/*
@@ -742,6 +829,46 @@ public class SakaiFacadeImpl implements SakaiFacade {
 					&& (hasPredefinedViewPermisson(member)
 							|| isAllowedSite(member.getUserId(), SIGNUP_VIEW, site.getId()) || isAllowedSite(member
 							.getUserId(), SIGNUP_VIEW_ALL, site.getId()))) {
+				User user = getUserQuietly(member.getUserId());
+				if (user == null) {
+					log.debug("user is not found from 'userDirectoryService' for userId:" + member.getUserId());
+					/* will not add into the dropDown list
+					signupUser = new SignupUser(member.getUserEid(), member.getUserId(), "", member.getUserEid(),
+							member.getRole(), site.getId(), site.isPublished());
+					processAddOrUpdateSignupUsers(signupUsers, signupUser);
+					*/
+					continue;
+				}
+
+				signupUser = new SignupUser(member.getUserEid(), member.getUserId(), user.getFirstName(), user
+						.getLastName(), member.getRole(), site.getId(), site.isPublished());
+				processAddOrUpdateSignupUsers(signupUsers, signupUser);
+
+			}
+		}
+	}
+	
+	/* get all users in a site */
+	@SuppressWarnings("unchecked")
+	private void getAttendeesForSiteWithSiteScope(Set<SignupUser> signupUsers, SignupSite signupSite) {
+		Site site = null;
+		try {
+			site = siteService.getSite(signupSite.getSiteId());
+		} catch (IdUnusedException e) {
+			log.error(e.getMessage(), e);
+		}
+
+		if (site == null)
+			return;
+
+		SignupUser signupUser = null;
+		Set<Member> members = site.getMembers();
+		for (Member member : members) {
+			if (member.isActive()
+					&& (hasPredefinedViewPermisson(member)
+							|| isAllowedSite(member.getUserId(), SIGNUP_ATTEND, site.getId()) || isAllowedSite(member
+							.getUserId(), SIGNUP_ATTEND_ALL, site.getId()) || isAllowedSite(member
+									.getUserId(), SIGNUP_UPDATE_SITE, site.getId()))) {
 				User user = getUserQuietly(member.getUserId());
 				if (user == null) {
 					log.debug("user is not found from 'userDirectoryService' for userId:" + member.getUserId());
@@ -966,7 +1093,8 @@ public class SakaiFacadeImpl implements SakaiFacade {
 		    group.getProperties().addProperty(GROUP_PROP_SITEINFO_VISIBLE, Boolean.TRUE.toString());
 		    
 		    //set this so the group does not show in the list of groups in signups
-		    group.getProperties().addProperty(GROUP_PROP_SIGNUP_IGNORE, Boolean.TRUE.toString());
+		    //SIGNUP-182 allow groups to be normal groups, ie dont set this property
+		    //group.getProperties().addProperty(GROUP_PROP_SIGNUP_IGNORE, Boolean.TRUE.toString());
 
 		    
 		    if(userUuids != null) {

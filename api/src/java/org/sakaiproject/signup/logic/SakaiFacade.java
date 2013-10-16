@@ -115,6 +115,16 @@ public interface SakaiFacade {
 	 * @return display name (probably firstname lastname) or "----------" (10
 	 *         hyphens) if none found
 	 */
+	public String getUserDisplayLastFirstName(String userId);
+	
+	/**
+	 * Get the display name for a user by their unique id
+	 * 
+	 * @param userId
+	 *            the current sakai user id (not username)
+	 * @return display name (probably  lastname,firstname) or "----------" (10
+	 *         hyphens) if none found
+	 */
 	public String getUserDisplayName(String userId);
 
 	/**
@@ -230,7 +240,7 @@ public interface SakaiFacade {
 	 *            a SignupMeeting object
 	 * @return a list of SignupMeeting objects
 	 */
-	public List<SignupUser> getAllPossbileCoordinators(SignupMeeting meeting);
+	public List<SignupUser> getAllPossibleCoordinators(SignupMeeting meeting);
 	
 	/**
 	 * test whether a user has permission to create a meeting in a meeting
@@ -248,6 +258,15 @@ public interface SakaiFacade {
 	 * @return a list of SignupMeeting objects
 	 */
 	public List<SignupUser> getAllUsers(SignupMeeting meeting);
+	
+	/**
+	 * get all users, who have permission to attend the meeting
+	 * 
+	 * @param meeting
+	 *            a SignupMeeting object
+	 * @return a list of SignupMeeting objects
+	 */
+	public List<SignupUser> getAllPossibleAttendees(SignupMeeting meeting);
 
 	/**
 	 * get Calendar for this specific siteId

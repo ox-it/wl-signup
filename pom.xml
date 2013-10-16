@@ -3,10 +3,25 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
+        <groupId>org.sakaiproject</groupId>
+        <artifactId>master</artifactId>
+        <version>2.10-SNAPSHOT</version>
+        <!-- version>2.9-SNAPSHOT</version -->
+        <!-- version>2.9.1</version -->
+        <relativePath>../master/pom.xml</relativePath>
+        <!-- for 2.8 -->
+        <!--
+        <version>2.8.3</version>
+        -->
+    </parent>
+    
+    <!-- parent>
 		<groupId>org.sakaiproject.purepoms</groupId>
 		<artifactId>sakai-standard-tool</artifactId>
 		<version>2.9.0-a02</version>
-	</parent>
+	</parent -->
+    
+
 	
 	<name>Sakai Signup Project</name>
 	
@@ -46,7 +61,7 @@
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<external-calendaring-service-version>1.0.4</external-calendaring-service-version>
+		<external-calendaring-service-version>1.0.5</external-calendaring-service-version>
 	</properties>
 	
     <distributionManagement>
@@ -122,10 +137,14 @@
             </snapshots>
         </repository>
     </repositories> 
-	
 	<dependencyManagement>
 		<dependencies>
 			
+            <dependency>
+                <groupId>org.azeckoski</groupId>
+                <artifactId>reflectutils</artifactId>
+                <version>0.9.18</version>
+            </dependency>
 			<!--  project dependencies -->
 			<dependency>
 				<groupId>org.sakaiproject.signup</groupId>
@@ -157,13 +176,13 @@
 			<dependency>
 				<groupId>org.sakaiproject.entitybroker</groupId>
 				<artifactId>entitybroker-api</artifactId>
-				<version>1.4.1</version>
+                <version>1.5.3</version>
 				<scope>provided</scope>
 			</dependency>
     		<dependency>
 				<groupId>org.sakaiproject.entitybroker</groupId>
 				<artifactId>entitybroker-utils</artifactId>
-				<version>1.5.0-a01</version>
+                <version>1.5.3</version>
 				<scope>compile</scope>
 			</dependency>
 			
@@ -262,19 +281,19 @@
 			<dependency>
             	<groupId>org.sakaiproject.jsf</groupId>
             	<artifactId>jsf-tool</artifactId>
-				<version>2.9.0-a01</version>
+				<version>2.9.0</version>
 				<scope>compile</scope>
         	</dependency>
         	<dependency>
             	<groupId>org.sakaiproject.jsf</groupId>
             	<artifactId>jsf-app</artifactId>
-				<version>2.9.0-a01</version>
+				<version>2.9.0</version>
 				<scope>compile</scope>
         	</dependency>
         	<dependency>
             	<groupId>org.sakaiproject.jsf</groupId>
             	<artifactId>jsf-widgets-sun-depend</artifactId>
-				<version>2.9.0-a01</version>
+				<version>2.9.0</version>
             	<type>pom</type>
         	</dependency>		
 			

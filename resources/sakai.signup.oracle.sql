@@ -15,7 +15,7 @@ create table signup_meetings (
 	title varchar2(255 char) not null,
 	description clob,
 	location varchar2(255 char) not null,
-	category varchar2(255 char) not null,
+	category varchar2(255 char) default null,
 	meeting_type varchar2(50 char) not null,
 	creator_user_id varchar2(255 char) not null,
 	coordinators_user_Ids   varchar2(1000 char)  default null,
@@ -36,6 +36,7 @@ create table signup_meetings (
 	allow_attendance   number(1,0)  default '0' NULL,	
 	create_groups   number(1,0)  default '0' NULL,
 	maxnumof_slot number(10,0) default 1,
+	vevent_uuid		varchar2(255) default NULL,
 	primary key (id));
 	
 create table signup_site_groups (
@@ -91,7 +92,8 @@ create table signup_ts (
 	locked number(1,0),
 	meeting_id number(19,0) not null,
 	list_index number(10,0),
-	group_id varchar2(255 char), 
+	group_id varchar2(255 char),
+	vevent_uuid  VARCHAR2(255)  default NULL,
 	primary key (id));
 
 CREATE TABLE  signup_attachments (

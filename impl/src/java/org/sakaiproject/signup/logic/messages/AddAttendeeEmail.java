@@ -26,6 +26,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.sakaiproject.signup.logic.SakaiFacade;
 import org.sakaiproject.signup.logic.SignupTrackingItem;
 import org.sakaiproject.signup.model.SignupMeeting;
@@ -129,13 +130,13 @@ public class AddAttendeeEmail extends SignupEmailBase {
 	
 	@Override
 	public String getFromAddress() {
-		return organizer.getEmail();
+		return StringUtils.defaultIfEmpty(organizer.getEmail(), getServerFromAddress());
 	}
 	
 	@Override
 	public String getSubject() {
 		return MessageFormat.format(rb.getString("subject.new.appointment.field"), new Object[] {
-			organizer.getDisplayName(), getTime(meeting.getStartTime()).toStringLocalDate() });
+			organizer.getDisplayName(), getTime(meeting.getStartTime()).toStringLocalDate(), getAbbreviatedMeetingTitle() });
 	}
 
 }

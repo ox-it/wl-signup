@@ -218,10 +218,6 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 
 		}
 
-		/* send one email to organizer about the update status */
-		if (!signupEventTrackingInfo.getMeeting().isReceiveEmailByOwner())
-			return;
-
 		//User organizer = null;
 		User initiator = null;
 		try {
@@ -233,11 +229,16 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			initiator = userDirectoryService.getUser(signupEventTrackingInfo.getInitiatorAllocationInfo().getAttendee() .getAttendeeUserId());
 
-			//AttendeeCancellationEmail email = new AttendeeCancellationEmail(organizer, initiator, sigupTList, signupEventTrackingInfo.getMeeting(), this.sakaiFacade);
-			//sendEmail(organizer, email);
-			for (User organizer : OwnerAndCoordinators) {
-				AttendeeCancellationEmail email = new AttendeeCancellationEmail(organizer, initiator, sigupTList, signupEventTrackingInfo.getMeeting(), this.sakaiFacade);
-				sendEmail(organizer, email);
+			/* send one email to organizer about the update status */			
+			if (signupEventTrackingInfo.getMeeting().isReceiveEmailByOwner()){				
+				for (User organizer : OwnerAndCoordinators) {
+					try{
+						AttendeeCancellationEmail email = new AttendeeCancellationEmail(organizer, initiator, sigupTList, signupEventTrackingInfo.getMeeting(), this.sakaiFacade);
+						sendEmail(organizer, email);
+					}catch(Exception e){
+						//do nothing: avoid one wrong email address for one user to break all things
+					}
+				}				
 			}
 			
 			//also send an email to the attendee
@@ -346,7 +347,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			logger.error("Cannot send mail. No recipient." + e.getMessage());
 		} catch (AddressValidationException e) {
 			//this should be caught when adding the email address, since it is validated then.
-			logger.warn("Cannot send mail. Invalid email address." + EmailAddress.toString(e.getInvalidEmailAddresses()));
+			logger.warn("Cannot send mail to user: " +  user.getEid() + ". Invalid email address." + EmailAddress.toString(e.getInvalidEmailAddresses()));
 		}
 		
 	}
@@ -683,6 +684,9 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		//note that the headers are largely ignored so we need to repeat some things here that are actually in the headers
 		//if these are eventaully converted to proper email templates, this should be alleviated
 		message.setSubject(email.getSubject());
+		
+		logger.debug("email.getFromAddress(): " + email.getFromAddress());
+		
 		message.setFrom(email.getFromAddress());
 		message.setContentType("text/html; charset=UTF-8");
 		
@@ -695,7 +699,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		if(StringUtils.isNotBlank(emailAddress) && EmailValidator.getInstance().isValid(emailAddress)) {
 			message.addRecipient(EmailAddress.RecipientType.TO, recipient.getDisplayName(), emailAddress);
 		} else {
-			logger.error("Invalid email: " + emailAddress + " for user:" + recipient.getDisplayId());
+			logger.error("Invalid email for user:" + recipient.getDisplayId() + ". No email will be sent to this user");
 			return null;
 		}
 		

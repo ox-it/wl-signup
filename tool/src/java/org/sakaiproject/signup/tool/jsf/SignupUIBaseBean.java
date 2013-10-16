@@ -108,6 +108,10 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 
 	private int maxAttendeesPerSlot;
 	
+	protected String customLocation;
+		
+	protected String customCategory;
+	
 	protected static final String ICS_MIME_TYPE="text/calendar";
 
 
@@ -158,7 +162,7 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 			//clean the list
 			List<SignupAttendee> cleanedList = getValidAttendees(elm.getAttendees());
 			for (SignupAttendee attendee : cleanedList) {
-				AttendeeWrapper attWrp = new AttendeeWrapper(attendee, sakaiFacade.getUserDisplayName(attendee
+				AttendeeWrapper attWrp = new AttendeeWrapper(attendee, sakaiFacade.getUserDisplayLastFirstName(attendee
 						.getAttendeeUserId()));
 				attWrp.setPositionIndex(posIndex++);
 				attendeeWrp.add(attWrp);
@@ -168,6 +172,15 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 					//setCurrentUserSignedup(true);
 					totalSignedupSlots++;
 			}
+			
+			//sorting by displayname
+			//JIRA: Signup-204
+			posIndex = 0;
+			Collections.sort(attendeeWrp);
+			for (AttendeeWrapper attWrp : attendeeWrp) {
+				attWrp.setPositionIndex(posIndex++);
+			}
+			
 			tsw.setAttendeeWrappers(attendeeWrp);
 
 			tsw.setWaitingList(wrapWaiters(elm.getWaitingList()));
@@ -264,7 +277,7 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 		List<AttendeeWrapper> attendeeWrp = new ArrayList<AttendeeWrapper>();
 		for (SignupAttendee attendee : attendees) {
 			attendeeWrp
-					.add(new AttendeeWrapper(attendee, sakaiFacade.getUserDisplayName(attendee.getAttendeeUserId())));
+					.add(new AttendeeWrapper(attendee, sakaiFacade.getUserDisplayLastFirstName(attendee.getAttendeeUserId())));
 		}
 
 		return attendeeWrp;
@@ -707,11 +720,13 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 		
 		for(String e: emails) {
 			sb.append(e);
-			sb.append(',');
+			//for compatibility with Outlook, this should be a semicolon not a comma as per the RFC. 
+			//Also tested in Thunderbird, Yahoo and GMail.
+			sb.append(';'); 
 		}
 		
 		//trim off last , and return
-		return StringUtils.removeEnd(sb.toString(), ",");
+		return StringUtils.removeEnd(sb.toString(), ";");
 	}
 	
 	/**
@@ -719,8 +734,13 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 	 * This method is in this particular bean because 1. We have access to the meeting here, and 2. it is used in more than one sub-bean.
 	 */
 	public void downloadICSForMeeting() {
-			
-		String filePath = calendarHelper.createCalendarFile(Collections.singletonList(calendarHelper.generateVEventForMeeting(meetingWrapper.getMeeting())));;
+		String filePath;
+		try{	
+			filePath = calendarHelper.createCalendarFile(Collections.singletonList(calendarHelper.generateVEventForMeeting(meetingWrapper.getMeeting())));
+		}catch(NullPointerException ne){
+			handleICSDownloadWarningToUser();
+			return;
+		}
 		
 		if(StringUtils.isNotBlank(filePath)) {
 			logger.debug("filepath: " + filePath);
@@ -730,6 +750,32 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 			//TODO this could set an error and return perhaps.
 		}
 		
+	}
+	
+	public void downloadICSForMeetingTimeSlot(TimeslotWrapper timeslotWrapper) {
+		String filePath;
+		try{	
+			filePath = calendarHelper.createCalendarFile(Collections.singletonList(calendarHelper.generateVEventForTimeslot(meetingWrapper.getMeeting(), timeslotWrapper.getTimeSlot())));;
+		}catch(NullPointerException ne){
+			handleICSDownloadWarningToUser();
+			return;
+		}
+		
+		if(StringUtils.isNotBlank(filePath)) {
+			logger.debug("filepath: " + filePath);
+			sendDownload(filePath, ICS_MIME_TYPE);
+		} else {
+			logger.error("Could not generate file for download");
+			//TODO this could set an error and return perhaps.
+		}
+		
+	}
+	
+	private void handleICSDownloadWarningToUser(){
+		logger.error("The Scheduler tool may not be availabe for the site");
+		String warningFileName = Utilities.rb.getString("ics_file_name_for_missing_scheduler_tool");
+		String warningMsg = Utilities.rb.getString("ics_warning_msg_for_missing_scheduler_tool");			
+		sendDownloadWarning(warningFileName,warningMsg);
 	}
 	
 	/**
@@ -769,6 +815,44 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 	}
 	
 	/**
+	 * Send a warning message to user about failed ICS file generation
+	 * @param fileName
+	 * @param warningMsg
+	 */
+	protected void sendDownloadWarning(String fileName, String warningMsg) {
+
+		FacesContext fc = FacesContext.getCurrentInstance();
+		ServletOutputStream out = null;
+		
+		
+		try {
+			HttpServletResponse response = (HttpServletResponse) fc.getExternalContext().getResponse();
+			
+			response.reset();
+			response.setHeader("Pragma", "public");
+			response.setHeader("Cache-Control","public, must-revalidate, post-check=0, pre-check=0, max-age=0"); 
+			response.setContentType("text/plain");
+			response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+			
+			out = response.getOutputStream();
+			warningMsg= warningMsg!=null? warningMsg:"Missing Scheduler tool on site";
+			out.print(warningMsg);
+
+			out.flush();
+		} catch (IOException ex) {
+			logger.warn("Error generating file for download:" + ex.getMessage());
+		} finally {
+			try{
+				out.close();
+			}catch (Exception e){
+				//do nothing;
+			}
+		}
+		fc.responseComplete();
+		
+	}
+	
+	/**
 	 * Is ICS calendar generation enabled in the external calendaring service?
 	 * @return	true/false
 	 */
@@ -793,6 +877,22 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 
 	public void setIframeId(String iframeId) {
 		this.iframeId = iframeId;
-	}	
+	}
+
+	public String getCustomLocation() {
+		return customLocation;
+	}
+
+	public void setCustomLocation(String customLocation) {
+		this.customLocation = customLocation;
+	}
+
+	public String getCustomCategory() {
+		return customCategory;
+	}
+
+	public void setCustomCategory(String customCategory) {
+		this.customCategory = customCategory;
+	}
 
 }

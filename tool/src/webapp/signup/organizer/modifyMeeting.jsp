@@ -80,11 +80,21 @@
 		                        <h:selectOneMenu id="selectedLocation" value="#{EditMeetingSignupMBean.selectedLocation}">
 									<f:selectItems value="#{EditMeetingSignupMBean.allLocations}"/>
 								</h:selectOneMenu>
-								<h:outputLabel id="customLocationLabel" for="customLocation" value="#{msgs.tab_event_edit_location_custom}" /><h:outputText value="&nbsp;" escape="false" />
-		                        <h:inputText id="customLocation" size="40" value="#{EditMeetingSignupMBean.signupMeeting.location}" styleClass="editText">  
+		                        <h:inputText id="customLocation" size="35" value="#{EditMeetingSignupMBean.customLocation}" style="display:none" styleClass="editText">  
 		                            <f:validator validatorId="Signup.EmptyStringValidator"/>
 		                            <f:validateLength maximum="255" />
 		                        </h:inputText>
+		                        
+								<h:outputLabel id="customLocationLabel" for="customLocation" styleClass="activeTag"  onclick="handleDropDownAndInput('meeting:customLocationLabel','meeting:customLocationLabel_undo','meeting:customLocation','meeting:selectedLocation')">
+									<h:graphicImage value="/images/plus.gif"  alt="open" title="#{msgs.tab_event_location_custom}" style="border:none;vertical-align: middle; padding:0 5px 0 15px;" styleClass="openCloseImageIcon"/>
+							   	    <h:outputText value="#{msgs.tab_event_location_custom}" escape="false" style="vertical-align: middle;"/>
+								</h:outputLabel>
+								<h:outputLabel id="customLocationLabel_undo" for="customLocation" styleClass="activeTag" style="display:none" onclick="handleDropDownAndInput('meeting:customLocationLabel','meeting:customLocationLabel_undo','meeting:customLocation','meeting:selectedLocation')">
+									<h:graphicImage value="/images/minus.gif"  alt="undo" title="#{msgs.event_custom_undo_tip}" style="border:none;vertical-align: middle;padding:0 5px 0 15px;" styleClass="openCloseImageIcon"/>
+							   	    <h:outputText value="#{msgs.event_custom_undo}" escape="false" style="vertical-align: middle;"/>
+								</h:outputLabel>
+								<h:outputText value="&nbsp;" escape="false" />
+				                        
 		                        <h:message for="customLocation" errorClass="alertMessageInline"/>
 		                    </h:panelGroup> 
 		                    
@@ -97,11 +107,21 @@
 		                        <h:selectOneMenu id="selectedCategory" value="#{EditMeetingSignupMBean.selectedCategory}">
 									<f:selectItems value="#{EditMeetingSignupMBean.allCategories}"/>
 								</h:selectOneMenu>
-								<h:outputLabel id="customCategoryLabel" for="customCategory" value="#{msgs.event_category_edit}" /><h:outputText value="&nbsp;" escape="false"/>
-		                        <h:inputText id="customCategory" size="40" value="#{EditMeetingSignupMBean.signupMeeting.category}" styleClass="editText">  
+		                        <h:inputText id="customCategory" size="35" value="#{EditMeetingSignupMBean.customCategory}" style="display:none" styleClass="editText">  
 		                            <f:validator validatorId="Signup.EmptyStringValidator"/>
 		                            <f:validateLength maximum="255" />
 		                        </h:inputText>
+				                        
+								<h:outputLabel id="customCategoryLabel" for="customLocation" styleClass="activeTag"  onclick="handleDropDownAndInput('meeting:customCategoryLabel','meeting:customCategoryLabel_undo','meeting:customCategory','meeting:selectedCategory')" >
+									<h:graphicImage value="/images/plus.gif"  alt="open" title="#{msgs.event_category_custom}" style="border:none;vertical-align: middle; padding:0 5px 0 15px;" styleClass="openCloseImageIcon"/>
+							   	    <h:outputText value="#{msgs.event_category_custom}" escape="false" style="vertical-align: middle;"/>
+								</h:outputLabel>
+								<h:outputLabel id="customCategoryLabel_undo" for="customLocation" styleClass="activeTag" style="display:none" onclick="handleDropDownAndInput('meeting:customCategoryLabel','meeting:customCategoryLabel_undo','meeting:customCategory','meeting:selectedCategory')">
+									<h:graphicImage value="/images/minus.gif"  alt="undo" title="#{msgs.event_custom_undo_tip}" style="border:none;vertical-align: middle;padding:0 5px 0 15px;" styleClass="openCloseImageIcon"/>
+							   	    <h:outputText value="#{msgs.event_custom_undo}" escape="false" style="vertical-align: middle;"/>
+								</h:outputLabel>
+								<h:outputText value="&nbsp;" escape="false"/>
+		                        
 		                        <h:message for="customCategory" errorClass="alertMessageInline"/>
 		                    </h:panelGroup>  
 							
@@ -324,6 +344,14 @@
 								<h:outputText value="#{msgs.event_yes_receive_notification}" escape="false"/>
 							</h:panelGroup>
 							
+							<h:outputText value="#{msgs.event_select_coordinators}" escape="false"  styleClass="titleText"/>
+							<h:dataTable id="meeting_coordinators" value="#{EditMeetingSignupMBean.allPossibleCoordinators}" var="coUser">
+								<h:column>
+									<h:selectBooleanCheckbox value="#{coUser.checked}"/>
+								    <h:outputText value="&nbsp;#{coUser.displayName}" escape="false" styleClass="longtext"/>				
+								</h:column>
+							</h:dataTable>	
+							
 							<h:outputText value="#{msgs.event_email_notification}" styleClass="titleText" escape="false"/>
 							<h:panelGrid columns="1" style="width:100%;margin-left:-3px;" rendered="#{EditMeetingSignupMBean.publishedSite}">
 								<h:panelGroup styleClass="editText" >
@@ -343,28 +371,7 @@
 								<h:selectBooleanCheckbox value="#{EditMeetingSignupMBean.sendEmail}" disabled="true"/>
 								<h:outputText value="#{msgs.event_email_not_send_out_label}" escape="false" style="color:#b11"/>
 							</h:panelGroup>
-							
-							<h:outputText value="#{msgs.event_select_coordinators}" escape="false"  styleClass="titleText"/>
-							<h:panelGroup>	
-			   	    				<h:outputLabel  id="imageOpen_editCoordinators" style="display:none" styleClass="activeTag" onclick="showDetails('meeting:imageOpen_editCoordinators','meeting:imageClose_hideCordinators','meeting:coordinators');">
-				   	    				<h:graphicImage value="/images/open.gif"  alt="open" title="Click to hide details." style="border:none;vertical-align:middle;" styleClass="openCloseImageIcon"/>
-				   	    				<h:outputText value="#{msgs.event_hide_coordinators}" escape="false" style="vertical-align: middle;"/>
-			   	    				</h:outputLabel>
-			   	    				<h:outputLabel id="imageClose_hideCordinators" styleClass="activeTag" onclick="showDetails('meeting:imageOpen_editCoordinators','meeting:imageClose_hideCordinators','meeting:coordinators');">
-			   	    					<h:graphicImage value="/images/closed.gif" alt="close" title="Click to show details." style="border:none;vertical-align:middle;" styleClass="openCloseImageIcon"/>
-			   	    					<h:outputText value="#{msgs.event_addedit_Coordinators}" escape="false" style="vertical-align: middle;"/>
-			   	    				</h:outputLabel>
-			   	    				<h:outputText value="&nbsp;#{msgs.event_select_coordinators_instruction}" escape="false"  styleClass="longtext"/>
-						   </h:panelGroup>
-							
-							<h:outputText id="coordinators_1" value="" escape="false" style="display:none"/>
-							<h:dataTable id="coordinators_2" value="#{EditMeetingSignupMBean.allPossibleCoordinators}" var="coUser"  
-							            styleClass="coordinatorTab" style="display:none">
-								<h:column>
-									<h:selectBooleanCheckbox value="#{coUser.checked}"/>
-								    <h:outputText value="&nbsp;#{coUser.displayName}" escape="false" styleClass="longtext"/>				
-								</h:column>
-							</h:dataTable>		
+								
 												
 							<h:outputText value="&nbsp;" escape="false"/>
 							<h:outputText value="&nbsp;" escape="false"/>
@@ -451,7 +458,9 @@
 			userDefinedTsChoice();
 			isShowEmailChoice();
 			setIframeHeight_DueTo_Ckeditor();
-			
+			initDropDownAndInput('meeting:customLocationLabel','meeting:customLocationLabel_undo','meeting:customLocation','meeting:selectedLocation');
+	        initDropDownAndInput('meeting:customCategoryLabel','meeting:customCategoryLabel_undo','meeting:customCategory','meeting:selectedCategory');
+
 			var wait=false; 
 			var originalTsNumVal = 4;//default
 			var warningMsgs="You may not decrease the number of time slots below the original value:";

@@ -144,7 +144,7 @@ public class EditMeetingSignupMBean extends SignupUIBaseBean {
 		showAttendeeName = false;
 		sendEmail = DEFAULT_SEND_EMAIL;		
 		//sendEmailAttendeeOnly = false;
-		sendEmailToSelectedPeopleOnly = SEND_EMAIL_ALL_PARTICIPANTS;
+		sendEmailToSelectedPeopleOnly = SEND_EMAIL_ONLY_ORGANIZER_COORDINATORS;
 		
 		unlimited = false;
 
@@ -207,8 +207,18 @@ public class EditMeetingSignupMBean extends SignupUIBaseBean {
 		getUserDefineTimeslotBean().init(this.signupMeeting, MODIFY_MEETING_PAGE_URL, this.customTimeSlotWrpList, UserDefineTimeslotBean.MODIFY_MEETING);
 		populateDropDown();	
 		
+		//populate organizer data
+		this.creatorUserId = this.signupMeeting.getCreatorUserId();
+		
+		//populate location and cateogry data for new meeting
+		//since it's modifying meeting, the dropdown selections should have it already there.
+		this.selectedLocation=this.signupMeeting.getLocation();
+		this.selectedCategory = this.signupMeeting.getCategory();
+		this.customLocation="";
+		this.customCategory="";
+		
 		/*pre-load all possible coordinators for step2*/
-		this.allPossibleCoordinators = this.sakaiFacade.getAllPossbileCoordinators(this.signupMeeting);
+		this.allPossibleCoordinators = this.sakaiFacade.getAllPossibleCoordinators(this.signupMeeting);
 		populateExistingCoordinators();
 
 	}
@@ -547,6 +557,8 @@ public class EditMeetingSignupMBean extends SignupUIBaseBean {
 				.getSessionMap().get("OrganizerSignupMBean");
 		SignupMeeting meeting = reloadMeeting(meetingWrapper.getMeeting());
 		this.meetingWrapper.setMeeting(meeting);
+		//update latest creator for UI
+		this.meetingWrapper.setCreator(sakaiFacade.getUserDisplayName(meeting.getCreatorUserId()));
 		bean.reset(meetingWrapper);
 	}
 
@@ -618,8 +630,8 @@ public class EditMeetingSignupMBean extends SignupUIBaseBean {
 		}
 		
 		//Set Location		
-		if (StringUtils.isBlank(this.signupMeeting.getLocation())){
-			if (selectedLocation.equals(Utilities.rb.getString("select_location"))){
+		if (StringUtils.isBlank(getCustomLocation())){
+			if (StringUtils.isBlank(selectedLocation) || selectedLocation.equals(Utilities.rb.getString("select_location"))){
 				validationError = true;
 				Utilities.addErrorMessage(Utilities.rb.getString("event.location_not_assigned"));
 				return;
@@ -627,18 +639,23 @@ public class EditMeetingSignupMBean extends SignupUIBaseBean {
 			this.signupMeeting.setLocation(selectedLocation);
 			
 		}
-		//clear the location fields
+		else{
+			this.signupMeeting.setLocation(getCustomLocation());
+		}
+		//clear the location fields???
 		this.selectedLocation="";
 		
 		//Set Category
 		//if textfield is blank, check the dropdown
-		if (StringUtils.isBlank(this.signupMeeting.getCategory())){
+		if (StringUtils.isBlank(getCustomCategory())){
 			//if dropdown is not the default, then use its value
 			if(!StringUtils.equals(selectedCategory, Utilities.rb.getString("select_category"))) {
 					this.signupMeeting.setCategory(selectedCategory);
 			}
+		}else{
+			this.signupMeeting.setCategory(getCustomCategory());
 		}
-		//clear the category fields
+		//clear the category fields??
 		this.selectedCategory="";
 		
 		//set the creator/organiser
@@ -1065,17 +1082,14 @@ public class EditMeetingSignupMBean extends SignupUIBaseBean {
 		this.allPossibleCoordinators = allPossibleCoordinators;
 	}
 	
+	/* 
+	 * get the list of coords and check the appropriate ones.
+	 */
 	private void populateExistingCoordinators(){
 		List<String> existingCoUserIds = getExistingCoordinatorIds(this.signupMeeting);
-		if(!existingCoUserIds.isEmpty() && this.allPossibleCoordinators !=null){
-			for (SignupUser cou : allPossibleCoordinators) {
-				for (String existId : existingCoUserIds) {
-					if(existId.equals(cou.getInternalUserId())){
-						cou.setChecked(true);
-						break;
-					}
-				}
-				
+		for (SignupUser coord : allPossibleCoordinators) {
+			if(existingCoUserIds.contains(coord.getInternalUserId())) {
+				coord.setChecked(true);
 			}
 		}
 	}

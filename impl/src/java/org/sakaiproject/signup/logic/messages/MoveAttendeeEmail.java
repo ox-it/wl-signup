@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.sakaiproject.signup.logic.SakaiFacade;
 import org.sakaiproject.signup.logic.SignupTrackingItem;
 import org.sakaiproject.signup.model.SignupMeeting;
@@ -151,14 +152,15 @@ public class MoveAttendeeEmail extends SignupEmailBase implements SignupTimeslot
 	
 	@Override
 	public String getFromAddress() {
-		return organizer.getEmail();
+		return StringUtils.defaultIfEmpty(organizer.getEmail(), getServerFromAddress());
 	}
 	
 	@Override
 	public String getSubject() {
 		return MessageFormat.format(rb.getString("subject.organizer.change.appointment.field"), new Object[] {
 					getTime(item.getRemovedFromTimeslot().get(0).getStartTime()).toStringLocalDate(),
-					getTime(item.getRemovedFromTimeslot().get(0).getStartTime()).toStringLocalTime() });
+					getTime(item.getRemovedFromTimeslot().get(0).getStartTime()).toStringLocalTime(),
+					getAbbreviatedMeetingTitle() });
 	}
 
 	@Override

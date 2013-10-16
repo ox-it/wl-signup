@@ -159,7 +159,7 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 	
 	private boolean mandatorySendEmail = NEW_MEETING_SEND_EMAIL;
 	
-	private String sendEmailToSelectedPeopleOnly = SEND_EMAIL_ALL_PARTICIPANTS;
+	private String sendEmailToSelectedPeopleOnly = SEND_EMAIL_ONLY_ORGANIZER_COORDINATORS;
 	
 	private boolean publishToCalendar = DEFAULT_EXPORT_TO_CALENDAR_TOOL;
 	
@@ -283,6 +283,10 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 	}
 	
 	public String getCreatorUserId() {
+		if(this.creatorUserId ==null){
+			//set current user as default meeting organizer if case people forget to select one
+			return sakaiFacade.getCurrentUserId();
+		}
 		return creatorUserId;
 	}
 
@@ -409,7 +413,7 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 		if(NEW_MEETING_SEND_EMAIL){
 			sendEmail = NEW_MEETING_SEND_EMAIL;
 		}
-		sendEmailToSelectedPeopleOnly=SEND_EMAIL_ALL_PARTICIPANTS;
+		sendEmailToSelectedPeopleOnly=SEND_EMAIL_ONLY_ORGANIZER_COORDINATORS;
 		receiveEmail = false;
 		sendEmailByOwner= DEFAULT_SEND_EMAIL; /*will be inherited per meeting basis*/
 		allowComment = DEFAULT_ALLOW_COMMENT;
@@ -454,9 +458,9 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 		Utilities.resetMeetingList();
 		this.eidOrEmailInputByUser = null;
 		this.selectedLocation=null;
-		this.customLocation=null;
+		this.customLocation="";
 		this.selectedCategory=null;
-		this.customCategory=null;
+		this.customCategory="";
 		this.creatorUserId=null;
 		/*clean up everything in getUserDefineTimeslotBean*/
 		getUserDefineTimeslotBean().reset(UserDefineTimeslotBean.NEW_MEETING);
@@ -721,7 +725,14 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 			
 			/*pre-load all possible coordinators for step2*/
 			signupMeeting.setSignupSites(CreateSitesGroups.getSelectedSignupSites(getCurrentSite(), getOtherSites()));
-			this.allPossibleCoordinators = this.sakaiFacade.getAllPossbileCoordinators(this.signupMeeting);			
+			this.allPossibleCoordinators = this.sakaiFacade.getAllPossibleCoordinators(this.signupMeeting);
+			
+			// tick the creator by default (SIGNUP-216)
+			for(SignupUser u: this.allPossibleCoordinators) {
+				if(StringUtils.equals(u.getInternalUserId(), this.creatorUserId)) {
+					u.setChecked(true);
+				}
+			}
 
 		}
 	}
@@ -787,9 +798,8 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 			setEndTimeAutoAdjusted(false);
 			//reset who should receive emails
 			//setSendEmailAttendeeOnly(false);
-			if(this.sendEmailToSelectedPeopleOnly.equals(SEND_EMAIL_ONLY_SIGNED_UP_ATTENDEES)){
-				sendEmailToSelectedPeopleOnly = SEND_EMAIL_ALL_PARTICIPANTS;//reset
-			}
+			sendEmailToSelectedPeopleOnly = SEND_EMAIL_ONLY_ORGANIZER_COORDINATORS;//reset
+
 			return ADD_MEETING_STEP2_PAGE_URL;
 		}
 
@@ -980,7 +990,7 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 		if (isDuplicateAttendee(timeslotWrapper.getTimeSlot(), attendee)) {
 			Utilities.addErrorMessage(Utilities.rb.getString("attendee.already.in.timeslot"));
 		} else {
-			timeslotWrapper.addAttendee(attendee, sakaiFacade.getUserDisplayName(attendeeUserId));
+			timeslotWrapper.addAttendee(attendee, sakaiFacade.getUserDisplayLastFirstName(attendeeUserId));
 		}
 
 		return "";
@@ -1579,7 +1589,7 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 			e.printStackTrace();
 		}
 		
-		this.allSignupUsers = sakaiFacade.getAllUsers(meeting);
+		this.allSignupUsers = sakaiFacade.getAllPossibleAttendees(meeting);
 
 		if (allSignupUsers != null
 				&& allSignupUsers.size() > MAX_NUM_PARTICIPANTS_FOR_DROPDOWN_BEFORE_AUTO_SWITCH_TO_EID_INPUT_MODE) {
