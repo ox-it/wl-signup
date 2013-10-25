@@ -287,19 +287,6 @@
 									<h:outputText value="#{msgs.event_email_not_send_out_label}" escape="false" style="color:#b11"/>
 								</h:panelGroup>
 
-								<h:outputText value="#{msgs.event_select_coordinators}" escape="false"  styleClass="titleText"/>
-								<h:panelGroup>
-									<h:outputLabel  id="imageOpen_editCoordinators" style="display:none" styleClass="activeTag" onclick="showDetails('meeting:imageOpen_editCoordinators','meeting:imageClose_hideCordinators','meeting:coordinators');">
-										<h:graphicImage value="/images/open.gif"  alt="open" title="Click to hide details." style="border:none;vertical-align: middle;" styleClass="openCloseImageIcon"/>
-										<h:outputText value="#{msgs.event_hide_coordinators}" escape="false" style="vertical-align: middle;"/>
-									</h:outputLabel>
-									<h:outputLabel id="imageClose_hideCordinators" styleClass="activeTag" onclick="showDetails('meeting:imageOpen_editCoordinators','meeting:imageClose_hideCordinators','meeting:coordinators');">
-										<h:graphicImage value="/images/closed.gif" alt="close" title="Click to show details." style="border:none;vertical-align:middle;" styleClass="openCloseImageIcon"/>
-										<h:outputText value="#{msgs.event_addedit_Coordinators}" escape="false" style="vertical-align: middle;"/>
-									</h:outputLabel>
-									<h:outputText value="&nbsp;#{msgs.event_select_coordinators_instruction}" escape="false"  styleClass="longtext"/>
-								</h:panelGroup>
-									
 								<h:outputText value="#{msgs.event_meeting_default_notify_setting}" styleClass="titleText" escape="false"/>
 								<h:panelGroup styleClass="longtext" >
 									<h:selectBooleanCheckbox value="#{NewSignupMeetingBean.sendEmailByOwner}"/>
