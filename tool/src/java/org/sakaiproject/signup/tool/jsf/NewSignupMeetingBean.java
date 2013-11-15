@@ -966,14 +966,15 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 			attendeeEidOrEmail = (String) newAttendeeInput.getValue();
 		}
 		
-		//check if there are multiple email addresses associated with input
-		List<String> associatedEids = getEidsForEmail(attendeeEidOrEmail.trim());
-		if(associatedEids.size() > 1) {
-			Utilities.addErrorMessage(MessageFormat.format(Utilities.rb.getString("exception.multiple.eids"), new Object[] {attendeeEidOrEmail, StringUtils.join(associatedEids, ", ")}));
+		// check if there are many users associated with the input email address
+		List<String> associatedDisplayIds = getEidsForEmail(attendeeEidOrEmail.trim());
+		if(associatedDisplayIds.size() > 1) {
+			Object[] ids = {attendeeEidOrEmail, StringUtils.join(associatedDisplayIds, ", ")};
+			Utilities.addErrorMessage(MessageFormat.format(Utilities.rb.getString("exception.multiple.displayIds"), ids));
 			return "";
 		}
 
-		String attendeeUserId = getUserIdForEidOrEmail(attendeeEidOrEmail.trim());
+		String attendeeUserId = getUserIdForDisplayIdOrEidOrEmail(attendeeEidOrEmail.trim());
 		if(StringUtils.isBlank(attendeeEidOrEmail)){
 			Utilities.addErrorMessage(Utilities.rb.getString("exception.no.such.user") + attendeeEidOrEmail);
 			return "";
@@ -2104,7 +2105,20 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 		
 		return null;
 	}
-	
+
+
+	/**
+	 * Gets the userId for a user, given a displayId or an Eid or an email.
+	 * We check for users with the values in this order.
+	 *
+	 * @param value  the string to lookup
+	 * @return       the userId or <code>null</code> if User cannot be found
+	 */
+	public String getUserIdForDisplayIdOrEidOrEmail(String value) {
+		User user = sakaiFacade.getUserByDisplayId(value);
+		return (user == null) ? getUserIdForEidOrEmail(value) : user.getId();
+	}
+
 	/**
 	 * Get the eids assocaited with an email address, ie there may be two or more users with the same email address. 
 	 * We need to be able to handle this in the UI.
