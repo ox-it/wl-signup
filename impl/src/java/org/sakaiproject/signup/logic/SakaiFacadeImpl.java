@@ -41,10 +41,13 @@ import org.sakaiproject.authz.api.Role;
 import org.sakaiproject.authz.api.SecurityAdvisor;
 import org.sakaiproject.authz.api.SecurityService;
 import org.sakaiproject.calendar.api.Calendar;
+import org.sakaiproject.calendar.api.CalendarEdit;
 import org.sakaiproject.calendar.api.CalendarService;
 import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.content.api.ContentHostingService;
+import org.sakaiproject.exception.IdInvalidException;
 import org.sakaiproject.exception.IdUnusedException;
+import org.sakaiproject.exception.IdUsedException;
 import org.sakaiproject.exception.PermissionException;
 import org.sakaiproject.signup.model.SignupGroup;
 import org.sakaiproject.signup.model.SignupMeeting;
@@ -923,15 +926,27 @@ public class SakaiFacadeImpl implements SakaiFacade {
 	 */
 	public Calendar getCalendar(String siteId) throws IdUnusedException, PermissionException {
 		String calendarId = calendarService.calendarReference(siteId, SiteService.MAIN_CONTAINER);
-		Calendar calendar = calendarService.getCalendar(calendarId);
-		return calendar;
+		return getCalendarById(calendarId);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Calendar getCalendarById(String calendarId) throws IdUnusedException, PermissionException {
-		Calendar calendar = calendarService.getCalendar(calendarId);
+		Calendar calendar = null;
+		try {
+			calendar = calendarService.getCalendar(calendarId);
+		} catch (IdUnusedException e) {
+			try {
+				CalendarEdit calendarEdit = calendarService.addCalendar(calendarId);
+				calendarService.commitCalendar(calendarEdit);
+				calendar = getCalendarById(calendarId);
+			} catch (IdInvalidException highlyUnlikely) {
+				log.error(highlyUnlikely);
+			} catch (IdUsedException extremelyUnlikely) {
+				log.error(extremelyUnlikely);
+			}
+		}
 		return calendar;
 	}
 
