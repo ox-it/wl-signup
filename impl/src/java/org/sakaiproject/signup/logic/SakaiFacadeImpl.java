@@ -924,7 +924,7 @@ public class SakaiFacadeImpl implements SakaiFacade {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Calendar getCalendar(String siteId) throws IdUnusedException, PermissionException {
+	public Calendar getCalendar(String siteId) throws PermissionException {
 		String calendarId = calendarService.calendarReference(siteId, SiteService.MAIN_CONTAINER);
 		return getCalendarById(calendarId);
 	}
@@ -932,7 +932,7 @@ public class SakaiFacadeImpl implements SakaiFacade {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Calendar getCalendarById(String calendarId) throws IdUnusedException, PermissionException {
+	public Calendar getCalendarById(String calendarId) throws PermissionException {
 		Calendar calendar = null;
 		try {
 			calendar = calendarService.getCalendar(calendarId);
