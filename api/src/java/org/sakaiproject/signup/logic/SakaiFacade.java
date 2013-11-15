@@ -273,7 +273,7 @@ public interface SakaiFacade {
 	 * 
 	 * @param siteId
 	 *            a unique id which represents the current site
-	 * @return a Calendar object
+	 * @return a Calendar object, will return <code>null</code> if something went very wrong
 	 * @throws PermissionException
 	 *             throw if user has no permission
 	 */
@@ -284,7 +284,7 @@ public interface SakaiFacade {
 	 * 
 	 * @param calendarId
 	 *            a unique Calendar Id
-	 * @return a Calendar object
+	 * @return a Calendar object, will return <code>null</code> if something went very wrong
 	 * @throws PermissionException
 	 *             throw if user has no permission
 	 */
