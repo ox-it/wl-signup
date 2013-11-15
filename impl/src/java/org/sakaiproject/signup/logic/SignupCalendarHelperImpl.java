@@ -205,8 +205,7 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 			
 			
 		} catch (PermissionException e) {
-			e.printStackTrace();
-			return null;
+			log.error("SignupCalendarHelperImpl.generateEvent: " + e);
 		}
 		
 		return event;
