@@ -988,10 +988,11 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 			attendeeEidOrEmail = (String) newAttendeeInput.getValue();
 		}
 		
-		//check if there are multiple email addresses associated with input
-		List<String> associatedEids = getEidsForEmail(attendeeEidOrEmail.trim());
-		if(associatedEids.size() > 1) {
-			Utilities.addErrorMessage(MessageFormat.format(Utilities.rb.getString("exception.multiple.eids"), new Object[] {attendeeEidOrEmail, StringUtils.join(associatedEids, ", ")}));
+		// check if there are many users associated with the input email address
+		List<String> associatedDisplayIds = getEidsForEmail(attendeeEidOrEmail.trim());
+		if(associatedDisplayIds.size() > 1) {
+			Object[] ids = {attendeeEidOrEmail, StringUtils.join(associatedDisplayIds, ", ")};
+			Utilities.addErrorMessage(MessageFormat.format(Utilities.rb.getString("exception.multiple.displayIds"), ids));
 			return "";
 		}
 
