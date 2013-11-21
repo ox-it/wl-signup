@@ -497,7 +497,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 					}
 				} 
 
-				if (email != null){
+				if (email != null && sakaiUsers != null){
 					if(sakaiUsers.size()> 400){
 						/*Currently, use this only for heavy case.
 						 * One drawback: the organizer don't know weather the email is really sent away or not.
