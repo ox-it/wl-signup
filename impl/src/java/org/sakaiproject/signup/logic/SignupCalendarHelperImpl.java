@@ -7,12 +7,13 @@ import java.util.List;
 import lombok.Setter;
 import lombok.extern.apachecommons.CommonsLog;
 
-import net.fortuna.ical4j.model.component.VEvent;
 
 import org.apache.commons.lang.StringUtils;
 import org.sakaiproject.authz.api.SecurityAdvisor;
 import org.sakaiproject.calendar.api.Calendar;
 import org.sakaiproject.calendar.api.CalendarEventEdit;
+import org.sakaiproject.calendaring.api.ExtCalendar;
+import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.calendaring.api.ExternalCalendaringService;
 import org.sakaiproject.exception.IdUnusedException;
 import org.sakaiproject.exception.PermissionException;
@@ -66,18 +67,18 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 	}
 	
 	@Override
-	public VEvent generateVEventForTimeslot(SignupMeeting meeting, SignupTimeslot ts) {
+	public ExtEvent generateExtEventForTimeslot(SignupMeeting meeting, SignupTimeslot ts) {
 		
 		if(meeting == null) {
-			log.error("Meeting was null. Cannot generate VEvent.");
+			log.error("Meeting was null. Cannot generate ExtEvent.");
 			return null;
 		}
 		if(ts == null) {
-			log.error("Timeslot was null. Cannot generate VEvent.");
+			log.error("Timeslot was null. Cannot generate ExtEvent.");
 			return null;
 		}
 		
-		VEvent v = ts.getVevent();
+		ExtEvent v = ts.getExtEvent();
 		
 		if(v == null) {
 			SecurityAdvisor advisor = sakaiFacade.pushSecurityAdvisor();
@@ -92,7 +93,7 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 				//SIGNUP-180 add sequence to vevents
 				tsEvent.setField("vevent_sequence", String.valueOf(ts.getVersion()));
 				
-				//generate VEvent for timeslot
+				//generate ExtEvent for timeslot
 				v = externalCalendaringService.createEvent(tsEvent);
 				
 			} finally {
@@ -104,14 +105,14 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 	}
 	
 	@Override
-	public VEvent generateVEventForMeeting(SignupMeeting meeting) {
+	public ExtEvent generateExtEventForMeeting(SignupMeeting meeting) {
 		
 		if(meeting == null) {
-			log.error("Meeting was null. Cannot generate VEvent.");
+			log.error("Meeting was null. Cannot generate ExtEvent.");
 			return null;
 		}
 		
-		VEvent v = meeting.getVevent();
+		ExtEvent v = meeting.getExtEvent();
 		
 		if(v == null) {
 			SecurityAdvisor advisor = sakaiFacade.pushSecurityAdvisor();
@@ -124,7 +125,7 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 				}
 				mEvent.setField("vevent_uuid", meeting.getUuid());
 					
-				//generate VEvent for timeslot
+				//generate ExtEvent for timeslot
 				v = externalCalendaringService.createEvent(mEvent);
 				
 				
@@ -138,21 +139,21 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 	}
 	
 	@Override
-	public String createCalendarFile(List<VEvent> vevents) {
+	public String createCalendarFile(List<ExtEvent> vevents) {
 		//create calendar
-		net.fortuna.ical4j.model.Calendar cal = externalCalendaringService.createCalendar(vevents);
+		ExtCalendar cal = externalCalendaringService.createCalendar(vevents);
 				
 		//get path to file
 		return externalCalendaringService.toFile(cal);
 	}
 
 	@Override
-	public VEvent cancelVEvent(VEvent vevent) {
+	public ExtEvent cancelExtEvent(ExtEvent vevent) {
 		return externalCalendaringService.cancelEvent(vevent);
 	}
 	
 	@Override
-	public VEvent addAttendeesToVEvent(VEvent vevent, List<User> users) {
+	public ExtEvent addAttendeesToExtEvent(ExtEvent vevent, List<User> users) {
 		return externalCalendaringService.addAttendeesToEvent(vevent, users);
 	}
 	

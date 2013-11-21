@@ -765,7 +765,7 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 	public void downloadICSForMeeting() {
 		String filePath;
 		try{	
-			filePath = calendarHelper.createCalendarFile(Collections.singletonList(calendarHelper.generateVEventForMeeting(meetingWrapper.getMeeting())));
+			filePath = calendarHelper.createCalendarFile(Collections.singletonList(calendarHelper.generateExtEventForMeeting(meetingWrapper.getMeeting())));
 		}catch(NullPointerException ne){
 			handleICSDownloadWarningToUser();
 			return;
@@ -784,7 +784,7 @@ abstract public class SignupUIBaseBean implements SignupBeanConstants, SignupMes
 	public void downloadICSForMeetingTimeSlot(TimeslotWrapper timeslotWrapper) {
 		String filePath;
 		try{	
-			filePath = calendarHelper.createCalendarFile(Collections.singletonList(calendarHelper.generateVEventForTimeslot(meetingWrapper.getMeeting(), timeslotWrapper.getTimeSlot())));;
+			filePath = calendarHelper.createCalendarFile(Collections.singletonList(calendarHelper.generateExtEventForTimeslot(meetingWrapper.getMeeting(), timeslotWrapper.getTimeSlot())));
 		}catch(NullPointerException ne){
 			handleICSDownloadWarningToUser();
 			return;

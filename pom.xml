@@ -60,7 +60,7 @@
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<external-calendaring-service-version>1.0.5</external-calendaring-service-version>
+		<external-calendaring-service-version>1.0.6ox1</external-calendaring-service-version>
 	</properties>
 	
     <distributionManagement>
@@ -368,13 +368,6 @@
 				<version>${external-calendaring-service-version}</version>
 				<scope>provided</scope>
 			</dependency>
-			
-			<dependency>
-      			<groupId>org.mnode.ical4j</groupId>
-      			<artifactId>ical4j</artifactId>
-      			<version>1.0.3</version>
-    		</dependency>
-			
 		</dependencies>
 	</dependencyManagement>
 	

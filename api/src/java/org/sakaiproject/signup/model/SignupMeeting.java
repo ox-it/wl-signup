@@ -31,6 +31,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.signup.logic.Permission;
 import org.sakaiproject.signup.logic.SignupMessageTypes;
 
@@ -132,7 +133,7 @@ public class SignupMeeting implements MeetingTypes, SignupMessageTypes {
 	/**
 	 * ICS VEvent created for this meeting
 	 */
-	private net.fortuna.ical4j.model.component.VEvent vevent;
+	private ExtEvent extEvent;
 	
 	/**
 	 * For tracking the event so that we can issue updates, persisted, generated once, never updated.

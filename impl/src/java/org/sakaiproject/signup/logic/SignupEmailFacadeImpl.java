@@ -34,8 +34,6 @@ import java.util.StringTokenizer;
 import lombok.Getter;
 import lombok.Setter;
 
-import net.fortuna.ical4j.model.component.VEvent;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.logging.Log;
@@ -43,6 +41,7 @@ import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.apache.commons.validator.EmailValidator;
 import org.sakaiproject.authz.api.SecurityAdvisor;
 import org.sakaiproject.calendar.api.CalendarEventEdit;
+import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.email.api.AddressValidationException;
 import org.sakaiproject.email.api.Attachment;
 import org.sakaiproject.email.api.EmailAddress;
@@ -113,8 +112,8 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		
 		boolean isException=false;
 		
-		//generate VEvents
-		generateVEvents(signupEventTrackingInfo.getMeeting());
+		//generate ExtEvents
+		generateExtEvents(signupEventTrackingInfo.getMeeting());
 		
 		List<SignupTrackingItem> sigupTList = signupEventTrackingInfo.getAttendeeTransferInfos();
 		for (SignupTrackingItem item : sigupTList) {
@@ -195,8 +194,8 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	 */
 	public void sendCancellationEmail(SignupEventTrackingInfo signupEventTrackingInfo) throws Exception {
 		
-		//generate VEvents
-		generateVEvents(signupEventTrackingInfo.getMeeting());
+		//generate ExtEvents
+		generateExtEvents(signupEventTrackingInfo.getMeeting());
 		
 		/* send email to everyone who get promoted during the process */
 		// TODO Do we need to send info about promoted guys to organizer?
@@ -257,8 +256,8 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	 */
 	public void sendEmailToParticipantsByOrganizerAction(SignupEventTrackingInfo signupEventTrackingInfo) throws Exception {
 		
-		//generate VEvents
-		generateVEvents(signupEventTrackingInfo.getMeeting());
+		//generate ExtEvents
+		generateExtEvents(signupEventTrackingInfo.getMeeting());
 		
 		List<SignupTrackingItem> sigupTList = signupEventTrackingInfo.getAttendeeTransferInfos();
 		for (SignupTrackingItem item : sigupTList) {
@@ -312,8 +311,8 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	 */
 	public void sendEmailToAttendee(SignupEventTrackingInfo signupEventTrackingInfo) throws Exception {
 		
-		//generate VEvents
-		generateVEvents(signupEventTrackingInfo.getMeeting());
+		//generate ExtEvents
+		generateExtEvents(signupEventTrackingInfo.getMeeting());
 		
 		List<SignupTrackingItem> sigupTList = signupEventTrackingInfo.getAttendeeTransferInfos();
 		for (SignupTrackingItem item : sigupTList) {
@@ -387,8 +386,8 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	@SuppressWarnings("unchecked")
 	private void sendEmailToAllUsers(SignupMeeting meeting, String messageType) throws Exception {
 		
-		//generate VEvents
-		generateVEvents(meeting);
+		//generate ExtEvents
+		generateExtEvents(meeting);
 		
 		List<SignupUser> signupUsers = sakaiFacade.getAllUsers(meeting);
 
@@ -758,14 +757,14 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			if(organizerCoordinatorsUuid.contains(user.getId())) {
 				
 				//check vevent for meeting exists, otherwise skip
-				VEvent v = meeting.getVevent();
+				ExtEvent v = meeting.getExtEvent();
 				if (v == null) {
 					return attachments;
 				} 
 				
 				//cancel, if required
 				if(cancel) {
-					v = calendarHelper.cancelVEvent(v);
+					v = calendarHelper.cancelExtEvent(v);
 				}
 				
 				if(logger.isDebugEnabled()){
@@ -782,14 +781,14 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 				}
 				
 				//create vevent(s) for timeslot(s) the user is in
-				List<VEvent> vevents = new ArrayList<VEvent>();
+				List<ExtEvent> vevents = new ArrayList<ExtEvent>();
 				for(SignupTimeslot ts: meeting.getSignupTimeSlots()) {
 					if(ts.getAttendee(user.getId()) != null) {
-						VEvent v = ts.getVevent();
+						ExtEvent v = ts.getExtEvent();
 						if(v != null) {
 							//cancel, if required
 							if(cancel) {
-								v = calendarHelper.cancelVEvent(v);
+								v = calendarHelper.cancelExtEvent(v);
 							}
 						
 							vevents.add(v);
@@ -811,10 +810,10 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			}
 			
 			//create vevent(s) for timeslot(s) the user is in
-			List<VEvent> vevents = new ArrayList<VEvent>();
+			List<ExtEvent> vevents = new ArrayList<ExtEvent>();
 			for(SignupTimeslot ts: meeting.getSignupTimeSlots()) {
 				if(ts.getAttendee(user.getId()) != null) {
-					VEvent v = ts.getVevent();
+					ExtEvent v = ts.getExtEvent();
 					if(v != null) {
 						vevents.add(v);
 					}
@@ -833,12 +832,12 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//use the timeslot info in this particular email object to adjust the applicable vevents
 			List<SignupTimeslot> cancelled = ((AttendeeCancellationOwnEmail) email).getRemoved();
-			List<VEvent> vevents = new ArrayList<VEvent>();
+			List<ExtEvent> vevents = new ArrayList<ExtEvent>();
 			for(SignupTimeslot ts: cancelled) {
-				VEvent v = ts.getVevent();
+				ExtEvent v = ts.getExtEvent();
 				if(v != null){
 					//set it to be cancelled, add to list
-					vevents.add(calendarHelper.cancelVEvent(v));
+					vevents.add(calendarHelper.cancelExtEvent(v));
 				}
 			}
 			
@@ -855,7 +854,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			}
 			
 			//check vevent for meeting exists, otherwise skip
-			VEvent v = meeting.getVevent();
+			ExtEvent v = meeting.getExtEvent();
 			if (v == null) {
 				return attachments;
 			}
@@ -875,8 +874,8 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 				}
 			}
 			
-			//add attendees to VEvent for overall meeting
-			VEvent vevent = calendarHelper.addAttendeesToVEvent(v, users);
+			//add attendees to ExtEvent for overall meeting
+			ExtEvent vevent = calendarHelper.addAttendeesToExtEvent(v, users);
 			
 			//create calendar and final attachment
 			attachments.add(formatICSAttachment(Collections.singletonList(vevent)));
@@ -890,12 +889,12 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//use the timeslot info in this particular email object to adjust the applicable vevents
 			List<SignupTimeslot> cancelled = ((CancellationEmail) email).getRemoved();
-			List<VEvent> vevents = new ArrayList<VEvent>();
+			List<ExtEvent> vevents = new ArrayList<ExtEvent>();
 			for(SignupTimeslot ts: cancelled) {
-				VEvent v = ts.getVevent();
+				ExtEvent v = ts.getExtEvent();
 				if(v != null){
 					//set it to be cancelled, add to list
-					vevents.add(calendarHelper.cancelVEvent(v));
+					vevents.add(calendarHelper.cancelExtEvent(v));
 				}
 			}
 			
@@ -926,15 +925,15 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			//so we need to check and recreate.
 			
 			//cancel all of the removed events
-			List<VEvent> vevents = new ArrayList<VEvent>();
+			List<ExtEvent> vevents = new ArrayList<ExtEvent>();
 			for(SignupTimeslot ts: removed) {
 				
 				//check and recreate if necessary
-				VEvent v = ensureVEventForTimeslot(meeting, ts);
+				ExtEvent v = ensureExtEventForTimeslot(meeting, ts);
 				
 				if(v != null){
 					//set it to be cancelled, add to list
-					vevents.add(calendarHelper.cancelVEvent(v));
+					vevents.add(calendarHelper.cancelExtEvent(v));
 				}
 			}
 			
@@ -942,7 +941,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			for(SignupTimeslot ts: added) {
 
 				//check and recreate if necessary
-				VEvent v = ensureVEventForTimeslot(meeting, ts);
+				ExtEvent v = ensureExtEventForTimeslot(meeting, ts);
 				
 				if(v != null){
 					vevents.add(v);
@@ -968,35 +967,35 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	
 	
 	/**
-	 * Helper to generate the calendareventedit objects, turn them into VEvents, then write back into the meeting/timeslot objects
+	 * Helper to generate the calendareventedit objects, turn them into ExtEvents, then write back into the meeting/timeslot objects
 	 * One is generated for the signupmeeting itself, then one for each timeslot.
 	 * @param meeting SignupMeeting
-	 * @return modifiedSignupmeeting with the VEvents injected
+	 * @return modifiedSignupmeeting with the ExtEvents injected
 	 */
-	private SignupMeeting generateVEvents(SignupMeeting meeting) {
+	private SignupMeeting generateExtEvents(SignupMeeting meeting) {
 		
-		//generate VEvent for meeting, add to object
-		meeting.setVevent(calendarHelper.generateVEventForMeeting(meeting));
+		//generate ExtEvent for meeting, add to object
+		meeting.setExtEvent(calendarHelper.generateExtEventForMeeting(meeting));
 			
 		//now one for each timeslot
 		for(SignupTimeslot ts: meeting.getSignupTimeSlots()){
 				
-			//generate VEvent for timeslot, add to object
-			ts.setVevent(calendarHelper.generateVEventForTimeslot(meeting, ts));
+			//generate ExtEvent for timeslot, add to object
+			ts.setExtEvent(calendarHelper.generateExtEventForTimeslot(meeting, ts));
 		}
 		
 		return meeting;
 	}
 	
 	/**
-	 * Under certain conditions (particular when attendee moved or swapped), the transient VEvents for timeslots are lost, so create them again.
+	 * Under certain conditions (particular when attendee moved or swapped), the transient ExtEvents for timeslots are lost, so create them again.
 	 * The calendarhelper checks first though.
 	 * @param meeting	overall SignupMeeting
-	 * @param ts		SignupTimeslot we need VEvent for
+	 * @param ts		SignupTimeslot we need ExtEvent for
 	 * @return
 	 */
-	private VEvent ensureVEventForTimeslot(SignupMeeting meeting, SignupTimeslot ts) {
-		return calendarHelper.generateVEventForTimeslot(meeting, ts);
+	private ExtEvent ensureExtEventForTimeslot(SignupMeeting meeting, SignupTimeslot ts) {
+		return calendarHelper.generateExtEventForTimeslot(meeting, ts);
 	}
 	
 	
@@ -1005,7 +1004,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	 * @param vevents list of vevents
 	 * @return
 	 */
-	private Attachment formatICSAttachment(List<VEvent> vevents) {
+	private Attachment formatICSAttachment(List<ExtEvent> vevents) {
 		String path = calendarHelper.createCalendarFile(vevents);
 		return new Attachment(new File(path), StringUtils.substringAfterLast(path, File.separator));
 		

@@ -30,6 +30,7 @@ import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.sakaiproject.calendaring.api.ExtEvent;
 
 /**
  * <p>
@@ -66,7 +67,7 @@ public class SignupTimeslot implements Comparable{
 	/**
 	 * ICS VEvent created for this timeslot, not persisted
 	 */
-	private net.fortuna.ical4j.model.component.VEvent vevent;
+	private ExtEvent extEvent;
 	
 	/**
 	 * For tracking the event so that we can issue updates, persisted, generated once, never updated.
