@@ -649,7 +649,9 @@ public class OrganizerSignupMBean extends SignupUIBaseBean {
 			meeting = addAttendee.signup(getMeetingWrapper().getMeeting(), timeslotWrapper.getTimeSlot(),
 					timeslotWrapper.getNewAttendee());
 
-			if (sendEmail) {
+			boolean sendAttendeeEmail = Utilities.getSignupConfigParamVal("signup.email.notification.attendee.signed.up", true);
+
+			if (sendEmail || sendAttendeeEmail) {
 				try {
 					signupMeetingService.sendEmailToParticipantsByOrganizerAction(addAttendee
 							.getSignupEventTrackingInfo());
