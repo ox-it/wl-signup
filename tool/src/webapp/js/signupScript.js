@@ -459,19 +459,20 @@
 			}
 		}
 	}
-	
+
 	function isShowEmailChoice(){
-    	var emailChoiceTag = document.getElementById('meeting:emailChoice');
-		var emailAttendeeOnlyTag = document.getElementById('meeting:emailAttendeeOnly');				
+		var emailChoiceTag = document.getElementById('meeting:emailChoice');
+		var emailAttendeeOnlyTag = document.getElementById('meeting:emailAttendeeOnly');
+
 		if(!emailChoiceTag || !emailAttendeeOnlyTag)
 			return;
-	
+
 		if(emailChoiceTag.checked)
 			emailAttendeeOnlyTag.style.display = "";
 		else
-			emailAttendeeOnlyTag.style.display = "none";           	
-    }
-	
+			emailAttendeeOnlyTag.style.display = "none";
+	}
+
 	function showDTimeInputFields(opt){
 		var yearTag = document.getElementById("meeting:startTime.year");
 		var monthTag = document.getElementById("meeting:startTime.month");
