@@ -965,7 +965,12 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 		} else {
 			attendeeEidOrEmail = (String) newAttendeeInput.getValue();
 		}
-		
+
+		if(StringUtils.isBlank(attendeeEidOrEmail)){
+			Utilities.addErrorMessage(Utilities.rb.getString("exception.no.such.user") + attendeeEidOrEmail);
+			return "";
+		}
+
 		// check if there are many users associated with the input email address
 		List<String> associatedDisplayIds = getEidsForEmail(attendeeEidOrEmail.trim());
 		if(associatedDisplayIds.size() > 1) {
@@ -975,11 +980,7 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 		}
 
 		String attendeeUserId = getUserIdForDisplayIdOrEidOrEmail(attendeeEidOrEmail.trim());
-		if(StringUtils.isBlank(attendeeEidOrEmail)){
-			Utilities.addErrorMessage(Utilities.rb.getString("exception.no.such.user") + attendeeEidOrEmail);
-			return "";
-		}
-		
+
 		SignupUser attendeeSignUser = getSakaiFacade().getSignupUser(this.signupMeeting, attendeeUserId);
 		if(attendeeSignUser ==null){
 			Utilities.addErrorMessage(MessageFormat.format(Utilities.rb.getString("user.has.no.permission.attend"), new Object[] {attendeeEidOrEmail}));
