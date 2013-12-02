@@ -1,6 +1,5 @@
 package org.sakaiproject.signup.logic;
 
-import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import org.sakaiproject.calendar.api.CalendarEventEdit;
 import org.sakaiproject.calendaring.api.ExtCalendar;
 import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.calendaring.api.ExternalCalendaringService;
-import org.sakaiproject.exception.IdUnusedException;
+import org.sakaiproject.entity.api.ResourceProperties;
 import org.sakaiproject.exception.PermissionException;
 import org.sakaiproject.signup.model.SignupMeeting;
 import org.sakaiproject.signup.model.SignupTimeslot;
@@ -92,7 +91,9 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 				
 				//SIGNUP-180 add sequence to vevents
 				tsEvent.setField("vevent_sequence", String.valueOf(ts.getVersion()));
-				
+
+				tsEvent.getProperties().addProperty(ResourceProperties.PROP_CREATOR, meeting.getCreatorUserId());
+
 				//generate ExtEvent for timeslot
 				v = externalCalendaringService.createEvent(tsEvent);
 				
@@ -124,7 +125,8 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 					return null;
 				}
 				mEvent.setField("vevent_uuid", meeting.getUuid());
-					
+				mEvent.getProperties().addProperty(ResourceProperties.PROP_CREATOR, meeting.getCreatorUserId());
+
 				//generate ExtEvent for timeslot
 				v = externalCalendaringService.createEvent(mEvent);
 				
