@@ -318,7 +318,7 @@ public class EditMeeting extends SignupAction implements MeetingTypes {
 					
 					//Synch the group title with new meeting title
 					if(hasMeetingTitleChanged && !justCreated){
-						//use case: if the group title has been changes via Site-Info tool by removing GROUP_PREFIX : "SIGNUP_", 
+						//use case: if the group title has been changes via Site-Info tool by removing GROUP_PREFIX : "S:",
 						//it will be not synch any more for that group.
 						String newTitle = generateGroupTitle(newlyModifyMeeting.getTitle(), timeslot, rownum);
 						boolean success = this.sakaiFacade.synchonizeGroupTitle(sakaiFacade.getCurrentLocationId(), timeslot.getGroupId(), newTitle);
