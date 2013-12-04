@@ -1999,7 +1999,7 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 	}
 	
 	public boolean isAllLocationsEmpty(){
-		return !Utilities.getSignupMeetingsBean().isMeetingsAvailable();
+		return this.getAllLocations().isEmpty();
 			
 	}
 	
