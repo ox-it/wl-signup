@@ -249,14 +249,17 @@ public abstract class SignupAction implements SignupBeanConstants{
 		final int TITLE_MAX_LENGTH = 99;
 		final char SEPARATOR = '-';
 
-		final DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		int titleSize = TITLE_MAX_LENGTH - SakaiFacade.GROUP_PREFIX.length();
 		StringBuilder sb = new StringBuilder(titleSize);
 		
 		sb.append(" ");
 		sb.append(SEPARATOR);
+		sb.append(" ");
 		sb.append(Utilities.rb.getString("group_slot_in_group_titlename"));
-		sb.append(" " + rowNum);
+		sb.append(" " + rowNum + " (");
+		sb.append(df.format(timeslot.getStartTime()));
+		sb.append(")");
 		titleSize -= sb.length();
 		
 		if (titleSize > 0)
