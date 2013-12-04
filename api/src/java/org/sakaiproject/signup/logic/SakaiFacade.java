@@ -83,8 +83,11 @@ public interface SakaiFacade {
 	
 	public static final String REALM_ID_FOR_LOGIN_REQUIRED_ONLY =".auth";
 
-	public static final String GROUP_PREFIX = "SIGNUP_";
-	
+	public static final String GROUP_PREFIX = "S:";
+
+	// as part of WL-3057, stop meetings being surprised when their group names have dramatically changed
+	public static final String FORMER_GROUP_PREFIX = "SIGNUP_";
+
 	// see https://jira.sakaiproject.org/browse/SAK-21403
 	//this is currently hardcode but could be moved later
 	public static final String GROUP_PROP_SITEINFO_VISIBLE = "group_prop_wsetup_created";

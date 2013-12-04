@@ -1225,8 +1225,8 @@ public class SakaiFacadeImpl implements SakaiFacade {
 		}
 		
 		try {
-			
-			if(group.getTitle().startsWith(GROUP_PREFIX)){
+			// the group_prefix was changed with WL-3075, this stops it getting confused
+			if(group.getTitle().startsWith(GROUP_PREFIX) || group.getTitle().startsWith(FORMER_GROUP_PREFIX)){
 				//it means that the group title has not been modified via Site-info, we can change it now				
 				group.setTitle(GROUP_PREFIX + newTitle);
 				siteService.save(site);
