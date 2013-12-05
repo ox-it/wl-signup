@@ -1115,5 +1115,14 @@ public class SignupMeetingServiceImpl implements SignupMeetingService, Retry, Me
 		signupEmailFacade.sendEmailToAttendee(signupEventTrackingInfo);
 	}
 
+	@Override
+	public List<String> getAllLocations(String siteId) throws Exception {
+		return signupMeetingDao.getAllLocations(siteId);
+	}
+
+	@Override
+	public List<String> getAllCategories(String siteId) throws Exception {
+		return signupMeetingDao.getAllCategories(siteId);
+	}
 
 }

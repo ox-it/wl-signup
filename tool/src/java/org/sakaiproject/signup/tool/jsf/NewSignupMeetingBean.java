@@ -1999,12 +1999,11 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 	}
 	
 	public boolean isAllLocationsEmpty(){
-		return this.getAllLocations().isEmpty();
-			
+		return !Utilities.getSignupMeetingsBean().isLocationsAvailable();
 	}
 	
 	public boolean isCategoriesExist() {
-		return !Utilities.getSignupMeetingsBean().getAllCategories().isEmpty();
+		return Utilities.getSignupMeetingsBean().isCategoriesAvailable();
 	}
 
 	public UserDefineTimeslotBean getUserDefineTimeslotBean() {
