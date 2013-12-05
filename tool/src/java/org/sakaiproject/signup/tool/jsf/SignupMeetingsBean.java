@@ -210,10 +210,12 @@ public class SignupMeetingsBean implements SignupBeanConstants {
 		Set<String> set = new HashSet<String>();
 		List<SelectItem> locations= new ArrayList<SelectItem>();
 		List<SignupMeetingWrapper> allMeetings = getMeetingWrappers(VIEW_ALL, null);
-		for(SignupMeetingWrapper meeting : allMeetings) {
-			String location = meeting.getMeeting().getLocation();
-			if(StringUtils.isNotBlank(location) && set.add(location)) {
-				locations.add(new SelectItem(location));
+		if (allMeetings != null) {
+			for(SignupMeetingWrapper meeting : allMeetings) {
+				String location = meeting.getMeeting().getLocation();
+				if(StringUtils.isNotBlank(location) && set.add(location)) {
+					locations.add(new SelectItem(location));
+				}
 			}
 		}
 		
