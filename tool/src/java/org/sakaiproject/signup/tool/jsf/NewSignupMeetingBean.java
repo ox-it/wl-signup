@@ -2009,12 +2009,12 @@ public class NewSignupMeetingBean implements MeetingTypes, SignupMessageTypes, S
 	
 	public boolean isAllLocationsEmpty(){
 		// this is safe to call often since we cache the locations
-		return getAllLocations().isEmpty();
+		return Utilities.getSignupMeetingsBean().getAllLocations().isEmpty();
 	}
 	
 	public boolean isCategoriesExist() {
 		// this is safe to call often since we cache the categories
-		return !getAllCategories().isEmpty();
+		return !Utilities.getSignupMeetingsBean().getAllCategories().isEmpty();
 	}
 
 	public UserDefineTimeslotBean getUserDefineTimeslotBean() {
