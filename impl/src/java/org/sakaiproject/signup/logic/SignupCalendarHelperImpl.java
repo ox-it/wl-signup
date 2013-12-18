@@ -1,5 +1,6 @@
 package org.sakaiproject.signup.logic;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.sakaiproject.time.api.TimeRange;
 import org.sakaiproject.time.api.TimeService;
 import org.sakaiproject.user.api.User;
 import org.sakaiproject.user.api.UserDirectoryService;
+import org.sakaiproject.user.api.UserNotDefinedException;
 import org.sakaiproject.util.ResourceLoader;
 
 /**
@@ -130,7 +132,7 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 
 				//generate ExtEvent for timeslot
 				v = externalCalendaringService.createEvent(mEvent);
-				
+				v = externalCalendaringService.addChairAttendeesToEvent(v, getCoordinators(meeting));
 				
 			} finally {
 				sakaiFacade.popSecurityAdvisor(advisor);
@@ -140,7 +142,27 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 		return v;
 		
 	}
-	
+
+	/**
+	 * Helper to get a list of Users who are coordinates for a given meeting
+	 *     meeting.coordinatorIds.map(userDirectoryService.getUser)
+	 *
+	 * @param meeting  the meeting in question
+	 * @return the list of coordinator Users
+	 */
+	private List<User> getCoordinators(SignupMeeting meeting) {
+		List<User> users = new ArrayList<User>();
+		List<String> ids = meeting.getCoordinatorIdsList();
+		for (String coordinator : ids) {
+			try {
+				users.add(userDirectoryService.getUser(coordinator));
+			} catch (UserNotDefinedException e) {
+				log.error("SignupCalendarHelperImpl.getCoordinators: Coordinator of meeting " + meeting.getId() + "is not defined - %s" + e);
+			}
+		}
+		return users;
+	}
+
 	@Override
 	public String createCalendarFile(List<ExtEvent> vevents) {
 		//create calendar
