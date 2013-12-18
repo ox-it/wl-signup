@@ -674,6 +674,10 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		message.setHeaders(email.getHeader());
 		message.setBody(email.getMessage());
 		
+		// Pass a flag to the EmailService to indicate that we want the MIME multipart subtype set to alternative
+		// so that an email client can present the message as a meeting invite
+		message.setHeader("multipart-subtype", "alternative");
+		
 		//note that the headers are largely ignored so we need to repeat some things here that are actually in the headers
 		//if these are eventaully converted to proper email templates, this should be alleviated
 		message.setSubject(email.getSubject());
