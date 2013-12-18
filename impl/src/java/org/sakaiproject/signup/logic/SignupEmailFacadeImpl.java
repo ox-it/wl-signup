@@ -155,7 +155,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 					+ meeting.getCreatorUserId());
 		}
 		
-		List<String> coordinatorIds=getExistingCoordinatorIds(meeting);
+		List<String> coordinatorIds = meeting.getCoordinatorIdsList();
 		for (String cId : coordinatorIds) {
 			try{
 				User coUser = userDirectoryService.getUser(cId);
@@ -167,20 +167,6 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		
 		
 		return new ArrayList<User>(organizerCoordinators);
-	}
-	
-	private List<String> getExistingCoordinatorIds(SignupMeeting meeting){
-		List<String> coUsers = new ArrayList<String>();
-		String coUserIdsString = meeting.getCoordinatorIds();
-		if(coUserIdsString !=null && coUserIdsString.trim().length()>0){
-			StringTokenizer userIdTokens = new StringTokenizer(coUserIdsString,"|");
-			while(userIdTokens.hasMoreTokens()){
-				String uId = userIdTokens.nextToken();
-				coUsers.add(uId);				
-			}
-		}
-		
-		return coUsers;		
 	}
 
 	/**
@@ -748,7 +734,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			//only send the overall meeting ICS file to the organiser of the meeting. 
 			//Students do not need this, they get them for the timeslots when they sign up
 			String organiserUuid = meeting.getCreatorUserId();
-			List<String> organizerCoordinatorsUuid = getExistingCoordinatorIds(meeting);
+			List<String> organizerCoordinatorsUuid = meeting.getCoordinatorIdsList();
 			organizerCoordinatorsUuid.add(organiserUuid);
 			
 			//if(StringUtils.equals(user.getId(), organiserUuid)) {
