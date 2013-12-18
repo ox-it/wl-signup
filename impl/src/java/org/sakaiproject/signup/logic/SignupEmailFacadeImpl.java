@@ -1000,8 +1000,11 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	 */
 	private Attachment formatICSAttachment(List<ExtEvent> vevents) {
 		String path = calendarHelper.createCalendarFile(vevents);
-		return new Attachment(new File(path), StringUtils.substringAfterLast(path, File.separator));
-		
+
+		// Explicitly define the Content-Type and Content-Diposition headers so the invitation appears inline
+		String filename = StringUtils.substringAfterLast(path, File.separator);
+		String type = "text/calendar; charset=\"utf-8\"; method=request; name=signup-invite.ics";
+		return new Attachment(new File(path), filename, type, Attachment.ContentDisposition.INLINE);
 	}
 	
 	
