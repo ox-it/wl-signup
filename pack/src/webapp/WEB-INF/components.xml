@@ -42,6 +42,7 @@
 	<bean id="org.sakaiproject.signup.logic.SignupCalendarHelper" class="org.sakaiproject.signup.logic.SignupCalendarHelperImpl">
 		<property name="sakaiFacade" ref="org.sakaiproject.signup.logic.SakaiFacade" />
 		<property name="externalCalendaringService" ref="org.sakaiproject.calendaring.api.ExternalCalendaringService" />
+		<property name="userDirectoryService" ref="org.sakaiproject.user.api.UserDirectoryService" />
 	</bean>
 
 	<bean id="org.sakaiproject.signup.logic.SignupEmailFacade" class="org.sakaiproject.signup.logic.SignupEmailFacadeImpl">
