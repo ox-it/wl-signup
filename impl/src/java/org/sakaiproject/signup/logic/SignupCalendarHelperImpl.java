@@ -99,6 +99,7 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 
 				//generate ExtEvent for timeslot
 				v = externalCalendaringService.createEvent(tsEvent);
+				externalCalendaringService.addChairAttendeesToEvent(v, getCoordinators(meeting));
 				
 			} finally {
 				sakaiFacade.popSecurityAdvisor(advisor);
@@ -132,7 +133,7 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 
 				//generate ExtEvent for timeslot
 				v = externalCalendaringService.createEvent(mEvent);
-				v = externalCalendaringService.addChairAttendeesToEvent(v, getCoordinators(meeting));
+				externalCalendaringService.addChairAttendeesToEvent(v, getCoordinators(meeting));
 				
 			} finally {
 				sakaiFacade.popSecurityAdvisor(advisor);

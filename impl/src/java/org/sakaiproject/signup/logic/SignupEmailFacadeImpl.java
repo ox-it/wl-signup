@@ -798,6 +798,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			for(SignupTimeslot ts: meeting.getSignupTimeSlots()) {
 				if(ts.getAttendee(user.getId()) != null) {
 					ExtEvent v = ts.getExtEvent();
+					calendarHelper.addAttendeesToExtEvent(v, Collections.singletonList(user));
 					if(v != null) {
 						vevents.add(v);
 					}
