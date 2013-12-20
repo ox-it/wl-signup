@@ -173,6 +173,15 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 	}
 
 	@Override
+	public String createCalendarFile(List<ExtEvent> vevents, String method) {
+		//create calendar
+		ExtCalendar cal = externalCalendaringService.createCalendar(vevents, method);
+				
+		//get path to file
+		return externalCalendaringService.toFile(cal);
+	}
+
+	@Override
 	public ExtEvent cancelExtEvent(ExtEvent vevent) {
 		return externalCalendaringService.cancelEvent(vevent);
 	}

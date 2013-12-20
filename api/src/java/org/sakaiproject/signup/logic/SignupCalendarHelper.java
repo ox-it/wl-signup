@@ -54,6 +54,14 @@ public interface SignupCalendarHelper {
 	public String createCalendarFile(List<ExtEvent> vevents);
 	
 	/**
+	 * Create a calendar for a list of ExtEvents and return the path to the file
+	 * @param vevents	List of ExtEvents
+	 * @param method	The ITIP method for the calendar, e.g. "REQUEST"
+	 * @return
+	 */
+	public String createCalendarFile(List<ExtEvent> vevents, String method);
+	
+	/**
 	 * Cancel an event
 	 * @param vevent ExtEvent to cancel
 	 * @return
