@@ -756,7 +756,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 				}	
 				
 				//create calendar for overall meeting and final attachment
-				attachments.add(formatICSAttachment(Collections.singletonList(v)));
+				attachments.add(formatICSAttachment(Collections.singletonList(v), cancel ? "CANCEL" : "REQUEST"));
 				
 			} else {
 				//students only get an ICS if they have signed up to a timeslot. They get an updated ICS that contains the new times for the timeslots
@@ -782,7 +782,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 				
 				//create calendar and final attachment, if we have vevents to work with
 				if(vevents.size()>0){
-					attachments.add(formatICSAttachment(vevents));
+					attachments.add(formatICSAttachment(vevents, cancel ? "CANCEL" : "REQUEST"));
 				}
 				
 			}
@@ -806,7 +806,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//create calendar and final attachment, if we have vevents to work with
 			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents));
+				attachments.add(formatICSAttachment(vevents, "REQUEST"));
 			}
 		} else if (email instanceof AttendeeCancellationOwnEmail) {
 			//NOTE: sent to attendee when they cancel themselves	
@@ -827,7 +827,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//create calendar and final attachment, if we have vevents to work with
 			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents));
+				attachments.add(formatICSAttachment(vevents, "CANCEL"));
 			}
 						
 			
@@ -862,7 +862,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			ExtEvent vevent = calendarHelper.addAttendeesToExtEvent(v, users);
 			
 			//create calendar and final attachment
-			attachments.add(formatICSAttachment(Collections.singletonList(vevent)));
+			attachments.add(formatICSAttachment(Collections.singletonList(vevent), "REQUEST"));
 			
 		
 		} else if (email instanceof CancellationEmail) {
@@ -884,7 +884,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//create calendar and final attachment, if we have vevents to work with
 			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents));
+				attachments.add(formatICSAttachment(vevents, "CANCEL"));
 			}
 		
 		} else if (email instanceof MoveAttendeeEmail || email instanceof SwapAttendeeEmail) {
@@ -934,7 +934,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//create calendar and final attachment, if we have vevents to work with
 			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents));
+				attachments.add(formatICSAttachment(vevents, "REQUEST"));
 			}
 		
 		} 
@@ -986,14 +986,15 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	/**
 	 * Helper to create an ICS calendar from a list of vevents, then turn it into an attachment
 	 * @param vevents list of vevents
+	 * @param method the ITIP method for the calendar, e.g. "REQUEST"
 	 * @return
 	 */
-	private Attachment formatICSAttachment(List<ExtEvent> vevents) {
-		String path = calendarHelper.createCalendarFile(vevents);
+	private Attachment formatICSAttachment(List<ExtEvent> vevents, String method) {
+		String path = calendarHelper.createCalendarFile(vevents, method);
 
 		// Explicitly define the Content-Type and Content-Diposition headers so the invitation appears inline
 		String filename = StringUtils.substringAfterLast(path, File.separator);
-		String type = "text/calendar; charset=\"utf-8\"; method=request; name=signup-invite.ics";
+		String type = String.format("text/calendar; charset=\"utf-8\"; method=%s; name=signup-invite.ics", method);
 		return new Attachment(new File(path), filename, type, Attachment.ContentDisposition.INLINE);
 	}
 	
