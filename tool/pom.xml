@@ -128,8 +128,22 @@
 			<version>2.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sakaiproject</groupId>
+			<artifactId>sakai-calendar-api</artifactId>
+		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<sourceDirectory>src/java</sourceDirectory>
 		<resources>
@@ -146,5 +160,10 @@
 				</includes>
 			</resource>
 		</resources>
+		<testResources>
+			<testResource>
+				<directory>${basedir}/src/test</directory>
+			</testResource>
+		</testResources>
 	</build>
 </project>
