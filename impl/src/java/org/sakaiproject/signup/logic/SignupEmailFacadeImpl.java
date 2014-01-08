@@ -155,7 +155,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 					+ meeting.getCreatorUserId());
 		}
 		
-		List<String> coordinatorIds=getExistingCoordinatorIds(meeting);
+		List<String> coordinatorIds = meeting.getCoordinatorIdsList();
 		for (String cId : coordinatorIds) {
 			try{
 				User coUser = userDirectoryService.getUser(cId);
@@ -167,20 +167,6 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		
 		
 		return new ArrayList<User>(organizerCoordinators);
-	}
-	
-	private List<String> getExistingCoordinatorIds(SignupMeeting meeting){
-		List<String> coUsers = new ArrayList<String>();
-		String coUserIdsString = meeting.getCoordinatorIds();
-		if(coUserIdsString !=null && coUserIdsString.trim().length()>0){
-			StringTokenizer userIdTokens = new StringTokenizer(coUserIdsString,"|");
-			while(userIdTokens.hasMoreTokens()){
-				String uId = userIdTokens.nextToken();
-				coUsers.add(uId);				
-			}
-		}
-		
-		return coUsers;		
 	}
 
 	/**
@@ -674,6 +660,10 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		message.setHeaders(email.getHeader());
 		message.setBody(email.getMessage());
 		
+		// Pass a flag to the EmailService to indicate that we want the MIME multipart subtype set to alternative
+		// so that an email client can present the message as a meeting invite
+		message.setHeader("multipart-subtype", "alternative");
+		
 		//note that the headers are largely ignored so we need to repeat some things here that are actually in the headers
 		//if these are eventaully converted to proper email templates, this should be alleviated
 		message.setSubject(email.getSubject());
@@ -744,7 +734,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			//only send the overall meeting ICS file to the organiser of the meeting. 
 			//Students do not need this, they get them for the timeslots when they sign up
 			String organiserUuid = meeting.getCreatorUserId();
-			List<String> organizerCoordinatorsUuid = getExistingCoordinatorIds(meeting);
+			List<String> organizerCoordinatorsUuid = meeting.getCoordinatorIdsList();
 			organizerCoordinatorsUuid.add(organiserUuid);
 			
 			//if(StringUtils.equals(user.getId(), organiserUuid)) {
@@ -766,7 +756,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 				}	
 				
 				//create calendar for overall meeting and final attachment
-				attachments.add(formatICSAttachment(Collections.singletonList(v)));
+				attachments.add(formatICSAttachment(Collections.singletonList(v), cancel ? "CANCEL" : "REQUEST"));
 				
 			} else {
 				//students only get an ICS if they have signed up to a timeslot. They get an updated ICS that contains the new times for the timeslots
@@ -792,7 +782,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 				
 				//create calendar and final attachment, if we have vevents to work with
 				if(vevents.size()>0){
-					attachments.add(formatICSAttachment(vevents));
+					attachments.add(formatICSAttachment(vevents, cancel ? "CANCEL" : "REQUEST"));
 				}
 				
 			}
@@ -808,6 +798,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			for(SignupTimeslot ts: meeting.getSignupTimeSlots()) {
 				if(ts.getAttendee(user.getId()) != null) {
 					ExtEvent v = ts.getExtEvent();
+					calendarHelper.addAttendeesToExtEvent(v, Collections.singletonList(user));
 					if(v != null) {
 						vevents.add(v);
 					}
@@ -816,7 +807,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//create calendar and final attachment, if we have vevents to work with
 			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents));
+				attachments.add(formatICSAttachment(vevents, "REQUEST"));
 			}
 		} else if (email instanceof AttendeeCancellationOwnEmail) {
 			//NOTE: sent to attendee when they cancel themselves	
@@ -837,7 +828,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//create calendar and final attachment, if we have vevents to work with
 			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents));
+				attachments.add(formatICSAttachment(vevents, "CANCEL"));
 			}
 						
 			
@@ -872,7 +863,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			ExtEvent vevent = calendarHelper.addAttendeesToExtEvent(v, users);
 			
 			//create calendar and final attachment
-			attachments.add(formatICSAttachment(Collections.singletonList(vevent)));
+			attachments.add(formatICSAttachment(Collections.singletonList(vevent), "REQUEST"));
 			
 		
 		} else if (email instanceof CancellationEmail) {
@@ -894,7 +885,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//create calendar and final attachment, if we have vevents to work with
 			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents));
+				attachments.add(formatICSAttachment(vevents, "CANCEL"));
 			}
 		
 		} else if (email instanceof MoveAttendeeEmail || email instanceof SwapAttendeeEmail) {
@@ -944,7 +935,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			
 			//create calendar and final attachment, if we have vevents to work with
 			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents));
+				attachments.add(formatICSAttachment(vevents, "REQUEST"));
 			}
 		
 		} 
@@ -996,12 +987,16 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	/**
 	 * Helper to create an ICS calendar from a list of vevents, then turn it into an attachment
 	 * @param vevents list of vevents
+	 * @param method the ITIP method for the calendar, e.g. "REQUEST"
 	 * @return
 	 */
-	private Attachment formatICSAttachment(List<ExtEvent> vevents) {
-		String path = calendarHelper.createCalendarFile(vevents);
-		return new Attachment(new File(path), StringUtils.substringAfterLast(path, File.separator));
-		
+	private Attachment formatICSAttachment(List<ExtEvent> vevents, String method) {
+		String path = calendarHelper.createCalendarFile(vevents, method);
+
+		// Explicitly define the Content-Type and Content-Diposition headers so the invitation appears inline
+		String filename = StringUtils.substringAfterLast(path, File.separator);
+		String type = String.format("text/calendar; charset=\"utf-8\"; method=%s; name=signup-invite.ics", method);
+		return new Attachment(new File(path), filename, type, Attachment.ContentDisposition.INLINE);
 	}
 	
 	

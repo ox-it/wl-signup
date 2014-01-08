@@ -1,6 +1,6 @@
 package org.sakaiproject.signup.logic;
 
-import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +15,7 @@ import org.sakaiproject.calendar.api.CalendarEventEdit;
 import org.sakaiproject.calendaring.api.ExtCalendar;
 import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.calendaring.api.ExternalCalendaringService;
-import org.sakaiproject.exception.IdUnusedException;
+import org.sakaiproject.entity.api.ResourceProperties;
 import org.sakaiproject.exception.PermissionException;
 import org.sakaiproject.signup.model.SignupMeeting;
 import org.sakaiproject.signup.model.SignupTimeslot;
@@ -24,6 +24,8 @@ import org.sakaiproject.time.api.Time;
 import org.sakaiproject.time.api.TimeRange;
 import org.sakaiproject.time.api.TimeService;
 import org.sakaiproject.user.api.User;
+import org.sakaiproject.user.api.UserDirectoryService;
+import org.sakaiproject.user.api.UserNotDefinedException;
 import org.sakaiproject.util.ResourceLoader;
 
 /**
@@ -92,9 +94,12 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 				
 				//SIGNUP-180 add sequence to vevents
 				tsEvent.setField("vevent_sequence", String.valueOf(ts.getVersion()));
-				
+
+				tsEvent.getProperties().addProperty(ResourceProperties.PROP_CREATOR, meeting.getCreatorUserId());
+
 				//generate ExtEvent for timeslot
 				v = externalCalendaringService.createEvent(tsEvent);
+				externalCalendaringService.addChairAttendeesToEvent(v, getCoordinators(meeting));
 				
 			} finally {
 				sakaiFacade.popSecurityAdvisor(advisor);
@@ -124,10 +129,11 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 					return null;
 				}
 				mEvent.setField("vevent_uuid", meeting.getUuid());
-					
+				mEvent.getProperties().addProperty(ResourceProperties.PROP_CREATOR, meeting.getCreatorUserId());
+
 				//generate ExtEvent for timeslot
 				v = externalCalendaringService.createEvent(mEvent);
-				
+				externalCalendaringService.addChairAttendeesToEvent(v, getCoordinators(meeting));
 				
 			} finally {
 				sakaiFacade.popSecurityAdvisor(advisor);
@@ -137,11 +143,36 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 		return v;
 		
 	}
-	
+
+	/**
+	 * Helper to get a list of Users who are coordinates for a given meeting
+	 *     meeting.coordinatorIds.map(userDirectoryService.getUser)
+	 *
+	 * @param meeting  the meeting in question
+	 * @return the list of coordinator Users
+	 */
+	private List<User> getCoordinators(SignupMeeting meeting) {
+		List<User> users = new ArrayList<User>();
+		List<String> ids = meeting.getCoordinatorIdsList();
+		for (String coordinator : ids) {
+			users.add(sakaiFacade.getUserQuietly(coordinator));
+		}
+		return users;
+	}
+
 	@Override
 	public String createCalendarFile(List<ExtEvent> vevents) {
 		//create calendar
 		ExtCalendar cal = externalCalendaringService.createCalendar(vevents);
+				
+		//get path to file
+		return externalCalendaringService.toFile(cal);
+	}
+
+	@Override
+	public String createCalendarFile(List<ExtEvent> vevents, String method) {
+		//create calendar
+		ExtCalendar cal = externalCalendaringService.createCalendar(vevents, method);
 				
 		//get path to file
 		return externalCalendaringService.toFile(cal);
