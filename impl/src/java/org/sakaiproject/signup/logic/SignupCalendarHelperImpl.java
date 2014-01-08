@@ -155,11 +155,7 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 		List<User> users = new ArrayList<User>();
 		List<String> ids = meeting.getCoordinatorIdsList();
 		for (String coordinator : ids) {
-			try {
-				users.add(userDirectoryService.getUser(coordinator));
-			} catch (UserNotDefinedException e) {
-				log.error("SignupCalendarHelperImpl.getCoordinators: Coordinator of meeting " + meeting.getId() + "is not defined - %s" + e);
-			}
+			users.add(sakaiFacade.getUserQuietly(coordinator));
 		}
 		return users;
 	}
@@ -279,8 +275,5 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 	
 	@Setter
 	private ExternalCalendaringService externalCalendaringService;
-
-	@Setter
-	private UserDirectoryService userDirectoryService;
 
 }
