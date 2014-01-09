@@ -251,23 +251,6 @@
 									<h:outputText value="#{msgs.event_yes_show_attendee_public}" escape="false"/>
 								</h:panelGroup>
 								
-								<h:outputText value="#{msgs.event_receive_notification}" styleClass="titleText" escape="false" rendered="#{!NewSignupMeetingBean.announcementType}"/>
-								<h:panelGroup styleClass="longtext" rendered="#{!NewSignupMeetingBean.announcementType}">
-									<h:selectBooleanCheckbox value="#{NewSignupMeetingBean.receiveEmail}"/>
-									<h:outputText value="#{msgs.event_yes_receive_notification}" escape="false"/>
-								</h:panelGroup>
-								
-								<h:outputText value="#{msgs.event_select_coordinators}" escape="false"  styleClass="titleText"/>
-								<h:dataTable id="meeting_coordinators" value="#{NewSignupMeetingBean.allPossibleCoordinators}" var="coUser" styleClass="coordinatorTab">
-									<h:column>
-										<h:selectBooleanCheckbox value="#{coUser.checked}"/>
-									    <h:outputText value="&nbsp;#{coUser.displayName}" escape="false" styleClass="longtext"/>				
-									</h:column>
-								</h:dataTable>																
-								
-								<h:outputText value="&nbsp;" escape="false"/>
-								<h:outputText value="&nbsp;" escape="false"/>
-								
 								<h:outputText value="#{msgs.event_create_email_notification}" styleClass="titleText" escape="false"/>
 								<h:panelGrid columns="1" style="width:100%;margin-left:-3px;" rendered="#{NewSignupMeetingBean.publishedSite}">
 									<h:panelGroup styleClass="editText" >
@@ -282,6 +265,24 @@
 										</h:selectOneRadio>
 									</h:panelGroup>
 								</h:panelGrid>
+								
+								<h:outputText value="#{msgs.event_select_coordinators}" escape="false"  styleClass="titleText"/>
+								<h:dataTable id="meeting_coordinators" value="#{NewSignupMeetingBean.allPossibleCoordinators}" var="coUser" styleClass="coordinatorTab">
+									<h:column>
+										<h:selectBooleanCheckbox value="#{coUser.checked}"/>
+									    <h:outputText value="&nbsp;#{coUser.displayName}" escape="false" styleClass="longtext"/>				
+									</h:column>
+								</h:dataTable>																
+								
+								<h:outputText value="#{msgs.event_receive_notification}" styleClass="titleText" escape="false" rendered="#{!NewSignupMeetingBean.announcementType}"/>
+								<h:panelGroup styleClass="longtext" rendered="#{!NewSignupMeetingBean.announcementType}">
+									<h:selectBooleanCheckbox value="#{NewSignupMeetingBean.receiveEmail}"/>
+									<h:outputText value="#{msgs.event_yes_receive_notification}" escape="false"/>
+								</h:panelGroup>
+
+								<h:outputText value="&nbsp;" escape="false"/>
+								<h:outputText value="&nbsp;" escape="false"/>
+								
 								<h:panelGroup styleClass="longtext" rendered="#{!NewSignupMeetingBean.publishedSite}">
 									<h:selectBooleanCheckbox value="#{NewSignupMeetingBean.sendEmail}" disabled="true"/>
 									<h:outputText value="#{msgs.event_email_not_send_out_label}" escape="false" style="color:#b11"/>
