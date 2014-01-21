@@ -24,8 +24,11 @@ package org.sakaiproject.signup.logic.messages;
 
 import java.util.List;
 
+import org.sakaiproject.calendaring.api.ExtEvent;
+import org.sakaiproject.signup.logic.SignupCalendarHelper;
 import org.sakaiproject.signup.logic.SignupTrackingItem;
 import org.sakaiproject.signup.model.SignupMeeting;
+import org.sakaiproject.user.api.User;
 
 /**
  * <P>
@@ -67,5 +70,14 @@ public interface SignupEmailNotification {
 	 * @return
 	 */
 	SignupMeeting getMeeting();	
+
+	/**
+	 * Generate a list of external event objects to be converted to ICal and
+	 * attached to the email.
+	 * @param user The User performing the action
+	 * @return The list of events to be attached to this email
+	 */
+	abstract public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper);
+
 
 }
