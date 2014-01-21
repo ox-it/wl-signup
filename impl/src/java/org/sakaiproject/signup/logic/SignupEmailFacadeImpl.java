@@ -767,18 +767,6 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	}
 	
 	/**
-	 * Under certain conditions (particular when attendee moved or swapped), the transient ExtEvents for timeslots are lost, so create them again.
-	 * The calendarhelper checks first though.
-	 * @param meeting	overall SignupMeeting
-	 * @param ts		SignupTimeslot we need ExtEvent for
-	 * @return
-	 */
-	private ExtEvent ensureExtEventForTimeslot(SignupMeeting meeting, SignupTimeslot ts) {
-		return calendarHelper.generateExtEventForTimeslot(meeting, ts);
-	}
-	
-	
-	/**
 	 * Helper to create an ICS calendar from a list of vevents, then turn it into an attachment
 	 * @param vevents list of vevents
 	 * @param method the ITIP method for the calendar, e.g. "REQUEST"
