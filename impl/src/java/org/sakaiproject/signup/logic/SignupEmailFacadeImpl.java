@@ -727,11 +727,6 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		} else if (email instanceof AttendeeCancellationOwnEmail) {
 
 		} else if (email instanceof AttendeeSignupEmail || email instanceof AttendeeCancellationEmail) {
-			//NOTE: sent to organiser when someone signs up or cancels. The output is the same, a full calendar for the meeting, with all attendees, updated.			
-			if(logger.isDebugEnabled()){
-				logger.debug("AttendeeSignupEmail/AttendeeCancellationEmail");
-			}
-			
 		
 		} else if (email instanceof CancellationEmail) {
 			//NOTE: sent to the attendee when their signup is cancelled by an organiser

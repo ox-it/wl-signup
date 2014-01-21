@@ -38,7 +38,7 @@ import org.sakaiproject.user.api.User;
  * Signed-up event
  * </p>
  */
-public class AttendeeSignupEmail extends SignupEmailBase {
+public class AttendeeSignupEmail extends OrganizerEmailBase {
 
 	private final User currentUser;
 

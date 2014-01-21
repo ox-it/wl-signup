@@ -38,7 +38,7 @@ import org.sakaiproject.user.api.User;
  * cancellation event
  * </p>
  */
-public class AttendeeCancellationEmail extends SignupEmailBase {
+public class AttendeeCancellationEmail extends OrganizerEmailBase {
 
 	private final User organizer;
 
@@ -67,6 +67,7 @@ public class AttendeeCancellationEmail extends SignupEmailBase {
 		this.items = items;
 		this.meeting = meeting;
 		this.setSakaiFacade(sakaiFacade);
+		this.cancellation = true;
 	}
 
 	/**

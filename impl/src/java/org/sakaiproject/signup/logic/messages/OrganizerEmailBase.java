@@ -23,21 +23,19 @@ abstract public class OrganizerEmailBase extends SignupEmailBase {
     public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper) {
         List<ExtEvent> events = new ArrayList<ExtEvent>();
 
-        //check vevent for meeting exists, otherwise skip
-        ExtEvent v = meeting.getExtEvent();
-        if (v == null) {
+        ExtEvent meetingEvent = meeting.getExtEvent();
+        if (meetingEvent == null) {
             return events;
         }
 
-        //get full list of attendees for the entire meeting, update attendee list, and create ICS. This is for overall meeting, not timeslot.
         List<SignupAttendee> attendees = new ArrayList<SignupAttendee>();
-        for(SignupTimeslot ts: meeting.getSignupTimeSlots()) {
-            attendees.addAll(ts.getAttendees());
+        for(SignupTimeslot timeslot: meeting.getSignupTimeSlots()) {
+            attendees.addAll(timeslot.getAttendees());
         }
 
-        calendarHelper.addAttendeesToExtEvent(v, attendees);
+        calendarHelper.addAttendeesToExtEvent(meetingEvent, attendees);
 
-        events.add(v);
+        events.add(meetingEvent);
 
         return events;
     }
