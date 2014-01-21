@@ -17,6 +17,7 @@ import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.calendaring.api.ExternalCalendaringService;
 import org.sakaiproject.entity.api.ResourceProperties;
 import org.sakaiproject.exception.PermissionException;
+import org.sakaiproject.signup.model.SignupAttendee;
 import org.sakaiproject.signup.model.SignupMeeting;
 import org.sakaiproject.signup.model.SignupTimeslot;
 import org.sakaiproject.signup.util.PlainTextFormat;
@@ -184,7 +185,18 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 	public ExtEvent addUsersToExtEvent(ExtEvent vevent, List<User> users) {
 		return externalCalendaringService.addAttendeesToEvent(vevent, users);
 	}
-	
+
+	public ExtEvent addAttendeesToExtEvent(ExtEvent vevent, List<SignupAttendee> attendees) {
+        List<User> users = new ArrayList<User>();
+        for (SignupAttendee attendee : attendees) {
+            User user = sakaiFacade.getUser(attendee.getAttendeeUserId());
+            if (user != null) {
+                users.add(user);
+            }
+        }
+        return externalCalendaringService.addAttendeesToEvent(vevent, users);
+	}
+
 	@Override
 	public boolean isIcsEnabled() {
 		return externalCalendaringService.isIcsEnabled();

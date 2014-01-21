@@ -35,17 +35,7 @@ abstract public class OrganizerEmailBase extends SignupEmailBase {
             attendees.addAll(ts.getAttendees());
         }
 
-        //turn attendeelist into list of User objects, so we can create proper Attendees for the calendar
-        List<User> users = new ArrayList<User>();
-        for(SignupAttendee a: attendees) {
-            User u = sakaiFacade.getUser(a.getAttendeeUserId());
-            if(u != null){
-                users.add(u);
-            }
-        }
-
-        //add attendees to ExtEvent for overall meeting
-        calendarHelper.addAttendeesToExtEvent(v, users);
+        calendarHelper.addAttendeesToExtEvent(v, attendees);
 
         events.add(v);
 
