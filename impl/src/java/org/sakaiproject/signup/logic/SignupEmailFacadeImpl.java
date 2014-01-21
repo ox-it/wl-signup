@@ -729,26 +729,6 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		} else if (email instanceof AttendeeSignupEmail || email instanceof AttendeeCancellationEmail) {
 		
 		} else if (email instanceof CancellationEmail) {
-			//NOTE: sent to the attendee when their signup is cancelled by an organiser
-			if(logger.isDebugEnabled()){
-				logger.debug("CancellationEmail");
-			}
-			
-			//use the timeslot info in this particular email object to adjust the applicable vevents
-			List<SignupTimeslot> cancelled = ((CancellationEmail) email).getRemoved();
-			List<ExtEvent> vevents = new ArrayList<ExtEvent>();
-			for(SignupTimeslot ts: cancelled) {
-				ExtEvent v = ts.getExtEvent();
-				if(v != null){
-					//set it to be cancelled, add to list
-					vevents.add(calendarHelper.cancelExtEvent(v));
-				}
-			}
-			
-			//create calendar and final attachment, if we have vevents to work with
-			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents, "CANCEL"));
-			}
 		
 		} else if (email instanceof MoveAttendeeEmail || email instanceof SwapAttendeeEmail) {
 			//NOTE: sent to attendee when organiser moves them to a different timeslot/ swaps them with another user
