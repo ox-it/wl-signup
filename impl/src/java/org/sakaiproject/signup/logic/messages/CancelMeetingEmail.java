@@ -59,6 +59,7 @@ public class CancelMeetingEmail extends AllUsersEmailBase {
 		this.meeting = meeting;
 		this.emailReturnSiteId = emailReturnSiteId;
 		this.setSakaiFacade(sakaiFacade);
+		this.cancellation = true;
 	}
 
 	/**

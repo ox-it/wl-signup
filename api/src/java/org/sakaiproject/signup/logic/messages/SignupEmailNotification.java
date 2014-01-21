@@ -37,6 +37,9 @@ import org.sakaiproject.user.api.User;
  */
 public interface SignupEmailNotification {
 
+	/** Indicates whether this email represents a cancellation, false by default */
+	public boolean cancellation = false;
+
 	/**
 	 * provide email header information
 	 * 
