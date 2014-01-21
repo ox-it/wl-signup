@@ -30,8 +30,7 @@ abstract public class AllUsersEmailBase extends SignupEmailBase {
             }
 
         } else {
-            final List<SignupTimeslot> timeslots = meeting.getSignupTimeSlots();
-            events.addAll(eventsWhichUserIsAttending(user, timeslots));
+            events.addAll(eventsWhichUserIsAttending(user));
         }
 
         if (this.cancellation) {

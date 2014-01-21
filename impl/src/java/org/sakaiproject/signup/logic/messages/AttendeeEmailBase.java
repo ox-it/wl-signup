@@ -21,8 +21,7 @@ abstract public class AttendeeEmailBase extends SignupEmailBase {
      */
     public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper) {
         List<ExtEvent> events = new ArrayList<ExtEvent>();
-        final List<SignupTimeslot> timeslots = meeting.getSignupTimeSlots();
-        events.addAll(eventsWhichUserIsAttending(user, timeslots));
+        events.addAll(eventsWhichUserIsAttending(user));
 
         for (ExtEvent event : events) {
             calendarHelper.addAttendeesToExtEvent(event, Collections.singletonList(user));
