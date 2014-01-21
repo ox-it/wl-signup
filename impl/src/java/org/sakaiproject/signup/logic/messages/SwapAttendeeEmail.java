@@ -40,7 +40,7 @@ import org.sakaiproject.user.api.User;
  * swapped with the other one in an event/meeting
  * </p>
  */
-public class SwapAttendeeEmail extends SignupEmailBase implements SignupTimeslotChanges {
+public class SwapAttendeeEmail extends TransferEmailBase implements SignupTimeslotChanges {
 
 	private final User organizer;
 
