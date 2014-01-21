@@ -716,24 +716,13 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 	private List<Attachment> generateICS(SignupEmailNotification email, User user) {
 		
 		List<Attachment> attachments = new ArrayList<Attachment>();
-		
-		SignupMeeting meeting = email.getMeeting();
-		
-		//for each message type, determine what we need to do to get the correct ICS file.
-		if (email instanceof NewMeetingEmail || email instanceof ModifyMeetingEmail || email instanceof CancelMeetingEmail) {
-		
-		} else if (email instanceof AddAttendeeEmail || email instanceof PromoteAttendeeEmail || email instanceof OrganizerPreAssignEmail || email instanceof AttendeeSignupOwnEmail) {
 
-		} else if (email instanceof AttendeeCancellationOwnEmail) {
-
-		} else if (email instanceof AttendeeSignupEmail || email instanceof AttendeeCancellationEmail) {
+		String method = email.cancellation ? "CANCEL" : "REQUEST";
+		final List<ExtEvent> events = email.generateEvents(user, calendarHelper);
 		
-		} else if (email instanceof CancellationEmail) {
-		
-		} else if (email instanceof MoveAttendeeEmail || email instanceof SwapAttendeeEmail) {
-
-		} 
-		
+		if (events.size() > 0) {
+			attachments.add(formatICSAttachment(events, method));
+		}
 		
 		/*
 		 * AutoReminderEmail - handled by cron job, not yet implemented.
