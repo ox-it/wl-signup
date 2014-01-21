@@ -14,7 +14,7 @@ import java.util.List;
  * An email that is sent when an attendee is transfered from one event to another
  * @author Ben Holmes
  */
-abstract public class TransferEmailBase extends SignupEmailBase {
+abstract public class TransferEmailBase extends SignupEmailBase implements SignupTimeslotChanges {
 
     /**
      * {@inheritDoc}
