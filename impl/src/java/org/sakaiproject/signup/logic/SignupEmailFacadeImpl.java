@@ -723,29 +723,9 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		if (email instanceof NewMeetingEmail || email instanceof ModifyMeetingEmail || email instanceof CancelMeetingEmail) {
 		
 		} else if (email instanceof AddAttendeeEmail || email instanceof PromoteAttendeeEmail || email instanceof OrganizerPreAssignEmail || email instanceof AttendeeSignupOwnEmail) {
+
 		} else if (email instanceof AttendeeCancellationOwnEmail) {
-			//NOTE: sent to attendee when they cancel themselves	
-			if(logger.isDebugEnabled()){
-				logger.debug("AttendeeCancellationOwnEmail");
-			}
-			
-			//use the timeslot info in this particular email object to adjust the applicable vevents
-			List<SignupTimeslot> cancelled = ((AttendeeCancellationOwnEmail) email).getRemoved();
-			List<ExtEvent> vevents = new ArrayList<ExtEvent>();
-			for(SignupTimeslot ts: cancelled) {
-				ExtEvent v = ts.getExtEvent();
-				if(v != null){
-					//set it to be cancelled, add to list
-					vevents.add(calendarHelper.cancelExtEvent(v));
-				}
-			}
-			
-			//create calendar and final attachment, if we have vevents to work with
-			if(vevents.size()>0){
-				attachments.add(formatICSAttachment(vevents, "CANCEL"));
-			}
-						
-			
+
 		} else if (email instanceof AttendeeSignupEmail || email instanceof AttendeeCancellationEmail) {
 			//NOTE: sent to organiser when someone signs up or cancels. The output is the same, a full calendar for the meeting, with all attendees, updated.			
 			if(logger.isDebugEnabled()){

@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.signup.logic.SakaiFacade;
+import org.sakaiproject.signup.logic.SignupCalendarHelper;
 import org.sakaiproject.signup.logic.SignupTrackingItem;
 import org.sakaiproject.signup.model.SignupMeeting;
 import org.sakaiproject.signup.model.SignupTimeslot;
@@ -66,6 +68,7 @@ public class AttendeeCancellationOwnEmail extends SignupEmailBase implements Sig
 		}
 		this.timeslot = timeslot;
 		this.setSakaiFacade(sakaiFacade);
+		this.cancellation = true;
 	}
 
 	/**
@@ -136,5 +139,20 @@ public class AttendeeCancellationOwnEmail extends SignupEmailBase implements Sig
 	public List<SignupTimeslot> getAdded() {
 		return Collections.EMPTY_LIST; //not applicable here
 	}
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper) {
+
+        List<ExtEvent> events = new ArrayList<ExtEvent>();
+        events.addAll(eventsWhichUserIsAttending(user));
+
+        for (ExtEvent event : events) {
+            calendarHelper.cancelExtEvent(event);
+        }
+
+        return events;
+    }
 
 }
