@@ -38,7 +38,7 @@ import org.sakaiproject.user.api.User;
  * pre-assigned to an event/meeting
  * </p>
  */
-public class OrganizerPreAssignEmail extends SignupEmailBase {
+public class OrganizerPreAssignEmail extends AttendeeEmailBase {
 
 	private final User organizer;
 
