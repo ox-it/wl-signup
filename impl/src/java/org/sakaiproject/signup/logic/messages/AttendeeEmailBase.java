@@ -24,7 +24,7 @@ abstract public class AttendeeEmailBase extends SignupEmailBase {
         events.addAll(eventsWhichUserIsAttending(user));
 
         for (ExtEvent event : events) {
-            calendarHelper.addAttendeesToExtEvent(event, Collections.singletonList(user));
+            calendarHelper.addUsersToExtEvent(event, Collections.singletonList(user));
         }
 
         return events;

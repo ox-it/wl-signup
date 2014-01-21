@@ -181,8 +181,7 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 		return externalCalendaringService.cancelEvent(vevent);
 	}
 	
-	@Override
-	public ExtEvent addAttendeesToExtEvent(ExtEvent vevent, List<User> users) {
+	public ExtEvent addUsersToExtEvent(ExtEvent vevent, List<User> users) {
 		return externalCalendaringService.addAttendeesToEvent(vevent, users);
 	}
 	

@@ -74,7 +74,7 @@ public interface SignupCalendarHelper {
 	 * @param users		List of Users to add
 	 * @return
 	 */
-	public ExtEvent addAttendeesToExtEvent(ExtEvent vevent, List<User> users);
+	public ExtEvent addUsersToExtEvent(ExtEvent vevent, List<User> users);
 	
 	/**
 	 * Is ICS calendar generation enabled in the external calendaring service?
