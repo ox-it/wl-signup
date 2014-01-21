@@ -54,21 +54,4 @@ abstract public class AllUsersEmailBase extends SignupEmailBase {
         return this.meetingCreatorAndOrganisers().contains(user.getId());
     }
 
-    private List<ExtEvent> eventsWhichUserIsAttending(User user, List<SignupTimeslot> timeslots) {
-        List<ExtEvent> events = new ArrayList<ExtEvent>();
-        for (SignupTimeslot timeslot : timeslots) {
-            if (userIsAttendingTimeslot(user, timeslot)) {
-                final ExtEvent event = timeslot.getExtEvent();
-                if (event != null) {
-                    events.add(event);
-                }
-            }
-        }
-        return events;
-    }
-
-    private boolean userIsAttendingTimeslot(User user, SignupTimeslot timeslot) {
-        return timeslot.getAttendee(user.getId()) != null;
-    }
-
 }

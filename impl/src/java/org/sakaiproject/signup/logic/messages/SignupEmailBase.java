@@ -23,6 +23,7 @@
 package org.sakaiproject.signup.logic.messages;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,14 +31,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.apache.commons.lang.StringUtils;
-import org.sakaiproject.exception.IdUnusedException;
+import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.signup.logic.SakaiFacade;
-import org.sakaiproject.signup.logic.SignupTrackingItem;
 import org.sakaiproject.signup.model.MeetingTypes;
 import org.sakaiproject.signup.model.SignupMeeting;
-import org.sakaiproject.site.api.Site;
-import org.sakaiproject.site.cover.SiteService;
+import org.sakaiproject.signup.model.SignupTimeslot;
 import org.sakaiproject.time.api.Time;
+import org.sakaiproject.user.api.User;
 import org.sakaiproject.util.ResourceLoader;
 
 /**
@@ -257,5 +257,21 @@ abstract public class SignupEmailBase implements SignupEmailNotification, Meetin
 	protected String getServerFromAddress() {
 		return getServiceName() +" <" + rb.getString("noReply@") + getSakaiFacade().getServerConfigurationService().getServerName() + ">";
 	}
-	
+
+	protected boolean userIsAttendingTimeslot(User user, SignupTimeslot timeslot) {
+		return timeslot.getAttendee(user.getId()) != null;
+	}
+
+	protected List<ExtEvent> eventsWhichUserIsAttending(User user, List<SignupTimeslot> timeslots) {
+		List<ExtEvent> events = new ArrayList<ExtEvent>();
+		for (SignupTimeslot timeslot : timeslots) {
+			if (userIsAttendingTimeslot(user, timeslot)) {
+				final ExtEvent event = timeslot.getExtEvent();
+				if (event != null) {
+					events.add(event);
+				}
+			}
+		}
+		return events;
+	}
 }
