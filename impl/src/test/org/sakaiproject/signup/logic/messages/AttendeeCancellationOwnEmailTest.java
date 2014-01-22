@@ -15,15 +15,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
  * @author Ben Holmes
  */
-public class CancellationEmailTest {
+public class AttendeeCancellationOwnEmailTest {
 
-    protected CancellationEmail _cancellationEmail;
+    protected AttendeeCancellationOwnEmail _email;
     protected User _mockedUser;
     protected SignupMeeting _mockedMeeting;
 
@@ -31,41 +32,40 @@ public class CancellationEmailTest {
     @Before
     public void setUp() {
         _mockedUser = mock(User.class);
+        when(_mockedUser.getId()).thenReturn("userId");
+
         _mockedMeeting = mock(SignupMeeting.class);
 
         SignupTrackingItem mockedItem = mock(SignupTrackingItem.class);
-        SignupAttendee mockedAttendee = mock(SignupAttendee.class);
-        when(mockedItem.getAttendee()).thenReturn(mockedAttendee);
-        when(mockedAttendee.getSignupSiteId()).thenReturn("123");
+        List<SignupTrackingItem> items = Collections.singletonList(mockedItem);
 
         SakaiFacade mockedFacade = mock(SakaiFacade.class);
-        
-        // Make some fake timeslots
-        SignupTimeslot mockedTimeslot = mock(SignupTimeslot.class);
+
+        SignupTimeslot mockedTimeslot = new SignupTimeslot();
         SignupTimeslot mockedCancelledTimeslot = mock(SignupTimeslot.class);
         ExtEvent mockedEvent = mock(ExtEvent.class);
         when(mockedCancelledTimeslot.getExtEvent()).thenReturn(mockedEvent);
-        
-        
+        when(mockedCancelledTimeslot.getAttendee("userId")).thenReturn(new SignupAttendee());
+
         List<SignupTimeslot> timeslots = new ArrayList<SignupTimeslot>();
         timeslots.add(mockedTimeslot);
         timeslots.add(mockedCancelledTimeslot);
-        
+
         when(_mockedMeeting.getSignupTimeSlots()).thenReturn(timeslots);
         when(mockedItem.getRemovedFromTimeslot()).thenReturn(Collections.singletonList(mockedCancelledTimeslot));
-        
-        _cancellationEmail = new CancellationEmail(_mockedUser, mockedItem, _mockedMeeting, mockedFacade);
+
+        _email = new AttendeeCancellationOwnEmail(_mockedUser, items, _mockedMeeting, mockedFacade);
     }
 
     @Test
     public void shouldBeACancellation() {
-        assertTrue(_cancellationEmail.isCancellation());
+        assertTrue(_email.isCancellation());
     }
 
     @Test
     public void shouldGenerateCancelledEvents() {
         SignupCalendarHelper mockedCalendarHelper = mock(SignupCalendarHelper.class);
-        final List<ExtEvent> events = _cancellationEmail.generateEvents(_mockedUser, mockedCalendarHelper);
+        final List<ExtEvent> events = _email.generateEvents(_mockedUser, mockedCalendarHelper);
 
         verify(mockedCalendarHelper, times(1)).cancelExtEvent(any(ExtEvent.class));
         assertEquals(1, events.size());
