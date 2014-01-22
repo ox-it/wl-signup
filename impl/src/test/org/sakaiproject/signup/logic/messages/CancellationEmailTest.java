@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author Ben Holmes
  */
-public class GeneralCancellationTest {
+public class CancellationEmailTest {
 
     protected SignupEmailBase _email;
 
