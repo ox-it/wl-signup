@@ -80,7 +80,7 @@ public interface SignupEmailNotification {
 	 * @param user The User performing the action
 	 * @return The list of events to be attached to this email
 	 */
-	abstract public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper);
+	List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper);
 
 
 }
