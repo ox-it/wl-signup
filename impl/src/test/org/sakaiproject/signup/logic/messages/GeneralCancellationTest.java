@@ -3,6 +3,7 @@ package org.sakaiproject.signup.logic.messages;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.signup.logic.SakaiFacade;
 import org.sakaiproject.signup.logic.SignupCalendarHelper;
@@ -13,15 +14,17 @@ import org.sakaiproject.signup.model.SignupTimeslot;
 import org.sakaiproject.user.api.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
  * @author Ben Holmes
  */
-abstract public class GeneralCancellationTest {
+public class GeneralCancellationTest {
 
     protected SignupEmailBase _email;
 
@@ -38,7 +41,8 @@ abstract public class GeneralCancellationTest {
     @Before
     public void setUp() {
 
-        // Make some fake timeslots
+        MockitoAnnotations.initMocks(this);
+
         ExtEvent mockedEvent = mock(ExtEvent.class);
         when(_mockedCancelledTimeslot.getExtEvent()).thenReturn(mockedEvent);
 
@@ -50,7 +54,35 @@ abstract public class GeneralCancellationTest {
     }
 
     @Test
-    public void shouldBeACancellation() {
+    public void canGenerateEventsFromAttendeeCancellationOwnEmail() {
+
+        when(_mockedUser.getId()).thenReturn("userId");
+        when(_mockedCancelledTimeslot.getAttendee("userId")).thenReturn(_mockedAttendee);
+
+        final List<SignupTrackingItem> items = Collections.singletonList(_mockedItem);
+        _email = new AttendeeCancellationOwnEmail(_mockedUser, items, _mockedMeeting, _mockedFacade);
+
+        final List<ExtEvent> events = _email.generateEvents(_mockedUser, _mockedCalendarHelper);
+        verify(_mockedCalendarHelper, times(1)).cancelExtEvent(any(ExtEvent.class));
+        assertEquals(1, events.size());
+
+        assertTrue(_email.isCancellation());
+    }
+
+    @Test
+    public void canGenerateEventsFromCancellationEmail() {
+
+        when(_mockedItem.getAttendee()).thenReturn(_mockedAttendee);
+        when(_mockedAttendee.getSignupSiteId()).thenReturn("123");
+
+        when(_mockedItem.getRemovedFromTimeslot()).thenReturn(Collections.singletonList(_mockedCancelledTimeslot));
+
+        _email = new CancellationEmail(_mockedUser, _mockedItem, _mockedMeeting, _mockedFacade);
+
+        List<ExtEvent> events = _email.generateEvents(_mockedUser, _mockedCalendarHelper);
+        verify(_mockedCalendarHelper, times(1)).cancelExtEvent(any(ExtEvent.class));
+        assertEquals(1, events.size());
+
         assertTrue(_email.isCancellation());
     }
 
