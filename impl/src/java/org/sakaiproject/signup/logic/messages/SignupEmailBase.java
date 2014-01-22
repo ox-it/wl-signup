@@ -266,8 +266,8 @@ abstract public class SignupEmailBase implements SignupEmailNotification, Meetin
 	}
 
 	protected List<ExtEvent> eventsWhichUserIsAttending(User user) {
-        final List<SignupTimeslot> timeslots = meeting.getSignupTimeSlots();
-        List<ExtEvent> events = new ArrayList<ExtEvent>();
+		final List<SignupTimeslot> timeslots = meeting.getSignupTimeSlots();
+		List<ExtEvent> events = new ArrayList<ExtEvent>();
 		for (SignupTimeslot timeslot : timeslots) {
 			if (userIsAttendingTimeslot(user, timeslot)) {
 				final ExtEvent event = timeslot.getExtEvent();
