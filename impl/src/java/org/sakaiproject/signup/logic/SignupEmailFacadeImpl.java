@@ -717,7 +717,7 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		
 		List<Attachment> attachments = new ArrayList<Attachment>();
 
-		String method = email.cancellation ? "CANCEL" : "REQUEST";
+		String method = email.isCancellation() ? "CANCEL" : "REQUEST";
 		final List<ExtEvent> events = email.generateEvents(user, calendarHelper);
 		
 		if (events.size() > 0) {

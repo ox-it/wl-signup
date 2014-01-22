@@ -37,9 +37,6 @@ import org.sakaiproject.user.api.User;
  */
 public interface SignupEmailNotification {
 
-	/** Indicates whether this email represents a cancellation, false by default */
-	public boolean cancellation = false;
-
 	/**
 	 * provide email header information
 	 * 
@@ -82,5 +79,10 @@ public interface SignupEmailNotification {
 	 */
 	List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper);
 
+	/**
+	 * Does this type of email represent a cancellation?
+	 * @return true if it is a cancellation, false otherwise
+	 */
+	boolean isCancellation();
 
 }

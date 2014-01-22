@@ -62,6 +62,9 @@ abstract public class SignupEmailBase implements SignupEmailNotification, Meetin
 	
 	private static final int SITE_DESCRIPTION_DISPLAY_LENGTH=20;
 
+	/** Indicates whether the email represents a cancellation - to be overwritten by subclasses */
+	protected boolean cancellation = false;
+
 	/* footer for the email */
 	protected String getFooter(String newline) {
 		/* tag the message - HTML version */
@@ -274,5 +277,9 @@ abstract public class SignupEmailBase implements SignupEmailNotification, Meetin
 			}
 		}
 		return events;
+	}
+
+	public boolean isCancellation() {
+		return cancellation;
 	}
 }
