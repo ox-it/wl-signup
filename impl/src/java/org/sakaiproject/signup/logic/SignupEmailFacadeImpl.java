@@ -725,7 +725,6 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		}
 		
 		/*
-		 * AutoReminderEmail - handled by cron job, not yet implemented.
 		 * Note that there is no notification if a meeting is removed altogether.
 		 */
 		
