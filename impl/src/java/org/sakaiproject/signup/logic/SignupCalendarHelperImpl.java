@@ -128,6 +128,7 @@ public class SignupCalendarHelperImpl implements SignupCalendarHelper {
 					return null;
 				}
 				mEvent.setField("vevent_uuid", meeting.getUuid());
+				mEvent.setField("vevent_sequence", String.valueOf(meeting.getVersion()));
 				mEvent.getProperties().addProperty(ResourceProperties.PROP_CREATOR, meeting.getCreatorUserId());
 
 				//generate ExtEvent for timeslot
