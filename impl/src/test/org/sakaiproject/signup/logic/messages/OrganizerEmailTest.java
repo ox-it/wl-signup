@@ -61,7 +61,8 @@ public class OrganizerEmailTest {
     public void attendeeCancellationEmail() {
         final List<SignupTrackingItem> mockedItems = Collections.singletonList(_mockedItem);
         _email = new AttendeeCancellationEmail(_mockedOrganiser, _mockedAttendingUser, mockedItems, _mockedMeeting, _mockedFacade);
-        assertTrue(_email.isCancellation());
+        // We don't want a cancelled signup to result in a full cancellation for the organiser.
+        assertFalse(_email.isCancellation());
         assertGenerates(1);
     }
 

@@ -67,7 +67,6 @@ public class AttendeeCancellationEmail extends OrganizerEmailBase {
 		this.items = items;
 		this.meeting = meeting;
 		this.setSakaiFacade(sakaiFacade);
-		this.cancellation = true;
 	}
 
 	/**
