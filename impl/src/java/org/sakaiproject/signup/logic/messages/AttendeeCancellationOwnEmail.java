@@ -146,10 +146,10 @@ public class AttendeeCancellationOwnEmail extends SignupEmailBase implements Sig
     public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper) {
 
         List<ExtEvent> events = new ArrayList<ExtEvent>();
-        events.addAll(eventsWhichUserIsAttending(user));
-
-        for (ExtEvent event : events) {
+        for (SignupTimeslot timeslot : removed) {
+            ExtEvent event = timeslot.getExtEvent();
             calendarHelper.cancelExtEvent(event);
+            events.add(event);
         }
 
         return events;

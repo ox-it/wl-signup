@@ -51,6 +51,8 @@ public class CancellationEmailTest {
         timeslots.add(_mockedCancelledTimeslot);
         when(_mockedMeeting.getSignupTimeSlots()).thenReturn(timeslots);
 
+        when(_mockedItem.getRemovedFromTimeslot()).thenReturn(Collections.singletonList(_mockedCancelledTimeslot));
+
     }
 
     @Test
@@ -59,6 +61,7 @@ public class CancellationEmailTest {
         when(_mockedUser.getId()).thenReturn("userId");
         when(_mockedCancelledTimeslot.getAttendee("userId")).thenReturn(_mockedAttendee);
 
+        when(_mockedItem.isInitiator()).thenReturn(true);
         final List<SignupTrackingItem> items = Collections.singletonList(_mockedItem);
         _email = new AttendeeCancellationOwnEmail(_mockedUser, items, _mockedMeeting, _mockedFacade);
 
@@ -74,8 +77,6 @@ public class CancellationEmailTest {
 
         when(_mockedItem.getAttendee()).thenReturn(_mockedAttendee);
         when(_mockedAttendee.getSignupSiteId()).thenReturn("123");
-
-        when(_mockedItem.getRemovedFromTimeslot()).thenReturn(Collections.singletonList(_mockedCancelledTimeslot));
 
         _email = new CancellationEmail(_mockedUser, _mockedItem, _mockedMeeting, _mockedFacade);
 
