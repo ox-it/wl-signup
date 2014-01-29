@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.signup.logic.SakaiFacade;
+import org.sakaiproject.signup.logic.SignupCalendarHelper;
 import org.sakaiproject.signup.logic.SignupTrackingItem;
 import org.sakaiproject.signup.model.SignupMeeting;
 import org.sakaiproject.signup.model.SignupTimeslot;
@@ -70,7 +72,8 @@ public class CancellationEmail extends SignupEmailBase implements SignupTimeslot
 		this.meeting = meeting;
 		this.setSakaiFacade(sakaiFacade);
 		this.emailReturnSiteId = item.getAttendee().getSignupSiteId();
-		
+		this.cancellation = true;
+
 		removed = item.getRemovedFromTimeslot();
 	}
 
@@ -97,6 +100,7 @@ public class CancellationEmail extends SignupEmailBase implements SignupTimeslot
 		this.meeting = meeting;
 		this.setSakaiFacade(sakaiFacade);
 		this.emailReturnSiteId = item.getAttendee().getSignupSiteId();
+		this.cancellation = true;
 		
 		removed = item.getRemovedFromTimeslot();
 
@@ -186,6 +190,21 @@ public class CancellationEmail extends SignupEmailBase implements SignupTimeslot
 	public List<SignupTimeslot> getAdded() {
 		return Collections.EMPTY_LIST; //not applicable here
 	}
-	
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper) {
+        List<ExtEvent> events = new ArrayList<ExtEvent>();
+        for (SignupTimeslot timeslot : this.getRemoved()) {
+            final ExtEvent event = timeslot.getExtEvent();
+            if (event != null) {
+                calendarHelper.cancelExtEvent(event);
+                events.add(event);
+            }
+        }
+        return events;
+    }
+
 
 }

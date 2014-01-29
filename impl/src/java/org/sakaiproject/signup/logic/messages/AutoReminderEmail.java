@@ -28,7 +28,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.signup.logic.SakaiFacade;
+import org.sakaiproject.signup.logic.SignupCalendarHelper;
 import org.sakaiproject.signup.logic.SignupTrackingItem;
 import org.sakaiproject.signup.model.SignupMeeting;
 import org.sakaiproject.signup.model.SignupTimeslot;
@@ -142,6 +144,14 @@ public class AutoReminderEmail extends SignupEmailBase {
 	public String getSubject() {
 		return MessageFormat.format(rb.getString("subject.auto.reminder.appointment.field"), new Object[] {getShortWeekDayName(meeting.getStartTime()), getTime(meeting.getStartTime()).toStringLocalDate(),
 					getTime(item.getStartTime()).toStringLocalTime(), getAbbreviatedMeetingTitle() });
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+	public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper) {
+		// Handled by cron job, not yet implemented.
+		return new ArrayList<ExtEvent>();
 	}
 
 }

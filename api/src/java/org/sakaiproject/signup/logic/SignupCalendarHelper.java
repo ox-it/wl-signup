@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.sakaiproject.calendar.api.CalendarEventEdit;
 import org.sakaiproject.calendaring.api.ExtEvent;
+import org.sakaiproject.signup.model.SignupAttendee;
 import org.sakaiproject.signup.model.SignupMeeting;
 import org.sakaiproject.signup.model.SignupTimeslot;
 import org.sakaiproject.user.api.User;
@@ -74,7 +75,15 @@ public interface SignupCalendarHelper {
 	 * @param users		List of Users to add
 	 * @return
 	 */
-	public ExtEvent addAttendeesToExtEvent(ExtEvent vevent, List<User> users);
+	public ExtEvent addUsersToExtEvent(ExtEvent vevent, List<User> users);
+	
+	/**
+	 * Add the list of SignupAttendees to the ExtEvent as attendees
+	 * @param vevent	ExtEvent to modify
+	 * @param attendees	List of Attendees to add
+	 * @return
+	 */
+	public ExtEvent addAttendeesToExtEvent(ExtEvent vevent, List<SignupAttendee> attendees);
 	
 	/**
 	 * Is ICS calendar generation enabled in the external calendaring service?

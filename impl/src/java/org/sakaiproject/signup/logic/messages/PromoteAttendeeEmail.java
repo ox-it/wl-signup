@@ -38,7 +38,7 @@ import org.sakaiproject.user.api.User;
  * promoted from waiting list
  * </p>
  */
-public class PromoteAttendeeEmail extends SignupEmailBase {
+public class PromoteAttendeeEmail extends AttendeeEmailBase {
 
 	private final User attendee;
 

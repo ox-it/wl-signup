@@ -38,7 +38,7 @@ import org.sakaiproject.user.api.User;
  * cancellation event
  * </p>
  */
-public class AttendeeCancellationEmail extends SignupEmailBase {
+public class AttendeeCancellationEmail extends OrganizerEmailBase {
 
 	private final User organizer;
 
