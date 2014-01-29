@@ -12,7 +12,7 @@ import java.util.List;
 
 
 /**
- * An email that is sent to an attendee when they are signed up
+ * An email that is sent to an organizer when they are signed up
  * @author Ben Holmes
  */
 abstract public class OrganizerEmailBase extends SignupEmailBase {
