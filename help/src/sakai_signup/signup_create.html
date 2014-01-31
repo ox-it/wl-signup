@@ -2,6 +2,7 @@
 "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>Sign-up Tool: creating meetings</title>
 <style type="text/css"></style>
 <link type="text/css" href="/library/skin/tool_base.css" media="all" 
@@ -20,21 +21,25 @@ media="all" rel="stylesheet" />
 <ol start="1" type="1">
 <li>
 <strong>Click Add,</strong>
-then choose the type of meeting and complete all the required information about dates, times and 
-
-place of meeting.
+then choose the type of meeting and complete all the required information about dates, times and place of meeting.
 </li>
 <ul>
 <li>
 <p>
 <strong>Title</strong>
-:&nbsp; This field will identify the meeting in this site&#8217;s list of meetings<strong>.</strong>
+:&nbsp; This field will identify the meeting in this site’s list of meetings.
 </p>
 </li>
 <li>
 <p>
 <strong>Location</strong>
 :&nbsp; This field will appear in the Meeting Details.
+</p>
+</li>
+<li>
+<p>
+<strong>Category</strong>
+:&nbsp; This field is any tag of your choice, e.g. 'Seminar'. You will be able to sort meetings accordingly.
 </p>
 </li>
 <li>
@@ -60,20 +65,23 @@ The 24-hour clock is not available, so AM and PM must be used.
 <li>
 <p>
 <strong>Meeting frequency</strong>:&nbsp; To set up recurring meetings,
-choose an option here.&nbsp; Any of the meeting types can be
+choose a frequency option here.&nbsp; Any of the meeting types can be
 recurring.&nbsp; Selection of a meeting frequency
-other than &#8220;Once Only&#8221; will create a series of entries in the meetings
+other than “Once Only” will create a series of entries in the meetings
 table with the same name but different details, where any of the
-individual entries can be modified as necessary (see &#8220;Editing a
-meeting&#8221;).
+individual entries can be modified as necessary (see “Editing a
+meeting”).
 </p>
+<p>
+<em>End After</em>
+—&nbsp;This option appears for any Meeting Frequency other than "Once Only". Specify either the total number of occurrences, or the date of the final meeting.</p>
 </li>
 <li>
 <p>
 <strong>Sign-up begins</strong>:&nbsp; Enter the point at which the
 meeting should be opened for sign-up.&nbsp; Before then, participants
 will not have an active Sign-up button next to a meeting entry.&nbsp; To 
-allow immediate sign-up, choose &#8220;Start Now&#8221; from the drop-down box.
+allow immediate sign-up, choose “Start Now” from the drop-down box.
 </p>
 </li>
 <li>
@@ -88,12 +96,17 @@ end, allowing sign-up even after the meeting has started, when that is appropria
 </li>
 <li>
 <p>
+<strong>Attendance</strong>:&nbsp; Check this box if you need to record who has attended the meeting. After the start time of the meeting, a new link will appear: Attendance, which lists all the participants who signed up. Attendance can be recorded by checking the checkbox in front of each participant to indicate their presence. You can use the print option to print this page as a useful check-in sheet.
+
+
+<li>
+<p>
 <strong>Available to</strong>:&nbsp; This field allows you to determine
 who can sign up for the meeting.&nbsp; You can limit sign-up to members
 of a group (defined on this site) or
 extend the sign-up offer to the membership of other sites, by selecting
 the appropriate checkboxes.&nbsp; The option to extend to other sites
-allows inclusion of those sites&#8217; members, or groups defined there.&nbsp; The
+allows inclusion of those sites’ members, or groups defined there.&nbsp; The
 other site must also have the Sign-up Tool in order for its members to
 participate.&nbsp; Default:&nbsp; Available to members of this site
 only.
@@ -104,33 +117,31 @@ only.
 <strong><a href="content.hlp?docId=signup_meetingType">Meeting Type</a></strong>:
 </p>
 <p>
-</p>
-<p>
-The relevant options for each of the three meeting types appear when that meeting type is selected 
-
-via its radio button.
+  The relevant options for each of the three meeting types appear when that meeting type is selected 
+  
+  via its radio button.
 </p>
 
 <p>
 <em>Open meeting</em>
-&#8212;&nbsp; No relevant options.
+—&nbsp; No relevant options. An open meeting serves merely as a notification of the event details.
 </p>
 
 <p>
 <em>Single slot</em>
-&#8212;&nbsp;Options to choose between Max number (in which case, enter the number of participants 
+—&nbsp;Options to choose between specifying a maximum number of participants (enter the number  
 
-allowed) and Unlimited.
+allowed) or 'Unlimited'.
 </p>
 
 <p>
-<em>Multiple slots</em>&#8212;Options create timeslots, either (1) computed
+<em>Multiple slots</em>—Options create timeslots, either (1) computed
 to occupy a single continuous time span, or (2) occupying separate
 irregular time spans manually defined, covering one or more days.&nbsp; Each method 
 creates a single meeting with multiple entries in a timeslot table.&nbsp;
 </p>
 </li>
-<ol type='a'>
+<ol type="a">
 <li>
 <p>Number of slots available for sign-up:&nbsp; Enter
 the number of individual timeslots over which to divide the meeting time.
@@ -151,17 +162,17 @@ will be set to 24 (120 minutes divided by 5).&nbsp; A number of slots
 that does not divide the period evenly will give rise to a warning message and an
 adjustment of the total span.&nbsp; Note:&nbsp; In any case, the
 resulting timeslots can be edited, after the meeting is published, through the
-&#8220;Modify&#8221; process by selecting &#8220;Advanced user-defined
-timeslots.&#8221;&nbsp; See below, &#8220;Editing a meeting.&#8221;
+“Modify” process by selecting “Advanced user-defined
+timeslots.”&nbsp; See below, “Editing a meeting.”
 </p>
 </li>
 <li>
 <p>Advanced user-defined timeslots: &nbsp;Allows a
 multiple-slot meeting to be defined as a set of irregular timeslot
 choices, over several days at different times.&nbsp; (Each person can sign up for
-only one.)&nbsp; Select this checkbox,&#8221; then select the &#8220;Edit
-Timeslots&#8221; link that appears. &nbsp;Enter new timeslots with the &#8220;Add a
-new timeslot&#8221; link, edit the data, and delete extraneous ones
+only one.)&nbsp; Select this checkbox,” then select the “Edit
+Timeslots” link that appears. &nbsp;Enter new timeslots with the “Add a
+new timeslot” link, edit the data, and delete extraneous ones
 with the red X.&nbsp; This option does not allow unlimited
 participation.&nbsp; A warning that this meeting covers more than one
 day can be ignored.</p>
@@ -170,70 +181,85 @@ day can be ignored.</p>
 </ul>
 
 
-<li>Continue to the second page (using <strong>&#8220;Next&#8221;</strong>), the Meeting Summary, to
+<li>Continue to the second page (using <strong>“Next”</strong>), the Meeting Summary, to
 verify the details set so far, then complete the meeting settings, as follows.
 </li>
 
 <ul>
 <li>
-<p><strong>Check the appropriate boxes </strong>
+<p><strong>Check the appropriate boxes</strong>
 to manage email notifications and the display of participant names.&nbsp; These settings are 
-off by default (value is &#8220;no&#8221;):
+off by default (value is “no”):
 </p>
 </li>
 
 <li>
 <p><strong>Display Participant Names</strong>
-:&nbsp; &#8220;Yes&#8221; means that names of participants will be visible to others.</p>
+:&nbsp; “Yes” means that names of participants will be visible to others.</p>
 </li>
 
 <li>
-<p><strong>Receive Notification</strong>:&nbsp; &#8220;Yes&#8221; means that the
-meeting creator will receive email notification when a participant
-signs up or cancels an appointment.</p>
+<p><strong>Announce Availability</strong>:&nbsp; "Yes" means that an e-mail announcing 
+the publication of this meeting will be sent to (select which option):</p>
+<p><em>All potential participants </em> - this refers to all site members, including all meeting coordinators</p>
+<p>OR</p>
+<p><em>Selected meeting coordinators</em>  - this refers to the list of meeting coordinators displayed below.</p>
 </li>
 
 <li>
-<p><strong>Announce Availability</strong>
-:&nbsp; &#8220;Yes&#8221; means that all the potential participants will receive e-mail announcing 
-that this meeting has been published.</p>
+<p><strong>Meeting Coordinators</strong>:&nbsp; The meeting organizer is selected by default. Select other meeting coordinators who should receive notifications.</p>
+</li>
+
+<li>
+<p><strong>Notifications of participant actions</strong>:&nbsp; “Yes” means that selected meeting coordinators (see list above) will receive email notification when a participant
+signs up or cancels an appointment. Signups will generate an automatic appointment in the personal calendars of selected meeting coordinators.</p>
+</li>
+
+<li>
+<p><strong>Default Email setting</strong>:&nbsp; When you modify a meeting, there is a checkbox on the &quot;Modify Meeting&quot; page to send email notification about changes to the meeting and/or the participant list. That checkbox will be pre-selected if you check this box.</p>
 </li>
 
 <p>
-Just below that, other default settings can be opened, all with initial values of &#8220;Yes&#8221;:
+Just below that, other default settings can be opened, all with initial values of “Yes”:
 </p>
 
 
 <li><p>
 <strong>Allow Wait List</strong>
-:&nbsp; &#8220;Yes&#8221; means that a Wait List will be kept, and participants can join it if this 
+:&nbsp; “Yes” means that a Wait List will be kept, and participants can join it if this 
 meeting is filled to capacity.</p>
 </li>
 
 <li>
-<p><strong>User ID InputMode:</strong> &nbsp;Yes, I want to use User ID input mode for adding
-participants. &#8211; allows organizer to use User Id rather than choosing from drop down
+<p><strong>Allow Adding Comment</strong>
+:&nbsp; "Yes" means that a participant can add a comment during sign-up.</p>
+</li>
+
+<li>
+<p><strong>User ID Input Mode:</strong> &nbsp;Yes, I want to use User ID input mode for adding
+participants. – allows organizer to use User Id rather than choosing from drop down
 list.&nbsp; Useful for very large classes where drop down list is very
 long.
 </p>
 </li>
 
 <li>
-<p><strong>Allow Adding Comment</strong>
-:&nbsp; &#8220;Yes&#8221; means that a participant can add a comment during sign-up.</p>
-</li>
-
-<li>
 <p><strong>Auto Reminder</strong>
-:&nbsp; &#8220;Yes&#8221; means that all attendees of the meeting will receive an e-mail reminder one 
-
-day in advance.</p>
+:&nbsp; “Yes” means that all attendees of the meeting will receive an e-mail reminder one day in advance.</p>
 </li>
 
 <li>
-<p><strong>Publish to Schedule</strong>:&nbsp; &#8220;Yes&#8221; means that the
-meeting will appear on this site&#8217;s Schedule or Calendar tool,
+<p><strong>Publish to Schedule</strong>:&nbsp; “Yes” means that the
+meeting will appear on this site’s Schedule or Calendar tool,
 regardless of attendance status of the current user.</p>
+</li>
+
+<li>
+<p><strong>Create groups for timeslots</strong>:&nbsp; "Yes" means that attendees who have signed up for each timeslot will automatically be formed into a group in Site Info > Manage Groups that will obey all other 'group-aware' tools/settings.</p>
+</li>
+
+<li>
+<p><strong>Max # of time slots per participant</strong>:&nbsp; You can select a number in the dropdown list to allow participants to sign up for more than one timeslot in a multiple-slot meeting.</p>
 </li>
 </ul>
 
@@ -252,4 +278,5 @@ meeting settings, as described below.&nbsp;</p>
 <p>&nbsp;</p>
 
 </div>
+
 </body></html>
