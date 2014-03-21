@@ -427,4 +427,8 @@ public class SignupMeetingWrapper implements SignupBeanConstants {
 			}
 		}
 	}
+	
+	public String getMeetingId() {
+		return getMeeting().getId().toString();
+	}
 }
