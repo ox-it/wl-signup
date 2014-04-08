@@ -4,7 +4,9 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.signup.logic.SakaiFacade;
+import org.sakaiproject.signup.logic.SignupCalendarHelper;
 import org.sakaiproject.signup.model.SignupMeeting;
 import org.sakaiproject.user.api.User;
 
@@ -96,5 +98,9 @@ public class AttendeeModifiedCommentEmail extends SignupEmailBase {
 		return MessageFormat.format(rb.getString("subject.comment.modification.field"), new Object[] {
 			getShortSiteTitleWithQuote(emailReturnSiteId), organizer.getDisplayName(), getTime(meeting.getStartTime()).toStringLocalDate(),
 			getTime(meeting.getStartTime()).toStringLocalTime() });
+	}
+
+	public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper) {
+		return new ArrayList<ExtEvent>();
 	}
 }
