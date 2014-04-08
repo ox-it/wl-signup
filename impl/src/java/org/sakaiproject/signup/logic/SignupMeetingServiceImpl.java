@@ -292,7 +292,7 @@ public class SignupMeetingServiceImpl implements SignupMeetingService, Retry, Me
 
 	}
 
-	/* check to see if the user has updte permission at any level */
+	/* check to see if the user has update permission at any level */
 	private boolean isAllowToUpdate(String userId, String siteId, SignupMeeting meeting) {
 		if (sakaiFacade.isUserAdmin(userId))
 			return true;
@@ -1074,6 +1074,13 @@ public class SignupMeetingServiceImpl implements SignupMeetingService, Retry, Me
 	 */
 	public void sendCancellationEmail(SignupEventTrackingInfo signupEventTrackingInfo) throws Exception {
 		signupEmailFacade.sendCancellationEmail(signupEventTrackingInfo);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void sendUpdateCommentEmail(SignupEventTrackingInfo signupEventTrackingInfo) throws Exception {
+		signupEmailFacade.sendUpdateCommentEmail(signupEventTrackingInfo);
 	}
 
 	/**
