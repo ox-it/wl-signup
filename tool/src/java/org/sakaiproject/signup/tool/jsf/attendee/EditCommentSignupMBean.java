@@ -192,28 +192,28 @@ public class EditCommentSignupMBean extends SignupUIBaseBean {
 			}
 			
 		} catch (PermissionException pe) {
-				Utilities.addErrorMessage(Utilities.rb.getString("no.permissoin.do_it"));
-			} catch (SignupUserActionException ue) {
-				/* TODO need to keep in the same page with new data if db changes */
-				Utilities.addErrorMessage(ue.getMessage());
-			} catch (Exception e) {
-				Utilities.addErrorMessage(Utilities.rb.getString("db.error_or_event.notExisted"));
-				logger.error(Utilities.rb.getString("db.error_or_event.notExisted") + " - " + e.getClass() + ":" + e.getMessage());
-				Utilities.resetMeetingList();
-				return MAIN_EVENTS_LIST_PAGE_URL;
-			}
-			if(isOrganizer){
-				reloadMeetingWrapperInOrganizerPage();
-			}
-			
-			/*
-			 * refresh meeting list to catch the changes when go back the main
-			 * meeting list page
-			 */
-			if (Utilities.getSignupMeetingsBean().isShowMyAppointmentTime())
-				Utilities.resetMeetingList();
-			
-			return updateMeetingwrapper(meeting, checkReturnUrl());
+			Utilities.addErrorMessage(Utilities.rb.getString("no.permissoin.do_it"));
+		} catch (SignupUserActionException ue) {
+			/* TODO need to keep in the same page with new data if db changes */
+			Utilities.addErrorMessage(ue.getMessage());
+		} catch (Exception e) {
+			Utilities.addErrorMessage(Utilities.rb.getString("db.error_or_event.notExisted"));
+			logger.error(Utilities.rb.getString("db.error_or_event.notExisted") + " - " + e.getClass() + ":" + e.getMessage());
+			Utilities.resetMeetingList();
+			return MAIN_EVENTS_LIST_PAGE_URL;
+		}
+		if(isOrganizer){
+			reloadMeetingWrapperInOrganizerPage();
+		}
+		
+		/*
+		 * refresh meeting list to catch the changes when go back the main
+		 * meeting list page
+		 */
+		if (Utilities.getSignupMeetingsBean().isShowMyAppointmentTime())
+			Utilities.resetMeetingList();
+		
+		return updateMeetingwrapper(meeting, checkReturnUrl());
 	
 	}
 	
