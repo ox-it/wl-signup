@@ -275,7 +275,7 @@
 				            	<h:outputText value="#{msgs.star_character}"  style="color:#B11;"/>
 				            	<h:outputText value ="#{msgs.event_publish_to}" />
 				            </h:panelGroup>				            
-				            <h:panelGroup rendered="#{CopyMeetingSignupMBean.missingSitGroupWarning}">
+				            <h:panelGroup rendered="#{CopyMeetingSignupMBean.missingSiteGroupWarning}">
 				            	<h:panelGrid columns="1">
 				            		<h:outputText value="#{msgs.event_some_orig_sitegroup_unavail_due_to_your_create_permission}" styleClass="alertMessage" 
 				            				  escape="false"/>
@@ -309,7 +309,7 @@
 				            		</h:panelGroup>
 				           		</h:panelGrid>
 				            </h:panelGroup>
-				            <h:outputText value="&nbsp;" escape="false" rendered="#{CopyMeetingSignupMBean.missingSitGroupWarning}"/>
+				            <h:outputText value="&nbsp;" escape="false" rendered="#{CopyMeetingSignupMBean.missingSiteGroupWarning}"/>
 				            
 				                               
 				            <h:panelGrid  columns="1" styleClass="meetingGpsSitesTable" style="">                    

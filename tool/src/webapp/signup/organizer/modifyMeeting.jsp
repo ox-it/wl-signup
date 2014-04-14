@@ -241,7 +241,7 @@
 							</h:panelGroup>
 							
 							<h:panelGroup rendered="#{EditMeetingSignupMBean.attendanceOn}">
-								<h:outputText value="Attendance" escape="false" styleClass="titleText"/>
+								<h:outputText value="Attendance:" escape="false" styleClass="titleText"/>
 							  </h:panelGroup>
               				<h:panelGroup rendered="#{EditMeetingSignupMBean.attendanceOn}">
 								<h:selectBooleanCheckbox id="attendanceSelection" value="#{EditMeetingSignupMBean.signupMeeting.allowAttendance}" />
@@ -257,7 +257,7 @@
 				           	<h:outputText value="#{msgs.label_custom_timeslots}"  escape="false" rendered="#{EditMeetingSignupMBean.customTsType}"/>
 				            <h:panelGrid columns="2" columnClasses="miCol1,miCol2" rendered="#{!EditMeetingSignupMBean.customTsType}">                
 					                   <h:panelGroup id="radios" styleClass="rs">                  
-					                        <h:selectOneRadio id="meetingType" value="#{EditMeetingSignupMBean.signupMeeting.meetingType}"    layout="pageDirection" styleClass="rs" >
+					                        <h:selectOneRadio id="meetingType" value="#{EditMeetingSignupMBean.signupMeeting.meetingType}" layout="pageDirection" styleClass="rs" >
 					                          	<f:selectItems value="#{EditMeetingSignupMBean.meetingTypeRadioBttns}"/>              	                      	         	 
 					                 	   </h:selectOneRadio> 
 					                   </h:panelGroup>

@@ -90,7 +90,7 @@
 								</h:outputText>
 								<h:outputText value="#{AttendeeSignupMBean.meetingWrapper.meeting.startTime}" rendered="#{AttendeeSignupMBean.meetingWrapper.meeting.meetingCrossDays}">
 										<f:convertDateTime pattern=", EEEEEEEE" />
-								</h:outputText>	
+								</h:outputText>
 								<h:outputText value="#{msgs.timeperiod_divider}" escape="false"/>
 								<h:outputText value="#{AttendeeSignupMBean.meetingWrapper.meeting.endTime}">
 									<f:convertDateTime pattern="h:mm a" />
@@ -191,8 +191,8 @@
 			         					<t:column>
 			         						<h:outputText escape="false" value="(#{attach.fileSize}kb)" rendered="#{!attach.isLink}"/>
 			         					</t:column>
-			         				</t:dataTable>			         				
-				         		</h:panelGrid>	
+			         				</t:dataTable>
+				         		</h:panelGrid>
 								
 							<h:outputText value="&nbsp;" escape="false"/>
 							<h:outputText value="&nbsp;" escape="false"/>
@@ -201,7 +201,7 @@
 				
 				<%-- control expand-collapse --%>
 				<h:panelGrid id="noAnnouncement197" columns="1" rendered="#{!AttendeeSignupMBean.announcementType}" columnClasses="alignRightColumn" styleClass="emailTable">																		
-						<h:panelGroup>	
+						<h:panelGroup>
 		   	    				<h:outputLabel  id="imageOpen_meetingInfoDetail"  styleClass="activeTag" onclick="showDetails('meeting:imageOpen_meetingInfoDetail','meeting:imageClose_meetingInfoDetail','meeting:meetingInfoDetails');setMeetingCollapseInfo(true);">
 			   	    				<h:graphicImage value="/images/openTop.gif"  alt="open" title="#{msgs.event_tool_tips_hide_details}" style="border:none; vertical-align: bottom;" styleClass="openCloseImageIcon" />
 			   	    				<h:outputText value="#{msgs.event_hide_meetingIfo_detail}" escape="false" />
@@ -238,7 +238,7 @@
 							</h:outputText>
 							<h:outputText value="#{timeSlotWrapper.timeSlot.startTime}" rendered="#{AttendeeSignupMBean.meetingWrapper.meeting.meetingCrossDays}">
 								<f:convertDateTime pattern=", EEE" />
-							</h:outputText>	
+							</h:outputText>
 							<h:outputText value="#{msgs.timeperiod_divider}" escape="false"
 								styleClass="longtext" />
 							<h:outputText value="#{timeSlotWrapper.timeSlot.endTime}"
@@ -250,7 +250,7 @@
 							</h:outputText>
 							<h:outputText value="#{timeSlotWrapper.timeSlot.endTime}" rendered="#{AttendeeSignupMBean.meetingWrapper.meeting.meetingCrossDays}">
 								<f:convertDateTime  dateStyle="short"/>
-							</h:outputText>	
+							</h:outputText>
 						</h:panelGroup>
 					</h:column>
 
@@ -285,7 +285,7 @@
 						</h:panelGroup>
 					</h:column>
 					
-					<h:column>		   
+					<h:column>
 							<f:facet name="header">
 								<h:outputText value="#{msgs.tab_event_signed_attendee}" escape="false"/>
 							</f:facet>
@@ -293,7 +293,7 @@
 					   			<h:dataTable id="peopleOnSignup" value="#{timeSlotWrapper.attendeeWrappers}" var="attendeeWrapper" columnClasses="signedUpList">
 					   				<h:column>
 					   					<h:outputText value="#{attendeeWrapper.displayName}" rendered="#{attendeeWrapper.signupAttendee.attendeeUserId !=null}" title="#{msgs.event_tool_tip_on_signuplist}"/>			
-					   				</h:column>				   		
+					   				</h:column>
 					   			</h:dataTable>
 					   			<h:dataTable id="peopleOnWaiting" value="#{timeSlotWrapper.waitingList}" var="attendeeWrapper" rendered="#{timeSlotWrapper.sizeOfWaitingList >0}"  styleClass="peopleOnListTable" columnClasses="waitingList">
 					   				<h:column>
@@ -304,7 +304,6 @@
 					   		<h:outputText value="#{msgs.event_show_no_attendee_info}" escape="false"  rendered="#{!timeSlotWrapper.timeSlot.displayAttendees}"/>
 				   	</h:column>
 					
-
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="#{msgs.tab_event_your_status}" escape="false"/>
@@ -316,6 +315,13 @@
 							<h:commandLink id="tsICS" action="#{AttendeeSignupMBean.downloadICSForTimeslot}" rendered="#{AttendeeSignupMBean.icsEnabled}">
 								<h:graphicImage value="/images/calendar_add.png" alt="#{msgs.label_ics}" title="#{msgs.label_download_ics_timeslot}" style="margin-left: 5px;" />
 							</h:commandLink>
+							<h:panelGroup>
+								<h:commandLink action="#{AttendeeSignupMBean.editAttendeeComment}">
+									<f:param id="timeslotId" name="timeslotId" value="#{timeSlotWrapper.timeSlot.id}"/>				   										   								
+									<h:outputText value="#{attendeeWrapper.displayName}" title="#{attendeeWrapper.commentForTooltips}" style="cursor:pointer;" rendered="#{attendeeWrapper.signupAttendee.attendeeUserId !=null}"/>
+									<h:graphicImage title="Click to view/edit comment" value="/images/comment.gif" width="18" height="18" alt="view comment" style="border:none" styleClass="openCloseImageIcon" rendered="#{attendeeWrapper.comment}" />
+								</h:commandLink>
+							</h:panelGroup>
 						</h:panelGroup>
 						<h:outputText value="#{msgs.event_on_waiting_list}"
 							title="#{msgs.event_tool_tip_you_ranking_num} #{timeSlotWrapper.rankingOnWaiting}"

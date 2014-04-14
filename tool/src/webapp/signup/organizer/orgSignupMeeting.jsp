@@ -393,7 +393,7 @@
 							   								<f:param id="timeslotId" name="timeslotId" value="#{timeSlotWrapper.timeSlot.id}"/>
 							   								<f:param id="attendeeUserId" name="attendeeUserId" value="#{attendeeWrapper.signupAttendee.attendeeUserId}"/>				   										   								
 							   								<h:outputText value="#{attendeeWrapper.displayName}" title="#{attendeeWrapper.commentForTooltips}" style="cursor:pointer;" rendered="#{attendeeWrapper.signupAttendee.attendeeUserId !=null}"/>
-							   								<h:graphicImage title="Click to view comment" value="/images/comment.gif" width="11" height="11" alt="view comment" style="border:none" styleClass="openCloseImageIcon" rendered="#{attendeeWrapper.comment}" />
+							   								<h:graphicImage title="Click to view/edit attendee's comment" value="/images/comment.gif" width="18" height="18" alt="view comment" style="border:none" styleClass="openCloseImageIcon" rendered="#{EditCommentSignupMBean.comment}" />
 							   							</h:commandLink>
 						   							</h:panelGroup>
 						   						</h:panelGrid>
@@ -624,6 +624,13 @@
 									<h:outputText value="#{msgs.organizer_instruction_click}" escape="false"/>
 									<h:graphicImage value="/images/email_go.png"/>
 									<h:outputText value="#{msgs.organizer_instruction_mailto_image}" escape="false"/>
+								</h:panelGroup>
+								
+								<h:outputText value="&nbsp;" escape="false"/>
+								<h:panelGroup >							 
+									<h:outputText value="#{msgs.organizer_instruction_click}" escape="false"/>
+									<h:graphicImage value="/images/comment.gif"/>
+									<h:outputText value="#{msgs.organizer_instruction_comment_image}" escape="false"/>
 								</h:panelGroup>
 								
 								<h:outputText value="&nbsp;" escape="false"/>

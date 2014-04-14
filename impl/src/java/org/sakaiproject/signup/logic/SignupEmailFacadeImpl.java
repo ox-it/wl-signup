@@ -29,12 +29,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 import org.apache.commons.validator.EmailValidator;
-import org.sakaiproject.authz.api.SecurityAdvisor;
-import org.sakaiproject.calendar.api.CalendarEventEdit;
 import org.sakaiproject.calendaring.api.ExtEvent;
 import org.sakaiproject.email.api.AddressValidationException;
 import org.sakaiproject.email.api.Attachment;
@@ -45,6 +42,7 @@ import org.sakaiproject.email.api.NoRecipientsException;
 import org.sakaiproject.signup.logic.messages.AddAttendeeEmail;
 import org.sakaiproject.signup.logic.messages.AttendeeCancellationEmail;
 import org.sakaiproject.signup.logic.messages.AttendeeCancellationOwnEmail;
+import org.sakaiproject.signup.logic.messages.AttendeeModifiedCommentEmail;
 import org.sakaiproject.signup.logic.messages.AttendeeSignupEmail;
 import org.sakaiproject.signup.logic.messages.AttendeeSignupOwnEmail;
 import org.sakaiproject.signup.logic.messages.CancelMeetingEmail;
@@ -230,7 +228,39 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 		}
 		
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void sendUpdateCommentEmail(SignupEventTrackingInfo signupEventTrackingInfo) throws Exception {
+		try {
+			User organizer = userDirectoryService.getUser(sakaiFacade.getCurrentUserId());
+			boolean isOrganizer = signupEventTrackingInfo.getMeeting().getPermission().isUpdate();
+			User attendee = userDirectoryService.getUser(signupEventTrackingInfo.getAttendeeComment().getAttendeeId());
+			String emailReturnSiteId = sakaiFacade.getCurrentLocationId();
+			AttendeeModifiedCommentEmail email = new AttendeeModifiedCommentEmail(organizer, signupEventTrackingInfo.getMeeting(), 
+					this.sakaiFacade, emailReturnSiteId, signupEventTrackingInfo.getAttendeeComment());
+			
+			if (isOrganizer){
+				try{
+					sendEmail(attendee, email);
+				}catch(Exception e){
+					//do nothing: avoid one wrong email address for one user to break all things
+				}
+			}
+			else {
+				try{
+					sendEmail(organizer, email);
+				}catch(Exception e){
+					//do nothing: avoid one wrong email address for one user to break all things
+				}
+			}
+		} catch (UserNotDefinedException e) {
+			throw new Exception("User is not found for userId: "
+					+ signupEventTrackingInfo.getMeeting().getCreatorUserId());
+		}
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -686,7 +716,6 @@ public class SignupEmailFacadeImpl implements SignupEmailFacade {
 			return null;
 		}
 		
-				
 		return message;
 	}
 

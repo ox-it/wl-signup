@@ -90,8 +90,10 @@ public interface SignupBeanConstants {
 	public static final String ORGANIZER_MEETING_PAGE_URL = "organizerMeeting";
 
 	public static final String VIEW_COMMENT_PAGE_URL = "viewComment";
+	
+	public static final String EDIT_COMMENT_PAGE_URL = "editComment";
 
-	public static final String COPTY_MEETING_PAGE_URL = "copyMeeting";
+	public static final String COPY_MEETING_PAGE_URL = "copyMeeting";
 
 	public static final String MODIFY_MEETING_PAGE_URL = "modifyMeeting";
 

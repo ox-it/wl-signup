@@ -45,6 +45,8 @@ public class SignupEventTrackingInfoImpl implements SignupEventTrackingInfo, Sig
 	private List<SignupTrackingItem> attendeeAllocationInfos;
 
 	private SignupMeeting meeting;
+	
+	private AttendeeComment attendeeComment;
 
 	/**
 	 * Constructor
@@ -204,5 +206,20 @@ public class SignupEventTrackingInfoImpl implements SignupEventTrackingInfo, Sig
 		}
 		return sb.toString();
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public AttendeeComment getAttendeeComment() {
+		return attendeeComment;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setAttendeeComment(AttendeeComment attendeeComment) {
+		this.attendeeComment = attendeeComment;
+	}
+	
 
 }

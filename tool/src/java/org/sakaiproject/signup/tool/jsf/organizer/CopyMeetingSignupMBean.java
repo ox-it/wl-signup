@@ -110,7 +110,7 @@ public class CopyMeetingSignupMBean extends SignupUIBaseBean {
 
 	private List<SignupUser> allowedUserList;
 
-	private boolean missingSitGroupWarning;
+	private boolean missingSiteGroupWarning;
 
 	private List<String> missingSites;
 
@@ -168,7 +168,7 @@ public class CopyMeetingSignupMBean extends SignupUIBaseBean {
 		repeatType = ONCE_ONLY;
 		repeatTypeUnknown=true;
 		showAttendeeName = false;
-		missingSitGroupWarning = false;
+		missingSiteGroupWarning = false;
 		
 		/*cleanup previously unused attachments in CHS*/
 		if(this.signupMeeting !=null)
@@ -224,7 +224,7 @@ public class CopyMeetingSignupMBean extends SignupUIBaseBean {
 			markerTimeslots(this.customTimeSlotWrpList);
 		}
 			
-		getUserDefineTimeslotBean().init(this.signupMeeting, COPTY_MEETING_PAGE_URL, this.customTimeSlotWrpList, UserDefineTimeslotBean.COPY_MEETING);
+		getUserDefineTimeslotBean().init(this.signupMeeting, COPY_MEETING_PAGE_URL, this.customTimeSlotWrpList, UserDefineTimeslotBean.COPY_MEETING);
 
 		
 	}
@@ -495,14 +495,14 @@ public class CopyMeetingSignupMBean extends SignupUIBaseBean {
 			/*Mark the time slot sequence for recurring events changes issues*/
 			markerTimeslots(this.customTimeSlotWrpList);
 			
-			getUserDefineTimeslotBean().init(this.signupMeeting, COPTY_MEETING_PAGE_URL,this.customTimeSlotWrpList, UserDefineTimeslotBean.COPY_MEETING);
+			getUserDefineTimeslotBean().init(this.signupMeeting, COPY_MEETING_PAGE_URL,this.customTimeSlotWrpList, UserDefineTimeslotBean.COPY_MEETING);
 		}else{	
 			if(!Utilities.isDataIntegritySafe(isUserDefinedTS(),UserDefineTimeslotBean.COPY_MEETING,getUserDefineTimeslotBean())){
 				return ORGANIZER_MEETING_PAGE_URL;
 			}
 			
 			this.customTimeSlotWrpList = getUserDefineTimeslotBean().getDestTSwrpList();
-			getUserDefineTimeslotBean().init(this.signupMeeting, COPTY_MEETING_PAGE_URL,this.customTimeSlotWrpList, UserDefineTimeslotBean.COPY_MEETING);
+			getUserDefineTimeslotBean().init(this.signupMeeting, COPY_MEETING_PAGE_URL,this.customTimeSlotWrpList, UserDefineTimeslotBean.COPY_MEETING);
 		}
 		
 		return CUSTOM_DEFINED_TIMESLOT_PAGE_URL;
@@ -949,7 +949,7 @@ public class CopyMeetingSignupMBean extends SignupUIBaseBean {
 		createSiteGroups.processSiteGroupSelectionMarks();
 		setCurrentSite(createSiteGroups.getCurrentSite());
 		setOtherSites(createSiteGroups.getOtherSites());
-		setMissingSitGroupWarning(createSiteGroups.isSiteOrGroupTruncated());
+		setMissingSiteGroupWarning(createSiteGroups.isSiteOrGroupTruncated());
 		setMissingSites(createSiteGroups.getMissingSites());
 		setMissingGroups(createSiteGroups.getMissingGroups());
 	}
@@ -1002,12 +1002,12 @@ public class CopyMeetingSignupMBean extends SignupUIBaseBean {
 	 * 
 	 * @return a boolean value
 	 */
-	public boolean isMissingSitGroupWarning() {
-		return missingSitGroupWarning;
+	public boolean isMissingSiteGroupWarning() {
+		return missingSiteGroupWarning;
 	}
 
-	private void setMissingSitGroupWarning(boolean missingSitGroupWarning) {
-		this.missingSitGroupWarning = missingSitGroupWarning;
+	private void setMissingSiteGroupWarning(boolean missingSiteGroupWarning) {
+		this.missingSiteGroupWarning = missingSiteGroupWarning;
 	}
 
 	public List<String> getMissingSites() {

@@ -1,0 +1,106 @@
+package org.sakaiproject.signup.logic.messages;
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.sakaiproject.calendaring.api.ExtEvent;
+import org.sakaiproject.signup.logic.SakaiFacade;
+import org.sakaiproject.signup.logic.SignupCalendarHelper;
+import org.sakaiproject.signup.model.SignupMeeting;
+import org.sakaiproject.user.api.User;
+
+public class AttendeeModifiedCommentEmail extends SignupEmailBase {
+
+	private final User organizer;
+
+	private final String emailReturnSiteId;
+	
+	private AttendeeComment attendeeComment;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param organizer
+	 *            an User, who organizes the event/meeting
+	 * @param meeting
+	 *            a SignupMeeting object
+	 * @param sakaiFacade
+	 *            a SakaiFacade object
+	 * @param emailReturnSiteId
+	 *            a unique SiteId string
+	 */
+	public AttendeeModifiedCommentEmail(User organizer, SignupMeeting meeting, SakaiFacade sakaiFacade, String emailReturnSiteId, AttendeeComment attendeeComment) {
+		this.organizer = organizer;
+		this.meeting = meeting;
+		this.setSakaiFacade(sakaiFacade);
+		this.emailReturnSiteId = emailReturnSiteId;
+		this.attendeeComment = attendeeComment;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<String> getHeader() {
+		List<String> rv = new ArrayList<String>();
+		// Set the content type of the message body to HTML
+		rv.add("Content-Type: text/html; charset=UTF-8");
+		rv.add("Subject: " + getSubject());
+		rv.add("From: " + getFromAddress());
+		rv.add("To: " + rb.getString("noReply@") + getSakaiFacade().getServerConfigurationService().getServerName());
+
+		return rv;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getMessage() {
+		StringBuilder message = new StringBuilder();
+		Object[] params = new Object[] { getSiteTitleWithQuote(emailReturnSiteId), getServiceName(),
+				makeFirstCapLetter(organizer.getDisplayName()), getSakaiFacade().getUserDisplayLastFirstName(getSakaiFacade().getCurrentUserId()) };
+		message.append(newline + MessageFormat.format(rb.getString("body.organizer.comment.update"), params));
+
+		message.append(newline + newline
+				+ MessageFormat.format(rb.getString("body.meetingTopic.part"), new Object[] { meeting.getTitle() }));
+		if (!meeting.isMeetingCrossDays()) {
+			Object[] paramsTimeframe = new Object[] { getTime(meeting.getStartTime()).toStringLocalDate(),
+					getTime(meeting.getStartTime()).toStringLocalTime(),
+					getTime(meeting.getEndTime()).toStringLocalTime(),
+					getSakaiFacade().getTimeService().getLocalTimeZone().getID()};
+			message.append(newline
+					+ MessageFormat.format(rb.getString("body.organizer.meeting.timeframe"), paramsTimeframe));
+		} else {
+			Object[] paramsTimeframe1 = new Object[] { getTime(meeting.getStartTime()).toStringLocalTime(),
+					getTime(meeting.getStartTime()).toStringLocalShortDate(),
+					getTime(meeting.getEndTime()).toStringLocalTime(),
+					getTime(meeting.getEndTime()).toStringLocalShortDate(),
+					getSakaiFacade().getTimeService().getLocalTimeZone().getID()};
+			message.append(newline
+					+ MessageFormat.format(rb.getString("body.organizer.meeting.crossdays.timeframe"), paramsTimeframe1));
+		}
+		
+		message.append(newline + newline + MessageFormat.format(rb.getString("body.comment"), new Object[] {
+			makeFirstCapLetter(attendeeComment.getAttendeeComment()) }));
+		
+		/* footer */
+		message.append(newline + getFooter(newline, emailReturnSiteId));
+		return message.toString();
+	}
+	
+	@Override
+	public String getFromAddress() {
+		return organizer.getEmail();
+	}
+	
+	@Override
+	public String getSubject() {
+		return MessageFormat.format(rb.getString("subject.comment.modification.field"), new Object[] {
+			getShortSiteTitleWithQuote(emailReturnSiteId), organizer.getDisplayName(), getTime(meeting.getStartTime()).toStringLocalDate(),
+			getTime(meeting.getStartTime()).toStringLocalTime() });
+	}
+
+	public List<ExtEvent> generateEvents(User user, SignupCalendarHelper calendarHelper) {
+		return new ArrayList<ExtEvent>();
+	}
+}

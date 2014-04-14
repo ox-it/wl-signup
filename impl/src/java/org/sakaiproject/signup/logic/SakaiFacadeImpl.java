@@ -517,6 +517,18 @@ public class SakaiFacadeImpl implements SakaiFacade {
 	/**
 	 * {@inheritDoc}
 	 */
+	public String getUserDisplayId(String eid) throws UserNotDefinedException {
+		User user = userDirectoryService.getUser(eid);
+		String displayId = null;
+		if (user != null) {
+			displayId = user.getDisplayId();
+		}
+		return displayId;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@SuppressWarnings("unchecked")
 	public List<SignupUser> getAllUsers(SignupMeeting meeting) {
 		List<SignupSite> signupSites = meeting.getSignupSites();
