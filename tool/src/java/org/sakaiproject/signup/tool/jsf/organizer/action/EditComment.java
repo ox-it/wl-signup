@@ -49,8 +49,8 @@ public class EditComment extends SignupAction {
 		// TODO Auto-generated method stub
 		String originalComment = findUserComment(originalMeeting, timeslotId);
 		String upToDateComment = findUserComment(upToDateMeeting, timeslotId);
-		
-		if(!originalComment.equals(upToDateComment)){
+
+		if(originalComment != null && !originalComment.equals(upToDateComment)){
 			throw new SignupUserActionException(Utilities.rb.getString("someone.already.updated.comment"));
 		}
 		if(upToDateMeeting.getTimeslot(timeslotId) != null && upToDateMeeting.getTimeslot(timeslotId).getAttendee(userId) != null){
