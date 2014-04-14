@@ -42,6 +42,7 @@ import org.sakaiproject.signup.tool.jsf.organizer.OrganizerSignupMBean;
 import org.sakaiproject.signup.tool.jsf.organizer.action.EditComment;
 import org.sakaiproject.signup.tool.util.Utilities;
 import org.sakaiproject.user.api.User;
+import org.sakaiproject.user.api.UserNotDefinedException;
 
 /**
  * <p>
@@ -323,6 +324,27 @@ public class EditCommentSignupMBean extends SignupUIBaseBean {
 		}
 
 		return eid;
+	}
+
+	/**
+	 * Get the attendee's display ID
+	 * @return displayId String
+	 */
+	public String getAttendeeDisplayId(){
+		String userId = attendeeWrapper.getSignupAttendee().getAttendeeUserId();
+
+		String displayId;
+		try {
+			displayId = sakaiFacade.getUserDisplayId(userId);
+		} catch (UserNotDefinedException e) {
+			displayId = null;
+		}
+		
+		if (displayId == null) {
+			return userId;
+		}
+
+		return displayId;
 	}
 
 	public String getComment() {

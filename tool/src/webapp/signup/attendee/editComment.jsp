@@ -28,7 +28,7 @@
 					<h:outputText value="#{EditCommentSignupMBean.attendeeWrapper.displayName}" styleClass="longtext" escape="false"/>
 					
 					<h:outputText value="#{msgs.event_attendee_eid}" styleClass="titleText" escape="false"/>
-					<h:outputText value="#{EditCommentSignupMBean.attendeeEid}" styleClass="longtext" escape="false"/>
+					<h:outputText value="#{EditCommentSignupMBean.attendeeDisplayId}" styleClass="longtext" escape="false"/>
 					
 					<h:outputText value="#{msgs.event_attendee_role}" styleClass="titleText" escape="false"/>
 					<h:outputText value="#{EditCommentSignupMBean.attendeeRole}" styleClass="longtext" escape="false"/>

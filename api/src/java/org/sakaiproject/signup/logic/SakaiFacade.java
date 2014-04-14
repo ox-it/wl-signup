@@ -212,6 +212,16 @@ public interface SakaiFacade {
 	public String getUserId(String eid) throws UserNotDefinedException;
 	
 	/**
+	 * get a user display ID
+	 * 
+	 * @param eid a unique id (enterprise Id)
+	 * @return String user displayId
+	 * @throws UserNotDefinedException
+	 *             throw if user is not found
+	 */
+	public String getUserDisplayId(String eid) throws UserNotDefinedException;
+
+	/**
 	 * get the User object
 	 * 
 	 * @param userId
