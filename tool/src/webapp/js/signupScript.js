@@ -739,7 +739,6 @@ function displayDateTime(d){
 
 }
 
-
 $(document).ready(function() {
 	 //register click events for the mobile info section
     $(".mobile-info-link").click(function(){ 
@@ -824,4 +823,34 @@ function resizeFrame(updown){
     }	
 }
 
+// Display processing message to user for operations that may take some time to process
+function displayProcessingIndicator(el){
 	
+    var clickedElement = $(document.getElementById(el.name));
+	
+    var $buttonContainer = $(clickedElement).parents('.act');
+    var pos = $(clickedElement).position();
+    var blockerWidth = $(clickedElement).width();
+    var blockerHeight = $(clickedElement).height();
+
+    $(clickedElement).blur();
+    $buttonContainer.find('#buttonBlocker').remove();
+    $buttonContainer.find('input').css({
+        'opacity': '1',
+        'filter': 'alpha(opacity = 100)'
+    });
+    $(clickedElement).css({
+        'opacity': '.5',
+        'filter': 'alpha(opacity = 50)',
+        'zoom':'1'
+    });
+    $buttonContainer.append('<div id=\"buttonBlocker\"></div>');
+    $('#buttonBlocker').css({
+        'width': blockerWidth,
+        'height': blockerHeight,
+        'top': pos.top,
+        'left': pos.left,
+        'display': 'block'
+    });
+    $buttonContainer.find('.messageProgress').fadeIn('slow');
+};

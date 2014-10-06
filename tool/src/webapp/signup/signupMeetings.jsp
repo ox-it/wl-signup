@@ -12,9 +12,9 @@
 				@import url("/sakai-signup-tool/css/signupStyle.css");
 		</style>
 		<link href="/library/js/jquery/ui/1.8.4/css/ui-lightness/jquery-ui-1.8.4.full.css" type="text/css" rel="stylesheet" media="all"/>
-		<script language="javascript" type="text/javascript" src="/library/js/jquery/1.4.2/jquery-1.4.2.min.js"></script>
+		<script TYPE="text/javascript" src="/library/js/jquery/jquery-1.9.1.min.js"></script>
 		<script language="javascript" type="text/javascript" src="/library/js/jquery/ui/1.8.4/jquery-ui-1.8.4.full.min.js"></script>
-		<script TYPE="text/javascript" LANGUAGE="JavaScript" src="/sakai-signup-tool/js/signupScript.js"></script>	
+		<script TYPE="text/javascript" src="/sakai-signup-tool/js/signupScript.js"></script>	
 		<h:form id="addMeeting">
 			<sakai:tool_bar>
 				<sakai:tool_bar_item value="#{msgs.add_new_event}" action="#{SignupMeetingsBean.addMeeting}" rendered="#{SignupMeetingsBean.allowedToCreate}"/>
@@ -237,7 +237,10 @@
 					
 					<h:panelGrid columns="1">
 						<h:outputText value="&nbsp;" escape="false"/>
-						<h:commandButton id="removeMeetings" action="#{SignupMeetingsBean.removeMeetings}" value="#{msgs.event_removeButton}" onclick='return confirm(getDeleteMessage());' rendered="#{SignupMeetingsBean.allowedToDelete}"/>
+						<h:panelGroup styleClass="act">
+							<h:commandButton id="removeMeetings" action="#{SignupMeetingsBean.removeMeetings}" value="#{msgs.event_removeButton}" onclick='return confirmDelete(this);' rendered="#{SignupMeetingsBean.allowedToDelete}"/>
+							<h:outputText styleClass="messageProgress" style="display:none" value="#{msgs.publish_processing_submit_message}" />
+						</h:panelGroup>
 					</h:panelGrid>
 				</h:panelGroup>
 			 </h:form>
@@ -392,8 +395,18 @@
 					return '<h:outputText escape="false" value="#{msgs.meeting_confirmation_to_remove_multiple}" />';
 				}
 				return '<h:outputText escape="false" value="#{msgs.meeting_confirmation_to_remove}" />';
-			}
+			};
+			
+			// Provide user a chance to cancel or confirm the deletion of meetings. 
+			function confirmDelete(el) {
+				var answer = confirm(getDeleteMessage());
 
+				if (answer == true){
+					displayProcessingIndicator(el);
+					return true;
+				}
+				return false;
+			};
 			
 		</script>
 		
